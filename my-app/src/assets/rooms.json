@@ -1,0 +1,22 @@
+[
+    {
+        "RoomNumber": 1,
+        "RoomCapacity": 7
+    },
+    {
+        "RoomNumber": 2,
+        "RoomCapacity": 4
+    },
+    {
+        "RoomNumber": 3,
+        "RoomCapacity": 9
+    },
+    {
+        "RoomNumber": 4,
+        "RoomCapacity": 5
+    },
+    {
+        "RoomNumber": 5,
+        "RoomCapacity": 3
+    }
+]

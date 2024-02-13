@@ -2,6 +2,8 @@
   "dependencies": {
     "@types/jest": "^29.5.12",
     "@types/node": "^20.11.16",
+    "rxdb": "^15.8.0",
+    "rxjs": "^7.8.1",
     "tslib": "^2.6.2"
   }
 }
