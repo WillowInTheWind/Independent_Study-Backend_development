@@ -26,7 +26,10 @@ export class AppComponent {
   inProgress: Task[] = [];
   done: Task[] = [];
 
-  editTask(list: string, task: Task): void { }
+  editTask(list: 'done' | 'todo' | 'inProgress', task: Task): void 
+  {
+    
+  }
 
   drop(event: CdkDragDrop<Task[]>): void {
     if (event.previousContainer === event.container) {
