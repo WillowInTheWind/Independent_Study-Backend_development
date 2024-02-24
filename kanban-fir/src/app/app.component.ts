@@ -14,28 +14,20 @@ const getObservable = (collection: AngularFirestoreCollection<Task>) => {
   });
   return subject;
 };
-
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
 export class AppComponent {
-  todo = this.store.collection('todo').valueChanges({ idField: 'id' }) as Observable<Task[]>;
-  inProgress = this.store.collection('inProgress').valueChanges({ idField: 'id' }) as Observable<Task[]>;
-  done = this.store.collection('done').valueChanges({ idField: 'id' }) as Observable<Task[]>;
+  todo: Observable<Task[]> = this.store.collection('todo').valueChanges({ idField: 'id' }) as Observable<Task[]>;
+  inProgress: Observable<Task[]> = this.store.collection('inProgress').valueChanges({ idField: 'id' }) as Observable<Task[]>;
+  done: Observable<Task[]> = this.store.collection('done').valueChanges({ idField: 'id' }) as Observable<Task[]>;
 
   constructor(private dialog: MatDialog, private store: AngularFirestore) { }
 
   title = 'kanban-fir';
 
-<<<<<<< HEAD
-  editTask(list: 'done' | 'todo' | 'inProgress', task: Task): void 
-  {
-    
-  }
-=======
->>>>>>> dcd08e1b9a9e7eea62f611f6e6f69d0a920c484b
 
 
   editTask(list: 'done' | 'todo' | 'inProgress', task: Task): void {
@@ -57,8 +49,11 @@ export class AppComponent {
       }
     });
   }
-  drop(event: CdkDragDrop<Task[]>): void {
+  drop(event: CdkDragDrop<Task[]|null>): void {
     if (event.previousContainer === event.container) {
+      return;
+    }
+    if (!event.previousContainer.data || !event.container.data) {
       return;
     }
     const item = event.previousContainer.data[event.previousIndex];

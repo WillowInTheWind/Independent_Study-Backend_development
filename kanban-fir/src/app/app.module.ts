@@ -10,7 +10,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { TaskComponent } from './task/task.component';
 import { MatFormField } from '@angular/material/input';
-import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
@@ -19,6 +18,8 @@ import { TaskDialogComponent } from './task-dialog/task-dialog.component';
 import { environment } from '../environments/environment';
 import { AngularFireModule } from "@angular/fire/compat";
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -38,7 +39,7 @@ import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
     MatInputModule,
     FormsModule,
     AngularFireModule.initializeApp(environment.firebase),
-    AngularFirestoreModule
+    AngularFirestoreModule,
   ],
   providers: [
     provideAnimationsAsync(),
