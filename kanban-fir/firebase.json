@@ -1,0 +1,9 @@
+{
+  "hosting": [
+    {
+      "target": "kanban-fir",
+      "source": ".",
+      "frameworksBackend": {}
+    }
+  ]
+}

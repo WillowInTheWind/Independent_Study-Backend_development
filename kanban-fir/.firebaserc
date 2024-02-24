@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "kanban-fir": {
+      "hosting": {
+        "kanban-fir": [
+          "kanban-fir"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "kanban-fir"
+  }
+}
