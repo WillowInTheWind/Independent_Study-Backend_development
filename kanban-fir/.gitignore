@@ -46,5 +46,4 @@ Thumbs.db
 *-debug.log
 .runtimeconfig.json
 
-#Api key
-/src/environments/**
+.env
