@@ -1,7 +1,8 @@
 node_modules
 target
 obj
-
+.env
 .fake
 .vs
 makefile
+bin

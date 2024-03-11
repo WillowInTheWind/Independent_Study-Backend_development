@@ -11,7 +11,7 @@ namespace TodoApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TodoItemsController : ControllerBase
+    public class TodoItemsController : Controller
     {
         private readonly TodoContext _context;
 
