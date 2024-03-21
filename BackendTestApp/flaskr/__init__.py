@@ -3,6 +3,7 @@ from flask import Flask, jsonify, session
 from authlib.integrations.flask_client import OAuth
 from flask import url_for, redirect
 from dotenv import load_dotenv
+
 load_dotenv()
 
 
@@ -20,15 +21,18 @@ def create_app(test_config=None):
     app.secret_key = 'sosecreet'
     oauth = OAuth(app)
     google = oauth.register(
-        name=os.getenv('name'),
-        client_id= os.getenv('client_id'),
+        name='google',
+        client_id=os.getenv('client_id'),
         client_secret=os.getenv('client_secret'),
-        access_token_url=os.getenv('access_token_url'),
+        access_token_url='https://accounts.google.com/o/oauth2/token',
         access_token_params=None,
-        authorize_url=os.getenv('authorize_url'),
+        authorize_url='https://accounts.google.com/o/oauth2/auth',
         authorize_params=None,
-        api_base_url=os.getenv('api_base_url'),
-        client_kwargs=os.getenv('client_kwargs'),
+        api_base_url='https://www.googleapis.com/oauth2/v1/',
+        # userinfo_endpoint='https://openidconnect.googleapis.com/v1/userinfo',
+        # This is only needed if using openId to fetch user info
+        client_kwargs={'scope': 'email profile'},
+        server_metadata_url='https://accounts.google.com/.well-known/openid-configuration'
     )
     if test_config is None:
         # load the instance config, if it exists, when not testing
@@ -57,12 +61,13 @@ def create_app(test_config=None):
 
     @app.route('/authorize')
     def authorize():
-        google = oauth.create_client('google')
+        googleauth = oauth.create_client('google')
 
-        token = google.authorize_access_token()
-        resp = google.get('userinfo', token=token)
+        token = googleauth.authorize_access_token()
+        resp = googleauth.get('userinfo', token=token)
         resp.raise_for_status()
         profile = resp.json()
+        print(profile)
         session['email'] = profile['email']
         # do something with the token and profile
         return redirect('/')
