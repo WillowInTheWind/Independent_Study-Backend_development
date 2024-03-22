@@ -4,6 +4,7 @@ use axum::response::Response;
 use serde::{Deserialize, Serialize};
 use crate::state::AppState;
 use axum_macros::debug_handler;
+use crate::handlers::user_manager::UserService;
 
 pub mod user_manager;
 #[derive(Debug, Deserialize, Serialize)]

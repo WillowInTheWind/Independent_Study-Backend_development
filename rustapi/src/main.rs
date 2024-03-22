@@ -1,38 +1,27 @@
 mod handlers;
 mod state;
+mod errors;
 
-use sqlx::Sqlite;
-use axum::{routing::{get, post}, http::StatusCode, response::IntoResponse, Json, Router, Extension};
-use axum::response::{Html, Response};
-
-use std::net::SocketAddr;
-use std::ptr::null;
+use sqlx::{Connection};
+use axum::{routing::{get, post}, http::StatusCode, response::IntoResponse, Router};
 use std::sync::Arc;
-use axum::extract::{Query, {State, FromRef}};
-use axum_macros::debug_handler;
+use axum::extract::{ FromRef};
 use serde::{Deserialize, Serialize};
-use serde_json::Value::String;
-
 use sqlx::sqlite::SqlitePoolOptions;
-use sqlx::{Pool, sqlite};
-use tokio::sync::Mutex;
-use crate::handlers::GenericUser;
 use crate::handlers::user_manager::UserService;
-use crate::state::{AppState, InternalState};
+use crate::state::{InternalState};
 
 #[tokio::main]
-async fn main() {
+async fn main() -> Result<(), sqlx::Error>  {
     tracing_subscriber::fmt::init();
 
 
     // Database Initialization
-    let url = std::env::var("DATABASE_URL").expect("DATABASE_URL must be set.");
-    let pool = SqlitePoolOptions::new()
-        // .max_connections(5)
-        .connect(&url)
-        .await
-        .unwrap();
+    let dburl = "C:\\Users\\Chase Wayland\\Independent_Study-Backend_development\\rustapi\\Database\\identifier.sqlite";
+    let pool = SqlitePoolOptions::new().connect(dburl).await?;
+    // Let's assume that an Err from func_result should end programme.
 
+    println!("->> Successful connection to database: {:?}", dburl);
     //Setting up Server
     let app_state: Arc<InternalState> =  Arc::new(
             InternalState::new(pool)
@@ -52,27 +41,8 @@ async fn main() {
     axum::serve(listener, app_router)
         .await
         .unwrap();
+
+    Ok(())
 }
-// #[debug_handler]
-// fn routes() -> Router {
-//
-//         // .route(
-//         //     "/login",
-//         //     get(login(axum::extract::State(state)))
-//         // )
-//
-// }
 
 
-
-
-#[debug_handler]
-pub async fn root( ) -> &'static str {
-    "This is the main route of the server"
-}
-// #[debug_handler]
-// pub async fn login(
-//     State(state): State<AppState>,
-// ) -> Json<GenericUser> {
-//     todo!()
-// }
