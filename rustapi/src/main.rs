@@ -1,3 +1,4 @@
+
 mod handlers;
 mod state;
 mod errors;
@@ -12,18 +13,22 @@ use crate::handlers::user_manager::UserService;
 use crate::state::{InternalState};
 use dotenv::dotenv;
 use std::error::Error;
+use std::future::IntoFuture;
+use axum_macros::debug_handler;
 
+
+// #[debug_handler]
 #[tokio::main]
-async fn main() -> Result<(), Box<dyn Error>>  {
+async fn main() {
     // dotenv()?;
-    dotenv()?;
+    dotenv().expect("TODO: panic message");
 
     tracing_subscriber::fmt::init();
 
 
     // Database Initialization
     let dburl = std::env::var("DATABASE_URL").expect("DATABASE_URL must set");
-    let pool = SqlitePoolOptions::new().connect(&dburl).await?;
+    let pool = SqlitePoolOptions::new().connect(&dburl).await.expect("could not connect");
     // Let's assume that an Err from func_result should end programme.
 
     println!("->> Successful connection to database: {:?}", &dburl);
@@ -42,12 +47,9 @@ async fn main() -> Result<(), Box<dyn Error>>  {
         .unwrap();
     println!("->> LISTENING on {:?}\n", listener.local_addr());
 
-
     axum::serve(listener, app_router)
         .await
         .unwrap();
-
-    Ok(())
 }
 
 

@@ -1,4 +1,5 @@
 use axum::extract::State;
+use axum::http::StatusCode;
 use axum::Json;
 use axum::response::Response;
 use serde::{Deserialize, Serialize};
@@ -8,6 +9,8 @@ use sqlx::FromRow;
 use crate::handlers::user_manager::UserService;
 
 pub mod user_manager;
+
+
 #[derive(FromRow, Debug, Deserialize, Serialize)]
 pub(crate) struct GenericUser {
     id: Option<i16>,
@@ -20,16 +23,17 @@ pub(crate) struct GenericUser {
 pub async fn root( ) -> &'static str {
     "This is the main route of the server"
 }
-// #[debug_handler]
+#[debug_handler]
 pub async fn login(
     State(state): State<AppState>,
-) -> Json<GenericUser> {
+) -> Json<Vec<GenericUser>> {
 
-   Json(
-       GenericUser {
-            id: Some(0),
-            user_name: "daddy".to_string(),
-            user_identifier: 12465
-       }
-   )
+   Json(state.dbreference.get_users().await.map_err(internal_error).unwrap())
+
+}
+fn internal_error<E>(err: E) -> (StatusCode, String)
+    where
+        E: std::error::Error,
+{
+    (StatusCode::INTERNAL_SERVER_ERROR, err.to_string())
 }
