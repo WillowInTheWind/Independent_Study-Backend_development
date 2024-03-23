@@ -13,10 +13,10 @@ pub mod user_manager;
 
 #[derive(FromRow, Debug, Deserialize, Serialize)]
 pub(crate) struct GenericUser {
-    id: Option<i16>,
+    id: Option<i64>,
     user_name: String,
     //if I end up implementing other way to login besides google Oauth I can change the user type
-    user_identifier: i32,
+    user_identifier: i64,
 }
 
 #[debug_handler]
