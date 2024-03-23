@@ -4,10 +4,11 @@ use axum::response::Response;
 use serde::{Deserialize, Serialize};
 use crate::state::AppState;
 use axum_macros::debug_handler;
+use sqlx::FromRow;
 use crate::handlers::user_manager::UserService;
 
 pub mod user_manager;
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(FromRow, Debug, Deserialize, Serialize)]
 pub(crate) struct GenericUser {
     id: Option<i16>,
     user_name: String,
@@ -19,9 +20,16 @@ pub(crate) struct GenericUser {
 pub async fn root( ) -> &'static str {
     "This is the main route of the server"
 }
-#[debug_handler]
+// #[debug_handler]
 pub async fn login(
     State(state): State<AppState>,
 ) -> Json<GenericUser> {
-    todo!()
+
+   Json(
+       GenericUser {
+            id: Some(0),
+            user_name: "daddy".to_string(),
+            user_identifier: 12465
+       }
+   )
 }

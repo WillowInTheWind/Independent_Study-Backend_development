@@ -2,7 +2,7 @@ mod handlers;
 mod state;
 mod errors;
 
-use sqlx::{Connection};
+use sqlx::{Connection, Sqlite, SqlitePool};
 use axum::{routing::{get, post}, http::StatusCode, response::IntoResponse, Router};
 use std::sync::Arc;
 use axum::extract::{ FromRef};
@@ -10,18 +10,23 @@ use serde::{Deserialize, Serialize};
 use sqlx::sqlite::SqlitePoolOptions;
 use crate::handlers::user_manager::UserService;
 use crate::state::{InternalState};
+use dotenv::dotenv;
+use std::error::Error;
 
 #[tokio::main]
-async fn main() -> Result<(), sqlx::Error>  {
+async fn main() -> Result<(), Box<dyn Error>>  {
+    // dotenv()?;
+    dotenv()?;
+
     tracing_subscriber::fmt::init();
 
 
     // Database Initialization
-    let dburl = "C:\\Users\\Chase Wayland\\Independent_Study-Backend_development\\rustapi\\Database\\identifier.sqlite";
-    let pool = SqlitePoolOptions::new().connect(dburl).await?;
+    let dburl = std::env::var("DATABASE_URL").expect("DATABASE_URL must set");
+    let pool = SqlitePoolOptions::new().connect(&dburl).await?;
     // Let's assume that an Err from func_result should end programme.
 
-    println!("->> Successful connection to database: {:?}", dburl);
+    println!("->> Successful connection to database: {:?}", &dburl);
     //Setting up Server
     let app_state: Arc<InternalState> =  Arc::new(
             InternalState::new(pool)
