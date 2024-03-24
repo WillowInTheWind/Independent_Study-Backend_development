@@ -1,18 +1,16 @@
 use axum::http::StatusCode;
-use axum::Json;
-use sqlx::{Sqlite, Pool, FromRow, Error};
+use sqlx::{Sqlite, Pool, Error};
 use crate::handlers::GenericUser;
-use crate::errors::QueryErrors;
-
 pub(crate) trait UserService: Send + Sync {
     async fn get_users(&self) -> Result<Vec<GenericUser>, sqlx::Error>;
     async fn get_user_by_id(&self, id: i32) -> Result<GenericUser, sqlx::Error>;
     async fn get_user_by_name(&self, name:&str) -> Result<GenericUser, sqlx::Error>;
-    async fn create_user(&self) -> Result<GenericUser, sqlx::Error>;
-    async fn delete_user(&self) -> Result<GenericUser, sqlx::Error>;
-    async fn edit_username(&self) ->  Result<GenericUser, sqlx::Error>;
+    async fn create_user(&self, newUser: GenericUser) -> Result<GenericUser, sqlx::Error>;
+    async fn delete_user_by_id(&self, id: i32) -> Result<GenericUser, sqlx::Error>;
+    async fn edit_username(&self, newUser: GenericUser) ->  Result<GenericUser, sqlx::Error>;
 }
 impl UserService for Pool<Sqlite> {
+    //get methods
     async fn get_users(&self) -> Result<Vec<GenericUser>, sqlx::Error> {
         let query: Result<Vec<GenericUser>, sqlx::Error> =
             sqlx::query_as(
@@ -23,7 +21,6 @@ impl UserService for Pool<Sqlite> {
 
         query
     }
-
     async fn get_user_by_id(&self, id:i32) -> Result<GenericUser, sqlx::Error> {
         let query: Result<GenericUser, sqlx::Error> =
             sqlx::query_as!(
@@ -37,7 +34,6 @@ impl UserService for Pool<Sqlite> {
 
         query
     }
-
     async fn get_user_by_name(&self, name: &str) -> Result<GenericUser, Error> {
         let query: Result<GenericUser, sqlx::Error> =
             sqlx::query_as!(
@@ -51,16 +47,15 @@ impl UserService for Pool<Sqlite> {
 
         query
     }
-
-    async fn create_user(&self) -> Result<GenericUser, Error> {
+//post put and edit methods
+    async fn create_user(&self, newUser: GenericUser) -> Result<GenericUser, Error> {
         todo!()
     }
-
-    async fn delete_user(&self) -> Result<GenericUser, Error> {
+    async fn delete_user_by_id(&self, id: i32) -> Result<GenericUser, Error> {
         todo!()
     }
-
-    async fn edit_username(&self) -> Result<GenericUser, Error> {
+    async fn edit_username(&self, newUser: GenericUser) -> Result<GenericUser, Error>
+    {
         todo!()
     }
 }

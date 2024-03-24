@@ -7,9 +7,9 @@ use crate::state::AppState;
 use axum_macros::debug_handler;
 use sqlx::FromRow;
 use crate::handlers::user_manager::UserService;
-
 pub mod user_manager;
-
+mod login_service;
+pub(crate) mod mx_service;
 
 #[derive(FromRow, Debug, Deserialize, Serialize)]
 pub(crate) struct GenericUser {
@@ -24,12 +24,10 @@ pub async fn root( ) -> &'static str {
     "This is the main route of the server"
 }
 #[debug_handler]
-pub async fn login(
+pub async fn users(
     State(state): State<AppState>,
 ) -> Json<Vec<GenericUser>> {
-
    Json(state.dbreference.get_users().await.map_err(internal_error).unwrap())
-
 }
 fn internal_error<E>(err: E) -> (StatusCode, String)
     where
