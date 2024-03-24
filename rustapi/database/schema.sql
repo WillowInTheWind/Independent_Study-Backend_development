@@ -9,3 +9,13 @@ CREATE TABLE user (
 INSERT into user values
 (1,'chase', 128474),
 (2, 'willow', 1282334)
+
+CREATE TABLE MX (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    index INTEGER NOT NULL,
+    date DATE UNIQUE NOT NULL,
+    owner INTEGER,
+    title TEXT UNIQUE NOT NULL,
+    description TEXT UNIQUE NOT NULL,
+    FOREIGN KEY(owner) REFERENCES user(id)
+);

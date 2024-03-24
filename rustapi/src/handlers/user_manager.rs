@@ -5,9 +5,9 @@ pub(crate) trait UserService: Send + Sync {
     async fn get_users(&self) -> Result<Vec<GenericUser>, sqlx::Error>;
     async fn get_user_by_id(&self, id: i32) -> Result<GenericUser, sqlx::Error>;
     async fn get_user_by_name(&self, name:&str) -> Result<GenericUser, sqlx::Error>;
-    async fn create_user(&self, newUser: GenericUser) -> Result<GenericUser, sqlx::Error>;
+    async fn create_user(&self, new_user: GenericUser) -> Result<GenericUser, sqlx::Error>;
     async fn delete_user_by_id(&self, id: i32) -> Result<GenericUser, sqlx::Error>;
-    async fn edit_username(&self, newUser: GenericUser) ->  Result<GenericUser, sqlx::Error>;
+    async fn edit_username(&self, new_user: GenericUser) ->  Result<GenericUser, sqlx::Error>;
 }
 impl UserService for Pool<Sqlite> {
     //get methods
@@ -48,13 +48,13 @@ impl UserService for Pool<Sqlite> {
         query
     }
 //post put and edit methods
-    async fn create_user(&self, newUser: GenericUser) -> Result<GenericUser, Error> {
+    async fn create_user(&self, new_user: GenericUser) -> Result<GenericUser, Error> {
         todo!()
     }
     async fn delete_user_by_id(&self, id: i32) -> Result<GenericUser, Error> {
         todo!()
     }
-    async fn edit_username(&self, newUser: GenericUser) -> Result<GenericUser, Error>
+    async fn edit_username(&self, new_user: GenericUser) -> Result<GenericUser, Error>
     {
         todo!()
     }
