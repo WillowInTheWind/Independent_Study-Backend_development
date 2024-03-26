@@ -51,19 +51,20 @@ impl UserService for Pool<Sqlite> {
     }
 //post put and edit methods
     async fn create_user(&self, new_user: GenericUser) -> Result<i64, Error> {
-    let query =
-        sqlx::query!(
-                // GenericUser,
-                r#"INSERT into user (user_name, user_identifier) values ($1,$2) "#,
-                new_user.user_name,
-                new_user.user_identifier
-            )
-            .execute(self)
-            .await?
-            .last_insert_rowid()
-        ;
-
-    Ok(query)
+    // let query =
+    //     sqlx::query!(
+    //             // GenericUser,
+    //             r#"INSERT into user (user_name, user_identifier) values ($1,$2) "#,
+    //             new_user.user_name,
+    //             new_user.user_identifier
+    //         )
+    //         .execute(self)
+    //         .await?
+    //         .last_insert_rowid()
+    //     ;
+    //
+    // Ok(query)
+    todo!()
     }
     async fn delete_user_by_id(&self, id: i32) -> Result<i64, Error> {
         let query =

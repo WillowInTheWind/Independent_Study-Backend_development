@@ -20,3 +20,7 @@ time = "0.3.34"
 oauth2 = "4.4.2"
 async-session = "3.0.0"
 headers = "0.4.0"
+hostname = "0.3.1"
+constant_time_eq = "0.1.5"
+reqwest = "0.12.2"
+uuid = { version = "1.8.0", features = ["v4"] }

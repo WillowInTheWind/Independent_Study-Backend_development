@@ -4,7 +4,7 @@ use oauth2::{
 };
 pub struct InternalState {
     pub dbreference: Pool<Sqlite>,
-    oauth_client: BasicClient
+    pub(crate) oauth_client: BasicClient
 }
 
 impl InternalState {
@@ -15,5 +15,4 @@ impl InternalState {
         }
     }
 }
-
 pub type AppState = std::sync::Arc<InternalState>;

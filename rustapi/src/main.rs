@@ -9,11 +9,12 @@ use oauth2::{
     ClientSecret, CsrfToken, RedirectUrl, Scope, TokenResponse, TokenUrl,
 };
 use std::string::String;
-use axum::{routing::{get, post}, Router};
+use axum::{routing::{get, post}, Router, Extension};
 use std::sync::Arc;
 use sqlx::sqlite::SqlitePoolOptions;
 use crate::state::{InternalState};
 use std::env;
+use crate::types::GenericUser;
 // use axum_macros::debug_handler;
 
 // #[debug_handler]
@@ -29,10 +30,13 @@ async fn main() {
     let listener = tokio::net::TcpListener::bind(format!("{}:{}", environment_variables.address, environment_variables.port))
         .await
         .unwrap();
+    let user_data = None;
     println!("->> LISTENING on {:?}\n", listener.local_addr());
-    axum::serve(listener, app_router(environment_variables))
+    axum::serve(listener, app_router(environment_variables, user_data))
         .await
         .unwrap();
+    let user_data: Option<GenericUser> = None;
+
 }
 async fn initialize_environment_variable() -> EnvironmentVariables {
     let outhclient= oauth_client().unwrap();
@@ -59,9 +63,11 @@ async fn initialize_environment_variable() -> EnvironmentVariables {
 }
 
 
-fn app_router (environment_variables: EnvironmentVariables) -> Router {
+fn app_router (environment_variables: EnvironmentVariables, user_data: Option<GenericUser>) -> Router {
     Router::new()
         .route("/", get(handlers::root))
         .route("/users", get(handlers::users))
         .with_state(environment_variables.app_state)
+        .layer(Extension(user_data))
 }
+
