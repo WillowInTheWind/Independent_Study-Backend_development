@@ -9,17 +9,20 @@ use oauth2::url::Url;
 use uuid::Uuid;
 use crate::state::AppState;
 use crate::types;
-use crate::types::OauthError;
+use crate::types::{GenericUser, OauthError};
 use reqwest::get;
 use std::env;
+use crate::handlers::user_manager::UserService;
 
 pub(crate) fn oauth_client() -> Result<BasicClient, crate::types::OauthError> {
     let client_id = ClientId::new(env::var("CLIENT_ID")?);
     let client_secret = ClientSecret::new(env::var("CLIENT_SECRET")?);
     let redirect_url = env::var("REDIRECT_URL")
         .unwrap_or_else(|_| "http://127.0.0.1:8080/auth/authorized".to_string());
+
     let auth_url = AuthUrl::new("https://accounts.google.com/o/oauth2/auth".to_string())
         .map_err(|_| "OAuth: invalid authorization endpoint URL")?;
+
     let token_url = TokenUrl::new("https://www.googleapis.com/oauth2/token".to_string())
         .map_err(|_| "OAuth: invalid token endpoint URL")?;
 
@@ -41,7 +44,7 @@ pub(crate) fn oauth_client() -> Result<BasicClient, crate::types::OauthError> {
 }
 
 
-pub(crate) async fn login(State(client): State<AppState>) -> std::result::Result<Redirect, OauthError> {
+pub(crate) async fn login(State(state): State<AppState>) -> std::result::Result<Redirect, OauthError> {
     // if user_data.is_some() {
     //     // check if already authenticated
     //     return Ok(Redirect::to("/"));
@@ -61,15 +64,16 @@ pub(crate) async fn login(State(client): State<AppState>) -> std::result::Result
         // .set_pkce_challenge(pkce_code_challenge)
         .url();
 println!("{:?}", client);
-    /* sqlx::query(
-        "INSERT INTO oauth2_state_storage (csrf_state, pkce_code_verifier, return_url) VALUES (?, ?, ?);",
-    )
-        .bind(csrf_state.secret())
-        .bind(pkce_code_verifier.secret())
-        .bind(return_url)
-        .execute(&db_pool)
-        .await?; */
+    //  sqlx::query(
+    //     "INSERT INTO oauth2_state_storage (csrf_state, pkce_code_verifier, return_url) VALUES (?, ?, ?);",
+    // )
+    //     .bind(csrf_state.secret())
+    //     .bind(pkce_code_verifier.secret())
+    //     .bind(return_url)
+    //     .execute(&state.dbreference)
+    //     .await?;
     Ok( Redirect::to(auth_url.as_ref()))
+    // Redirect to Google's oauth service
 }
 
 pub async fn oauth_return(
@@ -140,11 +144,14 @@ pub async fn oauth_return(
     let user_id = if let Ok(query) = query {
         query.0
     } else {
-        let query: (i64,) = sqlx::query_as("INSERT INTO users (email) VALUES (?) RETURNING id")
-            .bind(email)
-            .fetch_one(&state.dbreference)
-            .await?;
-        query.0
+        let user = GenericUser {
+            id: Some(0),
+            user_name: "".to_string(),
+            user_identifier: 0,
+            user_email: "".to_string(),
+        };
+        let query = state.dbreference.create_user(user).await?;
+        query
     };
 
     // Create a session for the user
@@ -159,18 +166,17 @@ pub async fn oauth_return(
     )]);
     let now = Utc::now().timestamp();
 
-    sqlx::query(
-        "INSERT INTO user_sessions
-        (session_token_p1, session_token_p2, user_id, created_at, expires_at)
-        VALUES (?, ?, ?, ?, ?);",
-    )
-        .bind(session_token_p1)
-        .bind(session_token_p2)
-        .bind(user_id)
-        .bind(now)
-        .bind(now + 60 * 60 * 24 * 7)
-        .execute(&state.dbreference)
-        .await?;
+    // sqlx::query(
+    //     "INSERT INTO user_sessions
+    //     (session_token_p1, session_token_p2, user_id, created_at, expires_at)
+    //     VALUES (?, ?, ?, ?, ?);",
+    //     .bind(session_token_p1)
+    //     .bind(session_token_p2)
+    //     .bind(user_id)
+    //     .bind(now)
+    //     .bind(now + 60 * 60 * 24 * 7)
+    //     .execute(&state.dbreference)
+    //     .await?;
 
     Ok((headers, Redirect::to(return_url.as_str())))
 }

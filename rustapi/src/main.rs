@@ -2,6 +2,7 @@ mod handlers;
 mod state;
 mod mxdate_algorithim;
 mod types;
+mod middlewares;
 
 use handlers::login_service::oauth_client;
 use oauth2::{
