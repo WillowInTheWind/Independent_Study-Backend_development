@@ -5,10 +5,13 @@ use axum::Json;
 use axum::response::{IntoResponse, Redirect};
 use crate::state::AppState;
 use axum_macros::debug_handler;
+use oauth2::{CsrfToken, Scope};
 use crate::handlers::user_manager::UserService;
 use crate::types;
-use crate::types::{OauthError, GenericUser};
-
+use crate::types::{AppError, GenericUser};
+use async_session::{MemoryStore, Session, SessionStore};
+use axum::http::header::SET_COOKIE;
+use axum::http::HeaderMap;
 use serde::Deserialize;
 
 pub mod user_manager;

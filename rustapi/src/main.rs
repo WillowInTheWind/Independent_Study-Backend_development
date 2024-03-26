@@ -14,7 +14,9 @@ use std::sync::Arc;
 use sqlx::sqlite::SqlitePoolOptions;
 use crate::state::{InternalState};
 use std::env;
-use crate::types::GenericUser;
+use dotenv::dotenv;
+use crate::handlers::login_service;
+use crate::types::{GenericUser, OauthError};
 // use axum_macros::debug_handler;
 
 // #[debug_handler]
@@ -24,7 +26,8 @@ struct EnvironmentVariables {
     port: String,
 }
 #[tokio::main]
-async fn main() {
+async fn main() -> Result<(), dotenv::Error>{
+    dotenv( )?;
     tracing_subscriber::fmt::init();
     let environment_variables = initialize_environment_variable().await;
     let listener = tokio::net::TcpListener::bind(format!("{}:{}", environment_variables.address, environment_variables.port))
@@ -36,13 +39,13 @@ async fn main() {
         .await
         .unwrap();
     let user_data: Option<GenericUser> = None;
-
+Ok(())
 }
 async fn initialize_environment_variable() -> EnvironmentVariables {
-    let outhclient= oauth_client().unwrap();
     let database_url = env::var("DATABASE_URL").expect("DATABASE_URL must set");
     let pool = SqlitePoolOptions::new().connect(&database_url).await.expect("could not connect");
     println!("->> Successful connection to database: {:?}", &database_url);
+    let outhclient= oauth_client().unwrap();
     let app_state: Arc<InternalState> =  Arc::new(
         InternalState::new(pool,outhclient)
     );
@@ -61,12 +64,12 @@ async fn initialize_environment_variable() -> EnvironmentVariables {
         port,
     }
 }
-
-
 fn app_router (environment_variables: EnvironmentVariables, user_data: Option<GenericUser>) -> Router {
     Router::new()
         .route("/", get(handlers::root))
         .route("/users", get(handlers::users))
+        .route("/login", get(login_service::login))
+        .route("/auth/authorized", get(login_service::oauth_return))
         .with_state(environment_variables.app_state)
         .layer(Extension(user_data))
 }

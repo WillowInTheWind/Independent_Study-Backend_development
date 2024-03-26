@@ -1,5 +1,4 @@
 use std::collections::HashMap;
-use std::env;
 use oauth2::{basic::BasicClient, AuthUrl, AuthorizationCode, ClientId, ClientSecret, CsrfToken, PkceCodeChallenge, PkceCodeVerifier, RedirectUrl, RevocationUrl, Scope, TokenResponse, TokenUrl};
 use anyhow::{Context, Result};
 use async_session::chrono::Utc;
@@ -12,54 +11,56 @@ use crate::state::AppState;
 use crate::types;
 use crate::types::OauthError;
 use reqwest::get;
+use std::env;
+
 pub(crate) fn oauth_client() -> Result<BasicClient, crate::types::OauthError> {
-    // Environment variables (* = required):
-    // *"CLIENT_ID"     "REPLACE_ME";
-    // *"CLIENT_SECRET" "REPLACE_ME";
-    //  "REDIRECT_URL"  "http://127.0.0.1:3000/auth/authorized";
-    //  "AUTH_URL"      "https://discord.com/api/oauth2/authorize?response_type=code";
-    //  "TOKEN_URL"     "https://discord.com/api/oauth2/token";
-
-    let client_id = env::var("CLIENT_ID").context("Missing CLIENT_ID!").map_err( types::AppError);
-    let client_secret = env::var("CLIENT_SECRET").context("Missing CLIENT_SECRET!")    .map_err( types::AppError);
+    let client_id = ClientId::new(env::var("CLIENT_ID")?);
+    let client_secret = ClientSecret::new(env::var("CLIENT_SECRET")?);
     let redirect_url = env::var("REDIRECT_URL")
-        .unwrap_or_else(|_| "http://127.0.0.1:3000/auth/authorized".to_string());
+        .unwrap_or_else(|_| "http://127.0.0.1:8080/auth/authorized".to_string());
+    let auth_url = AuthUrl::new("https://accounts.google.com/o/oauth2/auth".to_string())
+        .map_err(|_| "OAuth: invalid authorization endpoint URL")?;
+    let token_url = TokenUrl::new("https://www.googleapis.com/oauth2/token".to_string())
+        .map_err(|_| "OAuth: invalid token endpoint URL")?;
 
-    let auth_url = env::var("AUTH_URL").unwrap_or_else(|_| {
-        "https://discord.com/api/oauth2/authorize?response_type=code".to_string()
-    });
 
-    let token_url = env::var("TOKEN_URL")
-        .unwrap_or_else(|_| "https://discord.com/api/oauth2/token".to_string());
-
-    Ok(BasicClient::new(ClientId::new(client_id.unwrap()),
-                        Some(ClientSecret::new(client_secret.unwrap())),
-                        AuthUrl::new(auth_url).context("failed to create new authorization server URL").unwrap(),
-                        Some(TokenUrl::new(token_url).context("failed to create new token endpoint URL").unwrap(),
-    )).set_redirect_uri(
+    let client = BasicClient::new(
+        client_id,
+        Some(client_secret),
+        auth_url,
+        Some(token_url),
+    )
+    .set_redirect_uri(
             RedirectUrl::new(redirect_url).context("failed to create new redirection URL").map_err(types::AppError).unwrap(),
-    ))
+    )
+        .set_revocation_uri(
+        RevocationUrl::new("https://oauth2.googleapis.com/revoke".to_string())
+            .map_err(|_| "OAuth: invalid revocation endpoint URL")?,
+    );
+    Ok(client)
 }
 
 
-async fn discord_auth(State(client): State<AppState>) -> std::result::Result<Redirect, OauthError> {
+pub(crate) async fn login(State(client): State<AppState>) -> std::result::Result<Redirect, OauthError> {
     // if user_data.is_some() {
     //     // check if already authenticated
     //     return Ok(Redirect::to("/"));
-    // }
+    // // }
     // let return_url = params
     //     .remove("return_url")
     //     .unwrap_or_else(|| "/".to_string());
-    // TODO: check if return_url is valid
 
-    let (pkce_code_challenge, pkce_code_verifier) = PkceCodeChallenge::new_random_sha256();
+    // let (pkce_code_challenge, pkce_code_verifier) = PkceCodeChallenge::new_random_sha256();
+    let client = oauth_client()?;
 
-    let (auth_url, csrf_token): (Url, CsrfToken) = client.oauth_client
+    let (auth_url, csrf_state) = client
         .authorize_url(CsrfToken::new_random)
-        .add_scope(Scope::new("identify".to_string()))
+        .add_scope(Scope::new(
+            "https://www.googleapis.com/auth/userinfo.email".to_string(),
+        ))
+        // .set_pkce_challenge(pkce_code_challenge)
         .url();
-
-
+println!("{:?}", client);
     /* sqlx::query(
         "INSERT INTO oauth2_state_storage (csrf_state, pkce_code_verifier, return_url) VALUES (?, ?, ?);",
     )
@@ -69,7 +70,6 @@ async fn discord_auth(State(client): State<AppState>) -> std::result::Result<Red
         .execute(&db_pool)
         .await?; */
     Ok( Redirect::to(auth_url.as_ref()))
-    // Redirect to Google's oauth service
 }
 
 pub async fn oauth_return(
