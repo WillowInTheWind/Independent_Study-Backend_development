@@ -24,3 +24,5 @@ hostname = "0.3.1"
 constant_time_eq = "0.1.5"
 reqwest = { version = "0.12.2", features = ["json"] }
 uuid = { version = "1.8.0", features = ["v4"] }
+http = "1.1.0"
+axum-extra = { version = "0.9.3", features = ["typed-header"] }

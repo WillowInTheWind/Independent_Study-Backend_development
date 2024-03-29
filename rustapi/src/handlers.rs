@@ -1,9 +1,9 @@
+use crate::AppState;
 use anyhow::{anyhow, Context};
 use axum::extract::State;
 // use axum::http::StatusCode;
 use axum::Json;
 use axum::response::{IntoResponse, Redirect};
-use crate::state::AppState;
 use axum_macros::debug_handler;
 use oauth2::{CsrfToken, Scope};
 use crate::handlers::user_manager::UserService;
@@ -22,9 +22,9 @@ pub(crate) mod mx_service;
 pub async fn root( ) -> &'static str {
     "This is the main route of the server"
 }
-#[debug_handler]
-pub async fn users(
-    State(state): State<AppState>,
-) -> Json<Vec<GenericUser>> {
-   Json(state.dbreference.get_users().await.map_err(types::internal_error).unwrap())
-}
+// #[debug_handler]
+// pub async fn users(
+//     State(state): State<AppState>,
+// ) -> Json<Vec<GenericUser>> {
+//    Json(state.dbreference.get_users().await.map_err(types::internal_error).unwrap())
+// }
