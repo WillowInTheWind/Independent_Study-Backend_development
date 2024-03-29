@@ -116,8 +116,8 @@ use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 static COOKIE_NAME: &str = "SESSION";
 
 pub(crate) fn oauth_client() -> Result<BasicClient, AppError> {
-    let client_id = "50375690088-d550pisn0njk98emapjq169fcre5iqp8.apps.googleusercontent.com".to_string();
-    let client_secret = "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".to_string();
+    let client_id = env::var("CLIENT_ID").to_string();
+    let client_secret = env::var("CLIENT_SECRET").to_string();
     let redirect_url = "http://127.0.0.1:8080/auth/authorized".to_string();
     let auth_url = AuthUrl::new("https://accounts.google.com/o/oauth2/v2/auth".to_string())
         .expect("Invalid authorization endpoint URL");
