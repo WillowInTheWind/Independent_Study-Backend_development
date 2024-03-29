@@ -6,7 +6,7 @@ DROP TABLE IF EXISTS oauth2_state_storage;
 
 CREATE TABLE user (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    user_name TEXT UNIQUE NOT NULL,
+    name TEXT UNIQUE NOT NULL,
     user_identifier INTEGER NOT NULL,
     user_email TEXT UNIQUE NOT NULL
 );

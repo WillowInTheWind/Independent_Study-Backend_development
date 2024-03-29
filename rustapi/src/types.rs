@@ -71,7 +71,7 @@ impl MorningExercise {
 #[derive(FromRow, Debug, Deserialize, Serialize, Clone)]
 pub(crate) struct GenericUser {
     pub(crate) id: Option<i64>,
-    pub(crate) user_name: String,
+    pub(crate) name: String,
     //if I end up implementing other way to login besides google Oauth I can change the user type
     pub(crate) user_identifier: i64,
     pub(crate) user_email: String

@@ -15,7 +15,6 @@ use axum::http::HeaderMap;
 use serde::Deserialize;
 
 pub mod user_manager;
-pub(crate) mod login_service;
 pub(crate) mod mx_service;
 // static COOKIE_NAME: &str = "SESSION";
 #[debug_handler]

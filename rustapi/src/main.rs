@@ -16,7 +16,20 @@ use std::env;
 use axum::extract::FromRef;
 use dotenv::dotenv;
 use sqlx::{Pool, Sqlite};
-
+use anyhow::{Context, Result};
+use async_session::{MemoryStore, Session, SessionStore};
+use axum::{
+    async_trait,
+    extract::{ Query, State},
+    http::{header::SET_COOKIE, HeaderMap},
+    response::{IntoResponse, Redirect, Response},
+    RequestPartsExt,
+};
+use axum_extra::{headers, typed_header::TypedHeaderRejectionReason, TypedHeader};
+use http::{header, request::Parts, StatusCode};
+use serde::{Deserialize, Serialize};
+use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
+use crate::types::GenericUser;
 
 // #[debug_handler]
 struct EnvironmentVariables {
@@ -38,8 +51,7 @@ async fn main(){
         dbreference: pool,
         oauth_client: outhclient,
     };
-    // println!("->> Successful connection to database: {:?}", &database_url);
-
+    println!("->> Successful connection to database: {:?}", &database_url);
     let app_router =    Router::new()
         .route("/", get(handlers::root))
         .route("/users", get(handlers::users))
@@ -67,21 +79,12 @@ async fn initialize_environment_variable() -> EnvironmentVariables {
         port,
     }
 }
-// fn app_router (environment_variables: EnvironmentVariables, user_data: Option<GenericUser>) -> Router {
-//     Router::new()
-//         .route("/", get(handlers::root))
-//         .route("/users", get(handlers::users))
-//         .route("/login", get(login))
-//         .route("/auth/authorized", get(login_authorized))
-//         .with_state(environment_variables.app_state)
-// }
-
+// MAGIC CODE, DO NOT EDIT IT WILL KILL YOU
 #[derive(Clone)]
 pub struct AppState {
     pub dbreference: Pool<Sqlite>,
     pub(crate) oauth_client: BasicClient
 }
-
 impl AppState {
     pub fn new(db: Pool<Sqlite>, oauth_client: BasicClient) -> Self {
         AppState {
@@ -90,31 +93,12 @@ impl AppState {
         }
     }
 }
-
 impl FromRef<AppState> for BasicClient {
     fn from_ref(state: &AppState) -> Self {
         state.oauth_client.clone()
     }
 }
 
-
-use anyhow::{Context, Result};
-use async_session::{MemoryStore, Session, SessionStore};
-use axum::{
-    async_trait,
-    extract::{ Query, State},
-    http::{header::SET_COOKIE, HeaderMap},
-    response::{IntoResponse, Redirect, Response},
-    RequestPartsExt,
-};
-use axum_extra::{headers, typed_header::TypedHeaderRejectionReason, TypedHeader};
-use http::{header, request::Parts, StatusCode};
-use serde::{Deserialize, Serialize};
-use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
-
-// MAGIC CODE, DO NOT EDIT IT WILL KILL YOU
-
-static COOKIE_NAME: &str = "SESSION";
 
 pub(crate) fn oauth_client() -> Result<BasicClient, AppError> {
     dotenv().ok();
@@ -165,8 +149,18 @@ pub(crate) async fn login_authorized(
         .request_async(async_http_client)
         .await?;
     // Fetch user data from discord
+    // Fetch user data from discord
     let client = reqwest::Client::new();
-
+    let user_data: GenericUser = client
+        // https://discord.com/developers/docs/resources/user#get-current-user
+        .get("https://www.googleapis.com/oauth2/v3/userinfo")
+        .bearer_auth(token.access_token().secret())
+        .send()
+        .await
+        .context("failed in sending request to target Url")?
+        .json::<GenericUser>()
+        .await
+        .context("failed to deserialize response as JSON")?;
 
     Ok(Redirect::to("/"))
 }

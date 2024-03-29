@@ -16,7 +16,7 @@ impl UserService for Pool<Sqlite> {
     async fn get_users(&self) -> Result<Vec<GenericUser>, sqlx::Error> {
         let query: Result<Vec<GenericUser>, sqlx::Error> =
             sqlx::query_as(
-            "SELECT id, user_name, user_identifier FROM user")
+            "SELECT id, name, user_identifier FROM user")
             .fetch_all(self)
             .await
             ;
@@ -40,7 +40,7 @@ impl UserService for Pool<Sqlite> {
         let query: Result<GenericUser, sqlx::Error> =
             sqlx::query_as!(
                 GenericUser,
-                "SELECT * FROM user WHERE user_name = $1",
+                "SELECT * FROM user WHERE name = $1",
                 name
                 )
                 .fetch_one(self)
@@ -54,8 +54,8 @@ impl UserService for Pool<Sqlite> {
     let query =
         sqlx::query!(
                 // GenericUser,
-                r#"INSERT into user (user_name, user_identifier, user_email) values ($1,$2, $3) "#,
-                new_user.user_name,
+                r#"INSERT into user (name, user_identifier, user_email) values ($1,$2, $3) "#,
+                new_user.name,
                 new_user.user_identifier,
                 new_user.user_email
             )
@@ -86,7 +86,7 @@ impl UserService for Pool<Sqlite> {
         let query =
             sqlx::query!(
                 // GenericUser,
-                r#"Delete from user where user_name = $1"#,
+                r#"Delete from user where name = $1"#,
                 name
             )
                 .execute(self)
