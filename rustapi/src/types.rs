@@ -166,3 +166,14 @@ impl From<&str> for OauthError {
         OauthError::new(err)
     }
 }
+
+#[derive(FromRow, Debug, Deserialize, Serialize, Clone)]
+pub(crate) struct  GoogleUser {
+    // id: i32,
+    email: String,
+    verified_email: bool,
+    name: String,
+    given_name: String,
+    family_name: String,
+    picture: String
+}

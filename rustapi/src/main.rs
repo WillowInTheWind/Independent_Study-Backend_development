@@ -17,6 +17,7 @@ use axum::extract::FromRef;
 use dotenv::dotenv;
 use sqlx::{Pool, Sqlite};
 use anyhow::{Context, Result};
+use crate::types::GoogleUser;
 use async_session::{MemoryStore, Session, SessionStore};
 use axum::{
     async_trait,
@@ -151,17 +152,17 @@ pub(crate) async fn login_authorized(
     // Fetch user data from discord
     // Fetch user data from discord
     let client = reqwest::Client::new();
-    let user_data: GenericUser = client
+    let user_data = client
         // https://discord.com/developers/docs/resources/user#get-current-user
         .get("https://www.googleapis.com/oauth2/v3/userinfo")
         .bearer_auth(token.access_token().secret())
         .send()
         .await
         .context("failed in sending request to target Url")?
-        .json::<GenericUser>()
-        .await
-        .context("failed to deserialize response as JSON")?;
-
+        .json::<GoogleUser>()
+        .await;
+        // .context("failed to deserialize response as JSON")?;
+println!("{:?}",user_data);
     Ok(Redirect::to("/"))
 }
 
