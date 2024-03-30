@@ -170,10 +170,8 @@ impl From<&str> for OauthError {
 #[derive(FromRow, Debug, Deserialize, Serialize, Clone)]
 pub(crate) struct  GoogleUser {
     // id: i32,
+    sub: String,
+    picture: Option<String>,
     email: String,
-    verified_email: bool,
     name: String,
-    given_name: String,
-    family_name: String,
-    picture: String
 }
