@@ -2,23 +2,23 @@ mod handlers;
 mod state;
 mod mxdate_algorithim;
 mod types;
-mod middlewares;
 
 use oauth2::{
     basic::BasicClient, reqwest::async_http_client, AuthUrl, AuthorizationCode, ClientId,
     ClientSecret, CsrfToken, RedirectUrl, Scope, TokenResponse, TokenUrl,
 };
 use std::string::String;
-use axum::{routing::{get, post}, Router, Extension};
+use axum::{routing::{get, post}, Router, Extension, middleware};
 use std::sync::Arc;
 use sqlx::sqlite::SqlitePoolOptions;
 use std::env;
-use axum::extract::FromRef;
+use axum::extract::{FromRef, FromRequestParts};
 use dotenv::dotenv;
 use sqlx::{Pool, Sqlite};
 use anyhow::{Context, Result};
 use crate::types::GoogleUser;
 use async_session::{MemoryStore, Session, SessionStore};
+use async_session::chrono::Utc;
 use axum::{
     async_trait,
     extract::{ Query, State},
@@ -30,7 +30,10 @@ use axum_extra::{headers, typed_header::TypedHeaderRejectionReason, TypedHeader}
 use http::{header, request::Parts, StatusCode};
 use serde::{Deserialize, Serialize};
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
+use uuid::Uuid;
+use crate::state::AppState;
 use crate::types::GenericUser;
+static COOKIE_NAME: &str = "SESSION";
 
 // #[debug_handler]
 struct EnvironmentVariables {
@@ -39,33 +42,45 @@ struct EnvironmentVariables {
 }
 #[tokio::main]
 async fn main(){
-    dotenv().ok();
-    tracing_subscriber::fmt::init();
-    let database_url = env::var("DATABASE_URL").expect("DATABASE_URL must set");
-    let environment_variables = initialize_environment_variable().await;
-    let listener = tokio::net::TcpListener::bind(format!("{}:{}", environment_variables.address, environment_variables.port))
-        .await
-        .unwrap();
-    let pool = SqlitePoolOptions::new().connect(&database_url).await.expect("could not connect");
-    let outhclient= oauth_client().unwrap();
-    let app_state: AppState = AppState {
-        dbreference: pool,
-        oauth_client: outhclient,
-    };
-    println!("->> Successful connection to database: {:?}", &database_url);
-    let app_router =    Router::new()
-        .route("/", get(handlers::root))
-        .route("/users", get(handlers::users))
-        .route("/login", get(login))
-        .route("/auth/authorized", get(login_authorized))
-        .with_state(app_state);
-    println!("->> LISTENING on {:?}\n", listener.local_addr());
-    axum::serve(listener, app_router)
-        .await
-        .unwrap();
-}
-async fn initialize_environment_variable() -> EnvironmentVariables {
+    //Init enviorment variables and tracing
+        dotenv().ok();
+        tracing_subscriber::fmt::init();
+        let database_url = env::var("DATABASE_URL").expect("DATABASE_URL must set");
+        let environment_variables = initialize_environment_variable().await;
+    //Init App State
+        let store = MemoryStore::new();
 
+        let pool = SqlitePoolOptions::new().connect(&database_url).await.expect("could not connect");
+        let oauth_client = oauth_client().unwrap();
+        let app_state: AppState = AppState {
+            store,
+            dbreference: pool,
+            oauth_client,
+        };
+        println!("->> Successful connection to database: {:?}", &database_url);
+
+    //Init App Router
+        let app_router =    Router::new()
+            .route("/", get(handlers::root))
+            .route("/users", get(handlers::users))
+            .route("/login", get(login))
+            .route("/auth/authorized", get(login_authorized))
+            .fallback(error_404)
+            .with_state(app_state);
+    //Launch Server
+        let listener = tokio::net::TcpListener::bind(format!("{}:{}", environment_variables.address, environment_variables.port))
+            .await
+            .unwrap();
+        println!("->> LISTENING on {:?}\n", listener.local_addr());
+        axum::serve(listener, app_router)
+            .await
+            .unwrap();
+}
+async fn error_404() -> (StatusCode, &'static str) {
+    (StatusCode::NOT_FOUND, "Not Found")
+}
+
+async fn initialize_environment_variable() -> EnvironmentVariables {
     let address: String = match env::var("ADDRESS") {
         Ok(address) => {address}
         _ => {String::from("127.0.0.1")}
@@ -74,33 +89,15 @@ async fn initialize_environment_variable() -> EnvironmentVariables {
         Ok(port) => { port }
         _ => {"8080".to_string()}
     };
-
     EnvironmentVariables {
         address,
         port,
     }
 }
-// MAGIC CODE, DO NOT EDIT IT WILL KILL YOU
-#[derive(Clone)]
-pub struct AppState {
-    pub dbreference: Pool<Sqlite>,
-    pub(crate) oauth_client: BasicClient
-}
-impl AppState {
-    pub fn new(db: Pool<Sqlite>, oauth_client: BasicClient) -> Self {
-        AppState {
-            dbreference: db,
-            oauth_client
-        }
-    }
-}
-impl FromRef<AppState> for BasicClient {
-    fn from_ref(state: &AppState) -> Self {
-        state.oauth_client.clone()
-    }
-}
-
-
+// OAUTH Code: Note to future mantainers, this code DID NOT work
+// until I moved into *this* file, do not try to pull this out
+// into its own file it will only make you cry, ask me how I know
+//Oauth Methods
 pub(crate) fn oauth_client() -> Result<BasicClient, AppError> {
     dotenv().ok();
 
@@ -129,7 +126,6 @@ pub(crate) async fn login(State(client): State<BasicClient>) -> impl IntoRespons
     // TODO: this example currently doesn't validate the CSRF token during login attempts. That
     // makes it vulnerable to cross-site request forgery. If you copy code from this example make
     // sure to add a check for the CSRF token.
-    //
     // Issue for adding check to this example https://github.com/tokio-rs/axum/issues/2511
     let (auth_url, _csrf_token) = client
         .authorize_url(CsrfToken::new_random)
@@ -139,8 +135,8 @@ pub(crate) async fn login(State(client): State<BasicClient>) -> impl IntoRespons
 
     Redirect::to(&auth_url.to_string())
 }
-
 pub(crate) async fn login_authorized(
+    State(store): State<MemoryStore>,
     State(state): State<AppState>,
     State(oauth_client): State<BasicClient>,
     Query(query): Query<AuthRequest>,
@@ -149,8 +145,8 @@ pub(crate) async fn login_authorized(
         .exchange_code(AuthorizationCode::new(query.code))
         .request_async(async_http_client)
         .await?;
-    // Fetch user data from discord
-    // Fetch user data from discord
+    // Fetch user data from Google
+
     let client = reqwest::Client::new();
     let user_data = client
         // https://discord.com/developers/docs/resources/user#get-current-user
@@ -160,15 +156,34 @@ pub(crate) async fn login_authorized(
         .await
         .context("failed in sending request to target Url")?
         .json::<GoogleUser>()
-        .await;
-        // .context("failed to deserialize response as JSON")?;
-println!("{:?}",user_data);
-    Ok(Redirect::to("/"))
+        .await
+        .context("failed to deserialize response as JSON")?;
+
+    let mut session = Session::new();
+    session
+        .insert("user", &user_data)
+        .context("failed in inserting serialized value into session")?;
+
+    // Store session and get corresponding cookie
+    let cookie = store
+        .store_session(session)
+        .await
+        .context("failed to store session")?
+        .context("unexpected error retrieving cookie value")?;
+
+    // Build the cookie
+    let cookie = format!("{COOKIE_NAME}={cookie}; SameSite=Lax; Path=/");
+
+    // Set cookie
+    let mut headers = HeaderMap::new();
+    headers.insert(
+        SET_COOKIE,
+        cookie.parse().context("failed to parse cookie")?,
+    );
+
+    Ok((headers, Redirect::to("/")))
 }
-
-
 struct AuthRedirect;
-
 impl IntoResponse for AuthRedirect {
     fn into_response(self) -> Response {
         Redirect::temporary("/auth/discord").into_response()
@@ -180,13 +195,8 @@ pub(crate) struct AuthRequest {
     code: String,
     state: String,
 }
-
-
-// Use anyhow, define error and enable '?'
-// For a simplified example of using anyhow in axum check /examples/anyhow-error-response
 #[derive(Debug)]
 pub(crate) struct AppError(anyhow::Error);
-
 // Tell axum how to convert `AppError` into a response.
 impl IntoResponse for AppError {
     fn into_response(self) -> Response {
@@ -195,7 +205,6 @@ impl IntoResponse for AppError {
         (StatusCode::INTERNAL_SERVER_ERROR, "Something went wrong").into_response()
     }
 }
-
 // This enables using `?` on functions that return `Result<_, anyhow::Error>` to turn them into
 // `Result<_, AppError>`. That way you don't need to do that manually.
 impl<E> From<E> for AppError

@@ -6,6 +6,7 @@ use sqlx::FromRow;
 use serde::{Deserialize, Serialize};
 use axum::http::StatusCode;
 use axum::response::IntoResponse;
+use chrono::NaiveDate;
 use crate::mxdate_algorithim;
 
 pub(crate) trait DateToString {
@@ -23,9 +24,9 @@ impl DateToString for Date {
     }
 }
 pub(crate) struct MorningExercise {
-    pub(crate) id: u32,
-    pub(crate) index:u16,
-    pub(crate) date: Date,
+    pub(crate) id: i64,
+    pub(crate) mx_index: i64,
+    pub(crate) date:  chrono::NaiveDate,
     pub(crate) owner: GenericUser,
     pub(crate) title: String,
     pub(crate) description: String,
@@ -34,25 +35,25 @@ pub(crate) struct MorningExercise {
 impl MorningExercise {
 
     //constructors
-    pub fn new_with_index(id:u32,
+    pub fn new_with_index(id:i64,
                           owner: GenericUser,
-                          index: u16,
+                          mx_index: i64,
                           title: String,
                           description: String,
                           editors: Vec<GenericUser>)
                           -> Self {
         MorningExercise {
             id,
-            index,
+           mx_index,
             date: mxdate_algorithim::weekly_index_to_date(),
             owner,
             title ,
             description ,
         }
     }
-    pub fn new_with_date(id:u32,
+    pub fn new_with_date(id:i64,
                          owner: GenericUser,
-                         date: Date,
+                         date: NaiveDate,
                          title: String,
                          description: String,
                          editors: Vec<GenericUser>)
@@ -60,7 +61,24 @@ impl MorningExercise {
         MorningExercise {
             id,
             date,
-            index: mxdate_algorithim::weekly_date_to_index(),
+            mx_index: mxdate_algorithim::weekly_date_to_index() as i64,
+            owner,
+            title ,
+            description ,
+        }
+    }
+    pub fn new(id:i64,
+               owner: GenericUser,
+               mx_index: i64,
+               date: NaiveDate,
+               title: String,
+               description: String,
+               editors: Option<GenericUser>)
+                          -> Self {
+        MorningExercise {
+            id,
+            mx_index,
+            date,
             owner,
             title ,
             description ,
@@ -169,9 +187,9 @@ impl From<&str> for OauthError {
 
 #[derive(FromRow, Debug, Deserialize, Serialize, Clone)]
 pub(crate) struct  GoogleUser {
-    // id: i32,
-    sub: String,
-    picture: Option<String>,
-    email: String,
-    name: String,
+    // pub(crate) id: i32,
+    pub(crate) sub: String,
+    pub(crate) picture: Option<String>,
+    pub(crate) email: String,
+    pub(crate) name: String,
 }

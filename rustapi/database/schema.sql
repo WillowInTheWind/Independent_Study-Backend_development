@@ -1,4 +1,5 @@
 DROP TABLE IF EXISTS user;
+DROP TABLE IF EXISTS GoogleUsers;
 DROP TABLE IF EXISTS MX;
 DROP TABLE IF EXISTS user_sessions;
 DROP TABLE IF EXISTS oauth2_state_storage;
@@ -15,6 +16,15 @@ INSERT into user values
 (1,'chase', 128474, 'cwayland@fwparker.org'),
 (2, 'willow', 1282334,'wayland.chase@gmail.com');
 
+CREATE TABLE GoogleUsers (
+                             "id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+    sub INTEGER UNIQUE NOT NULL,
+    picture TEXT NOT NULL,
+    email TEXT UNIQUE NOT NULL,
+    name TEXT UNIQUE NOT NULL
+);
+
+
 CREATE TABLE MX (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     mx_index INTEGER NOT NULL,
@@ -26,16 +36,16 @@ CREATE TABLE MX (
 );
 
 CREATE TABLE "user_sessions" (
-"id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
-"user_id" integer NOT NULL,
-"session_token_p1" text NOT NULL,
-"session_token_p2" text NOT NULL,
-"created_at" integer NOT NULL,
-"expires_at" integer NOT NULL
+"id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+"user_id" INTEGER NOT NULL,
+"session_token_p1" TEXT NOT NULL,
+"session_token_p2" TEXT NOT NULL,
+"created_at" INTEGER NOT NULL,
+"expires_at" INTEGER NOT NULL
 );
 CREATE TABLE "oauth2_state_storage" (
-"id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
-"csrf_state" text NOT NULL,
-"pkce_code_verifier" text NOT NULL,
-"return_url" text NOT NULL
+    "id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "csrf_state" text NOT NULL,
+    "pkce_code_verifier" text NOT NULL,
+    "return_url" text NOT NULL
 );
