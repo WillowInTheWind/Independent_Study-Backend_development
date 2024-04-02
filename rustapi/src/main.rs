@@ -1,40 +1,58 @@
 mod handlers;
 mod state;
-mod mxdate_algorithim;
+mod mx_date_algorithm;
 mod types;
+mod config;
+mod middlewares;
 
-use oauth2::{
-    basic::BasicClient, reqwest::async_http_client, AuthUrl, AuthorizationCode, ClientId,
-    ClientSecret, CsrfToken, RedirectUrl, Scope, TokenResponse, TokenUrl,
-};
+use oauth2::{AuthorizationCode, CsrfToken, Scope, TokenResponse};
 use std::string::String;
-use axum::{routing::{get, post}, Router, Extension, middleware};
-use std::sync::Arc;
+use axum::{Json, middleware, Router, routing::get};
 use sqlx::sqlite::SqlitePoolOptions;
 use std::env;
-use axum::extract::{FromRef, FromRequestParts};
 use dotenv::dotenv;
-use sqlx::{Pool, Sqlite};
-use anyhow::{Context, Result};
-use crate::types::GoogleUser;
+use anyhow::Context;
 use async_session::{MemoryStore, Session, SessionStore};
-use async_session::chrono::Utc;
 use axum::{
-    async_trait,
-    extract::{ Query, State},
-    http::{header::SET_COOKIE, HeaderMap},
-    response::{IntoResponse, Redirect, Response},
     RequestPartsExt,
+    response::IntoResponse,
 };
-use axum_extra::{headers, typed_header::TypedHeaderRejectionReason, TypedHeader};
-use http::{header, request::Parts, StatusCode};
+use axum::extract::{Query, State};
+use axum::response::{Redirect, Response};
+use axum_extra::extract::cookie::Cookie;
+use axum_extra::extract::CookieJar;
+use chrono::{DateTime, Duration, TimeDelta, Utc};
+use http::header::SET_COOKIE;
+use http::{header, HeaderMap, StatusCode};
+use jsonwebtoken::{DecodingKey, encode, EncodingKey, Header};
+use oauth2::basic::BasicClient;
+use oauth2::reqwest::async_http_client;
+use once_cell::sync::Lazy;
 use serde::{Deserialize, Serialize};
+use serde_json::json;
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
-use uuid::Uuid;
+use crate::handlers::user_manager::UserService;
+use crate::middlewares::auth;
 use crate::state::AppState;
-use crate::types::GenericUser;
+use crate::types::{GenericUser, GoogleUser};
+static KEYS: Lazy<Keys> = Lazy::new(|| {
+    let secret = std::env::var("JWT_SECRET").expect("JWT_SECRET must be set");
+    Keys::new(secret.as_bytes())
+});
+struct Keys {
+    encoding: EncodingKey,
+    decoding: DecodingKey,
+}
+impl Keys {
+    fn new(secret: &[u8]) -> Self {
+        Self {
+            encoding: EncodingKey::from_secret(secret),
+            decoding: DecodingKey::from_secret(secret),
+        }
+    }
+}
 static COOKIE_NAME: &str = "SESSION";
-
+static TOKEN_LENGTH_SECONDS: i64 = 120;
 // #[debug_handler]
 struct EnvironmentVariables {
     address: String,
@@ -46,12 +64,12 @@ async fn main(){
         dotenv().ok();
         tracing_subscriber::fmt::init();
         let database_url = env::var("DATABASE_URL").expect("DATABASE_URL must set");
-        let environment_variables = initialize_environment_variable().await;
+        let environment_variables = config::initialize_environment_variable().await;
     //Init App State
         let store = MemoryStore::new();
 
         let pool = SqlitePoolOptions::new().connect(&database_url).await.expect("could not connect");
-        let oauth_client = oauth_client().unwrap();
+        let oauth_client = config::oauth_client().unwrap();
         let app_state: AppState = AppState {
             store,
             dbreference: pool,
@@ -65,7 +83,8 @@ async fn main(){
             .route("/users", get(handlers::users))
             .route("/login", get(login))
             .route("/auth/authorized", get(login_authorized))
-            .fallback(error_404)
+            .layer(middleware::from_fn_with_state(app_state.clone(), auth))
+            .fallback(handlers::error_404)
             .with_state(app_state);
     //Launch Server
         let listener = tokio::net::TcpListener::bind(format!("{}:{}", environment_variables.address, environment_variables.port))
@@ -76,51 +95,72 @@ async fn main(){
             .await
             .unwrap();
 }
-async fn error_404() -> (StatusCode, &'static str) {
-    (StatusCode::NOT_FOUND, "Not Found")
-}
+pub(crate) async fn login_authorized(
+    State(store): State<MemoryStore>,
+    State(state): State<AppState>,
+    State(oauth_client): State<BasicClient>,
+    Query(query): Query<AuthRequest>
+) -> Result<Response, AppError> {
+    let token = oauth_client
+        .exchange_code(AuthorizationCode::new(query.code))
+        .request_async(async_http_client)
+        .await?;
+    // Fetch user data from Google
 
-async fn initialize_environment_variable() -> EnvironmentVariables {
-    let address: String = match env::var("ADDRESS") {
-        Ok(address) => {address}
-        _ => {String::from("127.0.0.1")}
-    };
-    let port: String = match env::var("PORT") {
-        Ok(port) => { port }
-        _ => {"8080".to_string()}
-    };
-    EnvironmentVariables {
-        address,
-        port,
+    let client = reqwest::Client::new();
+    let user_data = client
+        .get("https://www.googleapis.com/oauth2/v3/userinfo")
+        .bearer_auth(token.access_token().secret())
+        .send()
+        .await
+        .context("failed in sending request to target Url")?
+        .json::<GoogleUser>()
+        .await
+        .context("failed to deserialize response as JSON")?;
+
+    let user_exists: Option<bool> =
+        sqlx::query_scalar("SELECT EXISTS(SELECT 1 FROM user WHERE user_email = $1)")
+            .bind(user_data.email)
+            .fetch_one(&state.dbreference)
+            .await
+            .context("failed in finding if user exists")?;
+
+    if let Some(exists) = user_exists {
+        if (exists) {
+            return Ok(Redirect::to("/").into_response())
+        }
     }
+
+    let user = GenericUser {
+        id: None,
+        name: "".to_string(),
+        user_identifier: 0,
+        user_email: "".to_string(),
+    };
+
+    let user_id = state.dbreference.create_user(user).await?;
+    let mut now = Utc::now();
+    let expires_in = Duration::try_seconds(TOKEN_LENGTH_SECONDS).unwrap();
+    now += expires_in;
+    let exp = now.timestamp() as usize;
+
+
+    let claims = Claims {
+        sub: user_id as i32,
+        exp
+    };
+
+    let jwttoken = encode(
+        &Header::default(),
+        &claims,
+        &KEYS.encoding,
+    ).unwrap();
+
+
+    let mut jar = CookieJar::new().add(Cookie::build(("token", jwttoken)).secure(true).http_only(true).path("/"));
+
+    Ok((jar, Redirect::to("/")).into_response())
 }
-// OAUTH Code: Note to future mantainers, this code DID NOT work
-// until I moved into *this* file, do not try to pull this out
-// into its own file it will only make you cry, ask me how I know
-//Oauth Methods
-pub(crate) fn oauth_client() -> Result<BasicClient, AppError> {
-    dotenv().ok();
-
-    let client_id = env::var("CLIENT_ID").unwrap();
-    let client_secret = env::var("CLIENT_SECRET").unwrap();
-    let redirect_url = "http://127.0.0.1:8080/auth/authorized".to_string();
-    let auth_url = AuthUrl::new("https://accounts.google.com/o/oauth2/v2/auth".to_string())
-        .expect("Invalid authorization endpoint URL");
-    let token_url = TokenUrl::new("https://www.googleapis.com/oauth2/v3/token".to_string())
-        .expect("Invalid token endpoint URL");
-
-
-    Ok(BasicClient::new(
-        ClientId::new(client_id),
-        Some(ClientSecret::new(client_secret)),
-        auth_url,
-        Some(token_url),
-    )
-        .set_redirect_uri(
-            RedirectUrl::new(redirect_url.to_string()).context("failed to create new redirection URL")?,
-        ))
-}
-
 
 pub(crate) async fn login(State(client): State<BasicClient>) -> impl IntoResponse {
     // TODO: this example currently doesn't validate the CSRF token during login attempts. That
@@ -135,65 +175,17 @@ pub(crate) async fn login(State(client): State<BasicClient>) -> impl IntoRespons
 
     Redirect::to(&auth_url.to_string())
 }
-pub(crate) async fn login_authorized(
-    State(store): State<MemoryStore>,
-    State(state): State<AppState>,
-    State(oauth_client): State<BasicClient>,
-    Query(query): Query<AuthRequest>,
-) -> Result<impl IntoResponse, AppError> {
-    let token = oauth_client
-        .exchange_code(AuthorizationCode::new(query.code))
-        .request_async(async_http_client)
-        .await?;
-    // Fetch user data from Google
-
-    let client = reqwest::Client::new();
-    let user_data = client
-        // https://discord.com/developers/docs/resources/user#get-current-user
-        .get("https://www.googleapis.com/oauth2/v3/userinfo")
-        .bearer_auth(token.access_token().secret())
-        .send()
-        .await
-        .context("failed in sending request to target Url")?
-        .json::<GoogleUser>()
-        .await
-        .context("failed to deserialize response as JSON")?;
-
-    let mut session = Session::new();
-    session
-        .insert("user", &user_data)
-        .context("failed in inserting serialized value into session")?;
-
-    // Store session and get corresponding cookie
-    let cookie = store
-        .store_session(session)
-        .await
-        .context("failed to store session")?
-        .context("unexpected error retrieving cookie value")?;
-
-    // Build the cookie
-    let cookie = format!("{COOKIE_NAME}={cookie}; SameSite=Lax; Path=/");
-
-    // Set cookie
-    let mut headers = HeaderMap::new();
-    headers.insert(
-        SET_COOKIE,
-        cookie.parse().context("failed to parse cookie")?,
-    );
-
-    Ok((headers, Redirect::to("/")))
-}
-struct AuthRedirect;
-impl IntoResponse for AuthRedirect {
-    fn into_response(self) -> Response {
-        Redirect::temporary("/auth/discord").into_response()
-    }
-}
 #[derive(Debug, Deserialize)]
 #[allow(dead_code)]
 pub(crate) struct AuthRequest {
     code: String,
     state: String,
+}
+pub struct AuthRedirect;
+impl IntoResponse for AuthRedirect {
+    fn into_response(self) -> Response {
+        Redirect::temporary("/login").into_response()
+    }
 }
 #[derive(Debug)]
 pub(crate) struct AppError(anyhow::Error);
@@ -214,4 +206,11 @@ impl<E> From<E> for AppError
     fn from(err: E) -> Self {
         Self(err.into())
     }
+}
+
+
+#[derive(Debug, Serialize, Deserialize)]
+struct Claims {
+    sub: i32,
+    exp: usize,
 }

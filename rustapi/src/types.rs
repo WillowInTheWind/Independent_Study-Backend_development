@@ -1,20 +1,18 @@
 use std::env::VarError;
 use axum::response::Html;
-use axum::response::Response;
-use time::Date;
 use sqlx::FromRow;
 use serde::{Deserialize, Serialize};
 use axum::http::StatusCode;
 use axum::response::IntoResponse;
 use chrono::NaiveDate;
-use crate::mxdate_algorithim;
+use crate::mx_date_algorithm;
 
 pub(crate) trait DateToString {
     fn date_to_long_string(&self) -> String;
     fn date_to_short_string(&self) -> String;
 
 }
-impl DateToString for Date {
+impl DateToString for NaiveDate {
     fn date_to_long_string(&self) -> String {
         todo!()
     }
@@ -45,7 +43,7 @@ impl MorningExercise {
         MorningExercise {
             id,
            mx_index,
-            date: mxdate_algorithim::weekly_index_to_date(),
+            date: mx_date_algorithm::weekly_index_to_date(),
             owner,
             title ,
             description ,
@@ -61,7 +59,7 @@ impl MorningExercise {
         MorningExercise {
             id,
             date,
-            mx_index: mxdate_algorithim::weekly_date_to_index() as i64,
+            mx_index: mx_date_algorithm::weekly_date_to_index() as i64,
             owner,
             title ,
             description ,
@@ -85,16 +83,24 @@ impl MorningExercise {
         }
     }
 }
-
 #[derive(FromRow, Debug, Deserialize, Serialize, Clone)]
 pub(crate) struct GenericUser {
     pub(crate) id: Option<i64>,
     pub(crate) name: String,
-    //if I end up implementing other way to login besides google Oauth I can change the user type
     pub(crate) user_identifier: i64,
     pub(crate) user_email: String
 }
-
+#[derive(FromRow, Debug, Deserialize, Serialize, Clone)]
+pub(crate) struct  GoogleUser {
+    // pub(crate) id: i32,
+    pub(crate) sub: String,
+    pub(crate) picture: Option<String>,
+    pub(crate) email: String,
+    pub(crate) name: String,
+}
+/// Errors, there are too many of them
+/// TODO: consolidate error type into one solid type
+pub(crate) struct AppError(pub anyhow::Error);
 pub fn internal_error<E>(err: E) -> (StatusCode, String)
     where
         E: std::error::Error,
@@ -102,16 +108,11 @@ pub fn internal_error<E>(err: E) -> (StatusCode, String)
     (StatusCode::INTERNAL_SERVER_ERROR, err.to_string())
 }
 #[derive(Debug)]
-pub(crate) struct AppError(pub anyhow::Error);
-
-
-#[derive(Debug)]
 pub struct OauthError {
     code: StatusCode,
     message: String,
     user_message: String,
 }
-
 impl OauthError {
     pub fn new(message: impl Into<String>) -> Self {
         Self {
@@ -138,7 +139,6 @@ impl From<VarError> for OauthError {
         OauthError::new(format!("Dotenv error: {:#}", err))
     }
 }
-
 impl IntoResponse for OauthError {
     fn into_response(self) -> axum::response::Response {
         println!("AppError: {}", self.message);
@@ -165,31 +165,18 @@ impl IntoResponse for OauthError {
             .into_response()
     }
 }
-
-
 impl From<sqlx::Error> for OauthError {
     fn from(err: sqlx::Error) -> Self {
         OauthError::new(format!("Database query error: {:#}", err))
     }
 }
-
 impl From<String> for OauthError {
     fn from(err: String) -> Self {
         OauthError::new(err)
     }
 }
-
 impl From<&str> for OauthError {
     fn from(err: &str) -> Self {
         OauthError::new(err)
     }
-}
-
-#[derive(FromRow, Debug, Deserialize, Serialize, Clone)]
-pub(crate) struct  GoogleUser {
-    // pub(crate) id: i32,
-    pub(crate) sub: String,
-    pub(crate) picture: Option<String>,
-    pub(crate) email: String,
-    pub(crate) name: String,
 }

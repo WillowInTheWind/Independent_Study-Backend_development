@@ -1,6 +1,7 @@
-// use axum::http::StatusCode;
 use sqlx::{Sqlite, Pool, Error};
 use crate::types::GenericUser;
+
+
 pub(crate) trait UserService: Send + Sync {
     async fn get_users(&self) -> Result<Vec<GenericUser>, sqlx::Error>;
     async fn get_user_by_id(&self, id: i32) -> Result<GenericUser, sqlx::Error>;
@@ -8,7 +9,6 @@ pub(crate) trait UserService: Send + Sync {
     async fn create_user(&self, new_user: GenericUser) -> Result<i64, sqlx::Error>;
     async fn delete_user_by_id(&self, id: i32) -> Result<i64, sqlx::Error>;
     async fn delete_user_by_user_name(&self, name: String) -> Result<i64, sqlx::Error>;
-
     async fn edit_username(&self, new_user: GenericUser) ->  Result<GenericUser, sqlx::Error>;
 }
 impl UserService for Pool<Sqlite> {

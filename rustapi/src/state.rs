@@ -4,8 +4,6 @@ use sqlx::{Pool, Sqlite};
 use oauth2::{
     basic::BasicClient
 };
-
-
 //Define AppState
 #[derive(Clone)]
 pub struct AppState {
@@ -14,7 +12,7 @@ pub struct AppState {
     pub(crate) oauth_client: BasicClient
 }
 impl AppState {
-    pub fn new(db: Pool<Sqlite>, oauth_client: BasicClient, store: MemoryStore) -> Self {
+    pub fn new(db:  Pool<Sqlite>, oauth_client: BasicClient, store: MemoryStore) -> Self {
         AppState {
             store,
             dbreference: db,
