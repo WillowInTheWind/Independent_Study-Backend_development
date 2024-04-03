@@ -2,14 +2,10 @@ use axum_extra::extract::CookieJar;
 use chrono::{Duration, Utc};
 use jsonwebtoken::{encode, Header};
 use axum_extra::extract::cookie::Cookie;
-use crate::{AppError, Claims, KEYS, TOKEN_LENGTH_SECONDS};
-use crate::handlers::user_manager::UserService;
-use crate::state::AppState;
-use crate::types::GoogleUser;
-
-pub async fn create_jwt_token(state: AppState, user_id: i64) -> Result<CookieJar, AppError> {
-// println!("passed conditional");
-
+use crate::AppError;
+use crate::loginroutes::{Claims, KEYS, TOKEN_LENGTH_SECONDS};
+pub async fn create_jwt_token(user_id: i64) -> Result<CookieJar, AppError> {
+    // println!("passed conditional");
     let mut now = Utc::now();
     let expires_in = Duration::try_seconds(TOKEN_LENGTH_SECONDS).unwrap();
     now += expires_in;
@@ -25,6 +21,10 @@ pub async fn create_jwt_token(state: AppState, user_id: i64) -> Result<CookieJar
         &KEYS.encoding,
     ).unwrap();
 
-    let mut jar = CookieJar::new().add(Cookie::build(("token", jwttoken)).secure(true).http_only(true).path("/"));
+    let jar = CookieJar::new().add(Cookie::build(("token", jwttoken)).secure(true).http_only(true).path("/"));
+    Ok(jar)
+}
+pub async fn remove_jwt_token () -> Result<CookieJar, AppError> {
+    let jar = CookieJar::new().add(Cookie::build(("token", "")).secure(true).http_only(true).path("/"));
     Ok(jar)
 }

@@ -1,7 +1,5 @@
 use sqlx::{Sqlite, Pool, Error};
 use crate::types::{ GoogleUser};
-
-
 pub(crate) trait UserService: Send + Sync {
     async fn get_users(&self) -> Result<Vec<GoogleUser>, sqlx::Error>;
     async fn get_user_by_id(&self, id: i32) -> Result<GoogleUser, sqlx::Error>;

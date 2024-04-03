@@ -1,5 +1,5 @@
 use std::env::VarError;
-use axum::response::Html;
+use axum::response::{Html, Response};
 use sqlx::FromRow;
 use serde::{Deserialize, Serialize};
 use axum::http::StatusCode;
@@ -21,8 +21,9 @@ impl DateToString for NaiveDate {
         todo!()
     }
 }
+#[derive(Debug, Serialize, Deserialize)]
 pub(crate) struct MorningExercise {
-    pub(crate) id: i64,
+    id: i64,
     pub(crate) mx_index: i64,
     pub(crate) date:  chrono::NaiveDate,
     pub(crate) owner: GoogleUser,
@@ -31,7 +32,6 @@ pub(crate) struct MorningExercise {
     // editors: Vec<GenericUser>
 }
 impl MorningExercise {
-
     //constructors
     pub fn new_with_index(id:i64,
                           owner: GoogleUser,
@@ -84,6 +84,7 @@ impl MorningExercise {
     }
 }
 #[derive(FromRow, Debug, Deserialize, Serialize, Clone)]
+#[warn(deprecated)]
 pub(crate) struct GenericUser {
     pub(crate) id: Option<i64>,
     pub(crate) name: String,
@@ -107,6 +108,7 @@ pub fn internal_error<E>(err: E) -> (StatusCode, String)
 {
     (StatusCode::INTERNAL_SERVER_ERROR, err.to_string())
 }
+
 #[derive(Debug)]
 pub struct OauthError {
     code: StatusCode,

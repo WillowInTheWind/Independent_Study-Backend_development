@@ -5,10 +5,10 @@ use axum::response::IntoResponse;
 use http::{header, StatusCode};
 use jsonwebtoken::{decode, Validation};
 use serde::Serialize;
-use crate::{Claims, KEYS};
-use crate::handlers::user_manager::UserService;
+use crate::defaultroutes::user_manager::UserService;
 use crate::state::AppState;
 use axum_extra::extract::cookie::CookieJar;
+use crate::loginroutes::{Claims, KEYS};
 
 #[derive(Debug, Serialize)]
 pub struct ErrorResponse {
@@ -37,12 +37,6 @@ pub async fn auth(
                     }
                 })
         });
-
-    // match token {
-    //     None => {}
-    //     Some(token) => {}
-    // }\
-
     let token = token.ok_or_else(|| {
         StatusCode::UNAUTHORIZED
     })?;
@@ -58,9 +52,7 @@ pub async fn auth(
         .claims;
 
     let user_id = claims.sub;
-
     let user = state.dbreference.get_user_by_id(user_id).await.unwrap();
-
     req.extensions_mut().insert(user);
     Ok(next.run(req).await)
 }
