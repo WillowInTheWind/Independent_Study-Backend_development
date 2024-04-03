@@ -4,7 +4,7 @@ use sqlx::FromRow;
 use serde::{Deserialize, Serialize};
 use axum::http::StatusCode;
 use axum::response::IntoResponse;
-use chrono::NaiveDate;
+use chrono::{Datelike, NaiveDate};
 use crate::mx_date_algorithm;
 
 pub(crate) trait DateToString {
@@ -14,11 +14,32 @@ pub(crate) trait DateToString {
 }
 impl DateToString for NaiveDate {
     fn date_to_long_string(&self) -> String {
-        todo!()
-    }
+        let month = match self.month() {
+            1 => { "January" }
+            2 => { "Febuary" }
+            3 => { "March" }
+            4 => { "April" }
+            5 => {"May"}
+            6 => {"June"}
+            7 => {"July"}
+            8 => {"August"}
+            9 => {"September"}
+            10 => {"October"}
+            11 => {"November"}
+            12 => {"December"}
+            _ => {"Unreachable value"}
+        };
+        let day = match self.day() {
+            1 => {format!("{:?}st",self.day())}
+            2 => {format!("{:?}nd",self.day())}
+            3 => {format!("{:?}rd",self.day())}
+            _ => {format!("{:?}th",self.day())}
+        };
+        format!("{} {} {}",month, self.day(), self.year()%1000)
 
+    }
     fn date_to_short_string(&self) -> String {
-        todo!()
+        format!("{}/{}/{}",self.month(), self.day(), self.year()%1000)
     }
 }
 #[derive(Debug, Serialize, Deserialize)]
