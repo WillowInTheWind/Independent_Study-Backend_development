@@ -1,17 +1,14 @@
 use axum::body::Body;
 use axum::extract::{Request, State};
-use axum::Json;
 use axum::middleware::Next;
 use axum::response::IntoResponse;
 use http::{header, StatusCode};
-use jsonwebtoken::{decode, DecodingKey, Validation};
+use jsonwebtoken::{decode, Validation};
 use serde::Serialize;
 use crate::{Claims, KEYS};
 use crate::handlers::user_manager::UserService;
 use crate::state::AppState;
-use crate::types::GoogleUser;
 use axum_extra::extract::cookie::CookieJar;
-use jsonwebtoken::errors::{Error, ErrorKind};
 
 #[derive(Debug, Serialize)]
 pub struct ErrorResponse {
@@ -49,14 +46,14 @@ pub async fn auth(
     let token = token.ok_or_else(|| {
         StatusCode::UNAUTHORIZED
     })?;
-println!("WAHOOO");
+
     let claims = decode::<Claims>(
         &token,
         &KEYS.decoding,
         &Validation::default(),
     )
         .map_err(|e| {
-            (StatusCode::UNAUTHORIZED)
+            StatusCode::UNAUTHORIZED
         })?
         .claims;
 

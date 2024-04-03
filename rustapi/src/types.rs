@@ -121,18 +121,6 @@ impl OauthError {
             code: StatusCode::INTERNAL_SERVER_ERROR,
         }
     }
-    pub fn with_user_message(self, user_message: impl Into<String>) -> Self {
-        Self {
-            user_message: user_message.into(),
-            ..self
-        }
-    }
-    // pub fn with_code(self, code: StatusCode) -> Self {
-    //     Self {
-    //         code,
-    //         ..self
-    //     }
-    // }
 }
 impl From<VarError> for OauthError {
     fn from(err: VarError) -> Self {

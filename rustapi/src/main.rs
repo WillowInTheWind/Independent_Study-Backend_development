@@ -4,34 +4,28 @@ mod mx_date_algorithm;
 mod types;
 mod config;
 mod middlewares;
-mod JWT;
+mod jwt;
 
 use oauth2::{AuthorizationCode, CsrfToken, Scope, TokenResponse};
 use std::string::String;
-use axum::{Json, middleware, Router, routing::get};
+use axum::{ middleware, Router, routing::get};
 use sqlx::sqlite::SqlitePoolOptions;
 use std::env;
 use dotenv::dotenv;
 use anyhow::Context;
-use async_session::{MemoryStore, Session, SessionStore};
+use async_session::{MemoryStore};
 use axum::{
-    RequestPartsExt,
     response::IntoResponse,
 };
 use axum::extract::{Query, State};
 use axum::response::{Redirect, Response};
-use axum_extra::extract::cookie::Cookie;
 use axum_extra::extract::CookieJar;
-use chrono::{DateTime, Duration, TimeDelta, Utc};
-use http::header::SET_COOKIE;
-use http::{header, HeaderMap, StatusCode};
-use jsonwebtoken::{decode, DecodingKey, encode, EncodingKey, Header, Validation};
-use jsonwebtoken::errors::ErrorKind;
+use http::{ StatusCode};
+use jsonwebtoken::{ DecodingKey, EncodingKey, };
 use oauth2::basic::BasicClient;
 use oauth2::reqwest::async_http_client;
 use once_cell::sync::Lazy;
 use serde::{Deserialize, Serialize};
-use serde_json::json;
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 use crate::handlers::user_manager::UserService;
 use crate::middlewares::auth;
@@ -98,7 +92,6 @@ async fn main(){
             .unwrap();
 }
 pub(crate) async fn login_authorized(
-    cookie_jar: CookieJar,
     State(store): State<MemoryStore>,
     State(state): State<AppState>,
     State(oauth_client): State<BasicClient>,
@@ -131,7 +124,7 @@ pub(crate) async fn login_authorized(
 
     if user_exists {
         let user = state.dbreference.get_user_by_name(&user_data.name).await?;
-        let jar = JWT::create_jwt_token(state, user.id.unwrap()).await?;
+        let jar = jwt::create_jwt_token(state, user.id.unwrap()).await?;
         return Ok((jar,Redirect::to("/")).into_response())
     }
 
@@ -144,7 +137,7 @@ pub(crate) async fn login_authorized(
     };
 
     let user_id = state.dbreference.create_user(user).await?;
-    let jar = JWT::create_jwt_token(state, user_id).await?;
+    let jar = jwt::create_jwt_token(state, user_id).await?;
 
     Ok((jar, Redirect::to("/")).into_response())
 }

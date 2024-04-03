@@ -1,28 +1,16 @@
-use crate::{AuthRedirect, Claims};
 use crate::{AppState};
-use axum::extract::{FromRef, FromRequestParts, State};
-use axum::{Extension, Json, RequestPartsExt};
+use axum::extract::{ State};
+use axum::{Extension, Json};
 use axum::response::IntoResponse;
 use axum_macros::debug_handler;
 use crate::handlers::user_manager::UserService;
 use crate::types;
-use crate::types::{GenericUser, GoogleUser};
-use async_session::{MemoryStore, SessionStore};
-use async_trait::async_trait;
+use crate::types::{ GoogleUser};
+use http::{ StatusCode};
 
-use axum_extra::typed_header::TypedHeaderRejectionReason;
-use axum_extra::TypedHeader;
-use headers::Authorization;
-use headers::authorization::Bearer;
-use http::{header, StatusCode};
-use http::request::Parts;
-use jsonwebtoken::decode;
-
-static COOKIE_NAME: &str = "SESSION";
 
 pub mod user_manager;
 pub(crate) mod mx_service;
-// static COOKIE_NAME: &str = "SESSION";
 pub(crate) async fn error_404() -> (StatusCode, &'static str) {
     (StatusCode::NOT_FOUND, "Not Found")
 }

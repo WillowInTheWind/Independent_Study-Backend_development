@@ -209,7 +209,7 @@ impl MxService for Pool<Sqlite> {
             .bind(title)
             .fetch_one(self)
             .await
-            .map_err(|err| StatusCode::INTERNAL_SERVER_ERROR)
+            .map_err(|e| StatusCode::INTERNAL_SERVER_ERROR)
             ;
 
         match query {

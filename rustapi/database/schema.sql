@@ -12,8 +12,6 @@ CREATE TABLE user (
     user_email TEXT UNIQUE NOT NULL
 );
 
-
-
 CREATE TABLE GoogleUsers (
     id integer NOT NULL PRIMARY KEY AUTOINCREMENT,
     sub TEXT UNIQUE NOT NULL,

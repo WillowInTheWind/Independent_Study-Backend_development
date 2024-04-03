@@ -1,5 +1,5 @@
 use sqlx::{Sqlite, Pool, Error};
-use crate::types::{GenericUser, GoogleUser};
+use crate::types::{ GoogleUser};
 
 
 pub(crate) trait UserService: Send + Sync {
