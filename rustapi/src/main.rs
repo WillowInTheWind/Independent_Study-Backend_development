@@ -4,6 +4,7 @@ mod mx_date_algorithm;
 mod types;
 mod config;
 mod middlewares;
+mod JWT;
 
 use oauth2::{AuthorizationCode, CsrfToken, Scope, TokenResponse};
 use std::string::String;
@@ -24,7 +25,8 @@ use axum_extra::extract::CookieJar;
 use chrono::{DateTime, Duration, TimeDelta, Utc};
 use http::header::SET_COOKIE;
 use http::{header, HeaderMap, StatusCode};
-use jsonwebtoken::{DecodingKey, encode, EncodingKey, Header};
+use jsonwebtoken::{decode, DecodingKey, encode, EncodingKey, Header, Validation};
+use jsonwebtoken::errors::ErrorKind;
 use oauth2::basic::BasicClient;
 use oauth2::reqwest::async_http_client;
 use once_cell::sync::Lazy;
@@ -52,7 +54,7 @@ impl Keys {
     }
 }
 static COOKIE_NAME: &str = "SESSION";
-static TOKEN_LENGTH_SECONDS: i64 = 120;
+static TOKEN_LENGTH_SECONDS: i64 = 12*60*60;
 // #[debug_handler]
 struct EnvironmentVariables {
     address: String,
@@ -80,10 +82,10 @@ async fn main(){
     //Init App Router
         let app_router =    Router::new()
             .route("/", get(handlers::root))
+            .layer(middleware::from_fn_with_state(app_state.clone(), auth))
             .route("/users", get(handlers::users))
             .route("/login", get(login))
             .route("/auth/authorized", get(login_authorized))
-            .layer(middleware::from_fn_with_state(app_state.clone(), auth))
             .fallback(handlers::error_404)
             .with_state(app_state);
     //Launch Server
@@ -96,6 +98,7 @@ async fn main(){
             .unwrap();
 }
 pub(crate) async fn login_authorized(
+    cookie_jar: CookieJar,
     State(store): State<MemoryStore>,
     State(state): State<AppState>,
     State(oauth_client): State<BasicClient>,
@@ -118,46 +121,30 @@ pub(crate) async fn login_authorized(
         .await
         .context("failed to deserialize response as JSON")?;
 
-    let user_exists: Option<bool> =
-        sqlx::query_scalar("SELECT EXISTS(SELECT 1 FROM user WHERE user_email = $1)")
-            .bind(user_data.email)
+    // println!("{:?}", state.dbreference.get_user_by_name(&user_data.name).await?);
+    let user_exists: bool =
+        sqlx::query_scalar("SELECT EXISTS(SELECT 1 FROM GoogleUsers WHERE name = $1)")
+            .bind(&user_data.name)
             .fetch_one(&state.dbreference)
             .await
-            .context("failed in finding if user exists")?;
+            .context("failed in finding if user exists").unwrap();
 
-    if let Some(exists) = user_exists {
-        if (exists) {
-            return Ok(Redirect::to("/").into_response())
-        }
+    if user_exists {
+        let user = state.dbreference.get_user_by_name(&user_data.name).await?;
+        let jar = JWT::create_jwt_token(state, user.id.unwrap()).await?;
+        return Ok((jar,Redirect::to("/")).into_response())
     }
 
-    let user = GenericUser {
-        id: None,
-        name: "".to_string(),
-        user_identifier: 0,
-        user_email: "".to_string(),
+    let user = GoogleUser {
+        id: Some(1),
+        sub: user_data.sub,
+        picture: user_data.picture,
+        email: user_data.email,
+        name: user_data.name,
     };
 
     let user_id = state.dbreference.create_user(user).await?;
-    let mut now = Utc::now();
-    let expires_in = Duration::try_seconds(TOKEN_LENGTH_SECONDS).unwrap();
-    now += expires_in;
-    let exp = now.timestamp() as usize;
-
-
-    let claims = Claims {
-        sub: user_id as i32,
-        exp
-    };
-
-    let jwttoken = encode(
-        &Header::default(),
-        &claims,
-        &KEYS.encoding,
-    ).unwrap();
-
-
-    let mut jar = CookieJar::new().add(Cookie::build(("token", jwttoken)).secure(true).http_only(true).path("/"));
+    let jar = JWT::create_jwt_token(state, user_id).await?;
 
     Ok((jar, Redirect::to("/")).into_response())
 }

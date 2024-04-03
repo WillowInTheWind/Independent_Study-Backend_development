@@ -12,14 +12,12 @@ CREATE TABLE user (
     user_email TEXT UNIQUE NOT NULL
 );
 
-INSERT into user values
-(1,'chase', 128474, 'cwayland@fwparker.org'),
-(2, 'willow', 1282334,'wayland.chase@gmail.com');
+
 
 CREATE TABLE GoogleUsers (
-    "id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
-    sub INTEGER UNIQUE NOT NULL,
-    picture TEXT NOT NULL,
+    id integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+    sub TEXT UNIQUE NOT NULL,
+    picture TEXT,
     email TEXT UNIQUE NOT NULL,
     name TEXT UNIQUE NOT NULL
 );

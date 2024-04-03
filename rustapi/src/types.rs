@@ -25,7 +25,7 @@ pub(crate) struct MorningExercise {
     pub(crate) id: i64,
     pub(crate) mx_index: i64,
     pub(crate) date:  chrono::NaiveDate,
-    pub(crate) owner: GenericUser,
+    pub(crate) owner: GoogleUser,
     pub(crate) title: String,
     pub(crate) description: String,
     // editors: Vec<GenericUser>
@@ -34,7 +34,7 @@ impl MorningExercise {
 
     //constructors
     pub fn new_with_index(id:i64,
-                          owner: GenericUser,
+                          owner: GoogleUser,
                           mx_index: i64,
                           title: String,
                           description: String,
@@ -50,7 +50,7 @@ impl MorningExercise {
         }
     }
     pub fn new_with_date(id:i64,
-                         owner: GenericUser,
+                         owner: GoogleUser,
                          date: NaiveDate,
                          title: String,
                          description: String,
@@ -66,7 +66,7 @@ impl MorningExercise {
         }
     }
     pub fn new(id:i64,
-               owner: GenericUser,
+               owner: GoogleUser,
                mx_index: i64,
                date: NaiveDate,
                title: String,
@@ -92,7 +92,7 @@ pub(crate) struct GenericUser {
 }
 #[derive(FromRow, Debug, Deserialize, Serialize, Clone)]
 pub(crate) struct  GoogleUser {
-    // pub(crate) id: i32,
+    pub(crate) id: Option<i64>,
     pub(crate) sub: String,
     pub(crate) picture: Option<String>,
     pub(crate) email: String,
