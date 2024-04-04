@@ -1,5 +1,4 @@
 POST http://127.0.0.1:8080/morningexercises/create
-Cookie: token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjIsImV4cCI6MTcxMjIzMDcwNX0.wv1Il8qPIz-2RBAlnvhyd3N0ONfDTfdJ7oknXZrh6XE";
 Content-Type: application/json
 
 {
