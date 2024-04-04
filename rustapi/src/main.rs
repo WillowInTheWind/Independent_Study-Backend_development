@@ -8,6 +8,7 @@ mod jwt;
 mod loginroutes;
 mod MXroutes;
 mod UserRoutes;
+mod router;
 
 use oauth2::TokenResponse;
 use axum::{middleware, Router, routing::get};
@@ -16,9 +17,10 @@ use std::env;
 use dotenv::dotenv;
 use anyhow::Context;
 use axum::response::{IntoResponse, Response};
-use axum::routing::post;
+use axum::routing::{delete, post};
 use http::StatusCode;
 use serde::{Deserialize, Serialize};
+use sqlx::sqlite::SqliteJournalMode::Delete;
 use crate::defaultroutes::user_manager::UserService;
 use crate::middlewares::auth;
 use crate::state::AppState;
@@ -39,10 +41,9 @@ async fn main(){
             dbreference: pool,
             oauth_client,
         };
-
         println!("->> Successful connection to database: {:?}", &database_url);
     //Init App router
-        let app_router = router(app_state);
+        let app_router = router::router(app_state);
     //Launch Server
         let listener = tokio::net::TcpListener::bind(format!("{}:{}", environment_variables.address, environment_variables.port))
             .await
@@ -53,28 +54,6 @@ async fn main(){
             .unwrap();
 }
 
-fn router(app_state: AppState) -> Router {
-    let mx_routes = Router::new()
-        .route("/", get(MXroutes::get_all_mxs))
-        .route("/create", post(MXroutes::post_mx))
-        .route("/mine", get(MXroutes::get_users_mxs));
-    let user_routes = Router::new()
-        .route("/", get(UserRoutes::get_all_users))
-        .route("/:id", get(UserRoutes::get_user_by_id));
-    let auth_routes = Router::new()
-        .route("/logout", get(loginroutes::logout))
-        .route("/login", get(loginroutes::login))
-        .route("/authorized", get(loginroutes::login_authorized));
-
-    Router::new()
-        .route("/", get(defaultroutes::root))
-        .nest("/morningexercises", mx_routes)
-        .nest("/users", user_routes)
-        .layer(middleware::from_fn_with_state(app_state.clone(), auth))
-        .nest("/auth", auth_routes)
-        .fallback(defaultroutes::error_404)
-        .with_state(app_state)
-}
 #[derive(Debug)]
 pub(crate) struct AppError(anyhow::Error);
 
