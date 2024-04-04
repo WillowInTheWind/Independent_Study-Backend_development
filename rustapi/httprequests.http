@@ -1,0 +1,18 @@
+POST http://127.0.0.1:8080/morningexercises/create
+Cookie: token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjIsImV4cCI6MTcxMjIzMDcwNX0.wv1Il8qPIz-2RBAlnvhyd3N0ONfDTfdJ7oknXZrh6XE";
+Content-Type: application/json
+
+{
+  "id": 1,
+  "mx_index": 2,
+  "date": "2024-01-03",
+  "owner": {
+    "id": 1,
+    "sub": "21325",
+    "email": "User@user.com",
+    "name": "name"
+  },
+  "title": "ti324le",
+  "description": "342"
+}
+###

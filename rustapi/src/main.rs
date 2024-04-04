@@ -16,6 +16,7 @@ use std::env;
 use dotenv::dotenv;
 use anyhow::Context;
 use axum::response::{IntoResponse, Response};
+use axum::routing::post;
 use http::StatusCode;
 use serde::{Deserialize, Serialize};
 use crate::defaultroutes::user_manager::UserService;
@@ -38,6 +39,7 @@ async fn main(){
             dbreference: pool,
             oauth_client,
         };
+
         println!("->> Successful connection to database: {:?}", &database_url);
     //Init App router
         let app_router = router(app_state);
@@ -54,9 +56,11 @@ async fn main(){
 fn router(app_state: AppState) -> Router {
     let mx_routes = Router::new()
         .route("/", get(MXroutes::get_all_mxs))
+        .route("/create", post(MXroutes::post_mx))
         .route("/mine", get(MXroutes::get_users_mxs));
     let user_routes = Router::new()
-        .route("/", get(UserRoutes::get_all_users));
+        .route("/", get(UserRoutes::get_all_users))
+        .route("/:id", get(UserRoutes::get_user_by_id));
     let auth_routes = Router::new()
         .route("/logout", get(loginroutes::logout))
         .route("/login", get(loginroutes::login))

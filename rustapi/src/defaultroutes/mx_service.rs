@@ -1,4 +1,5 @@
 use axum::http::StatusCode;
+use axum_macros::debug_handler;
 use chrono::{NaiveDate};
 use sqlx::{Pool, Sqlite};
 use crate::defaultroutes::user_manager::UserService;
@@ -123,27 +124,26 @@ impl MxService for Pool<Sqlite> {
         Ok(mxs)
 
     }
-    async fn get_mxs(&self) -> Result<Vec<types::MorningExercise>, (StatusCode, String)> {
-        let query : Result<Vec<(i64, i64, i64, NaiveDate, String, String)>, _> = sqlx::query_as
-            ("SELECT * FROM MX")
-            .fetch_all(self)
-            .await;
 
-        let mxs = match query {
-            Ok(query) => {
-                let mut mxs: Vec<MorningExercise> = Vec::new();
-                for mx in query {
-                    let user = self.get_user_by_id(mx.1 as i32)
-                        .await
-                        .map_err(|err|(StatusCode::INTERNAL_SERVER_ERROR, "GetUserFailed".to_string()))?;
-                    mxs.push(MorningExercise::new(mx.0,user,mx.2,mx.3,mx.4,mx.5, None));
-                }
-                mxs
-            }
-            Err(query) => {
-                return Err((StatusCode::INTERNAL_SERVER_ERROR, "Query Failed".to_string()))
-            }
-        };
+    async fn get_mxs(&self) -> Result<Vec<types::MorningExercise>, (StatusCode, String)> {
+        let query : Vec<mxquery> = sqlx::query_as!
+            (mxquery, "SELECT * FROM MX")
+            .fetch_all(self)
+            .await
+            .map_err(|e| (StatusCode::INTERNAL_SERVER_ERROR, "query failed".to_string()))?;
+
+        // println!("dfs");
+
+        let mut mxs: Vec<MorningExercise> = Vec::new();
+        for mx in query {
+            let user = self.get_user_by_id(mx.id as i32)
+                .await
+                .map_err(|err|(StatusCode::INTERNAL_SERVER_ERROR, "GetUserFailed".to_string()))?;
+            mxs.push(MorningExercise::new(mx.id ,user,mx.mx_index,mx.date,mx.title,mx.description, None));
+        }
+
+
+
         Ok(mxs)
     }
     async fn create_mx(&self, mx: MorningExercise) -> StatusCode {
@@ -153,7 +153,7 @@ impl MxService for Pool<Sqlite> {
         let title: String = mx.title;
         let description: String = mx.description;
 
-        let query = sqlx::query("INSERT (mx_index,date,owner, title,description) into user values (?,?,?,?,?)")
+        let query = sqlx::query("INSERT into MX (mx_index,date,owner, title,description) values (?,?,?,?,?)")
             .bind(index)
             .bind(date)
             .bind(owner)
@@ -161,7 +161,7 @@ impl MxService for Pool<Sqlite> {
             .bind(description)
             .execute(self)
             .await
-            .map_err(|err| StatusCode::INTERNAL_SERVER_ERROR);
+            .map_err(|err| println!("{}", err));
 
         match query {
             Ok(q) => {
@@ -227,4 +227,14 @@ impl MxService for Pool<Sqlite> {
     async fn edit_mx(&self) -> StatusCode {
         todo!()
     }
+}
+
+#[derive(Debug)]
+struct mxquery {
+    id: i64,
+    mx_index: i64,
+    owner: i64,
+    date: NaiveDate,
+    title: String,
+    description: String
 }

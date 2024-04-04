@@ -1,5 +1,5 @@
 use std::env::VarError;
-use axum::response::{Html, Response};
+use axum::response::{Html};
 use sqlx::FromRow;
 use serde::{Deserialize, Serialize};
 use axum::http::StatusCode;

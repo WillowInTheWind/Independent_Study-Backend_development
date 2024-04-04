@@ -1,10 +1,8 @@
 use crate::{AppState};
 use axum::extract::{ State};
-use axum::{Extension, Json};
+use axum::{Extension};
 use axum::response::IntoResponse;
 use axum_macros::debug_handler;
-use crate::defaultroutes::user_manager::UserService;
-use crate::types;
 use crate::types::{ GoogleUser};
 use http::{ StatusCode};
 pub mod user_manager;
