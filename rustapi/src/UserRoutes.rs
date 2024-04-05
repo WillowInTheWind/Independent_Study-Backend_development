@@ -13,17 +13,21 @@ pub async fn delete_user() -> Response {
     todo!()
 }
 pub async fn get_user_by_id(Path(params): Path<i32>,State(state): State<AppState>,) -> Json<GoogleUser> {
+    println!("->> User get request by id");
+
     Json(state.dbreference.get_user_by_id(params).await.unwrap())
 }
 #[debug_handler]
 pub async fn get_user_by(Path(params): Path<String>,State(state): State<AppState>,) -> Result<Json<GoogleUser>, StatusCode> {
-    match params {
-        String::from("email") => {
+    println!("->> User get request by {}", params);
+
+    match params.as_str(){
+        "email" => {
             Ok(Json(state.dbreference.get_user_by_email(&params).await.unwrap()))
         }
-        String::from("sub") => {
+        "sub" => {
             Ok(Json(state.dbreference.get_user_by_sub(&params).await.unwrap()))        }
-        String::from("name") => {
+        "name" => {
             Ok(Json(state.dbreference.get_user_by_name(&params).await.unwrap()) )       }
         _ => {Err(StatusCode::NOT_FOUND)}
     }
@@ -32,5 +36,7 @@ pub async fn get_user_by(Path(params): Path<String>,State(state): State<AppState
 pub async fn get_all_users(
     State(state): State<AppState>,
 ) -> Json<Vec<GoogleUser>> {
+    println!("->> User get request");
+
     Json(state.dbreference.get_users().await.map_err(types::internal_error).unwrap())
 }

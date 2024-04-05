@@ -38,6 +38,8 @@ pub(crate) async fn login_authorized(
     State(state): State<AppState>,
     State(oauth_client): State<BasicClient>,
     Query(query): Query<AuthRequest>) -> Result<Response, AppError> {
+    println!("->> reached authorization page");
+
     let token = oauth_client
         .exchange_code(AuthorizationCode::new(query.code))
         .request_async(async_http_client)
@@ -85,11 +87,15 @@ pub(crate) async fn login_authorized(
 
 pub(crate) async fn logout(
 ) -> Result<Response, StatusCode> {
+    println!("->> user logged out");
+
     let cookies = jwt::remove_jwt_token().await.map_err(|e| StatusCode::INTERNAL_SERVER_ERROR)?;
     Ok((cookies, Redirect::to("/")).into_response())
 }
 
 pub(crate) async fn login(State(client): State<BasicClient>) -> Response {
+    println!("->> user logged in or signed up");
+
     // TODO: this example currently doesn't validate the CSRF token during login attempts. That
     // makes it vulnerable to cross-site request forgery. If you copy code from this example make
     // sure to add a check for the CSRF token.

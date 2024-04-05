@@ -1,10 +1,18 @@
 use axum::{middleware, Router};
-use axum::routing::{delete, get, post};
+use axum::routing::{any, delete, get, post};
+use http::header::CONTENT_TYPE;
+use http::Method;
 use crate::{defaultroutes, loginroutes, MXroutes, UserRoutes};
 use crate::middlewares::auth;
 use crate::state::AppState;
+use tower_http::cors::{Any, CorsLayer};
 
 pub fn router(app_state: AppState) -> Router {
+    // let cors = CorsLayer::new()
+    //     .allow_methods([Method::GET, Method::POST, Method::DELETE])
+    //     .allow_origin(Any)
+    //     .allow_headers([CONTENT_TYPE]);
+    let cors = CorsLayer::permissive();
     let mx_routes = Router::new()
         .route("/", get(MXroutes::get_all_mxs))
         .route("/create", post(MXroutes::post_mx))
@@ -13,7 +21,7 @@ pub fn router(app_state: AppState) -> Router {
     let user_routes = Router::new()
         .route("/", get(UserRoutes::get_all_users))
         .route("/:id", get(UserRoutes::get_user_by_id))
-        .route("/:user_property", get(UserRoutes::get_user_by))
+        // .route("/:user_property", get(UserRoutes::get_user_by))
         .route("/delete", delete(UserRoutes::delete_user));
     let auth_routes = Router::new()
         .route("/logout", get(loginroutes::logout))
@@ -27,4 +35,5 @@ pub fn router(app_state: AppState) -> Router {
         .nest("/auth", auth_routes)
         .fallback(defaultroutes::error_404)
         .with_state(app_state)
+        .layer(cors)
 }
