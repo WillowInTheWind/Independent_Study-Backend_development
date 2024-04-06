@@ -8,10 +8,6 @@ use crate::state::AppState;
 use tower_http::cors::{Any, CorsLayer};
 
 pub fn router(app_state: AppState) -> Router {
-    // let cors = CorsLayer::new()
-    //     .allow_methods([Method::GET, Method::POST, Method::DELETE])
-    //     .allow_origin(Any)
-    //     .allow_headers([CONTENT_TYPE]);
     let cors = CorsLayer::permissive();
     let mx_routes = Router::new()
         .route("/", get(MXroutes::get_all_mxs))

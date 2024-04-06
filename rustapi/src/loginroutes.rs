@@ -8,6 +8,7 @@ use oauth2::{AuthorizationCode, CsrfToken, Scope, TokenResponse};
 use oauth2::reqwest::async_http_client;
 use http::StatusCode;
 use anyhow::Context;
+use axum::Json;
 use crate::{AppError, jwt};
 use crate::defaultroutes::user_manager::UserService;
 use crate::state::AppState;
@@ -76,7 +77,7 @@ pub(crate) async fn login_authorized(
         sub: user_data.sub,
         picture: user_data.picture,
         email: user_data.email,
-        name: user_data.name,
+        name: user_data.name
     };
 
     let user_id = state.dbreference.create_user(user).await?;
@@ -100,13 +101,16 @@ pub(crate) async fn login(State(client): State<BasicClient>) -> Response {
     // makes it vulnerable to cross-site request forgery. If you copy code from this example make
     // sure to add a check for the CSRF token.
     // Issue for adding check to this example https://github.com/tokio-rs/axum/issues/2511
+
     let (auth_url, _csrf_token) = client
         .authorize_url(CsrfToken::new_random)
         .add_scope(Scope::new("profile".to_string()))
         .add_scope(Scope::new("email".to_string()))
         .url();
 
-    Redirect::to(&auth_url.to_string()).into_response()
+    let url = auth_url.to_string();
+    let authurl = Json(url);
+    authurl.into_response()
 }
 
 #[derive(Debug, Deserialize)]
