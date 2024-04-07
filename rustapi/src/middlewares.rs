@@ -22,11 +22,11 @@ pub async fn auth(
     mut req: Request<Body>,
     next: Next,
 ) -> Result<Response, StatusCode> {
-    let hi = req.headers().get("cookie");
+    let hi = req.headers().get("authorization");
     let token = hi.ok_or_else(|| {
         StatusCode::UNAUTHORIZED
     })?;
-
+println!("token found");
     let token = token.to_str().unwrap().replace("token=", "");
 
     let claims = decode::<Claims>(

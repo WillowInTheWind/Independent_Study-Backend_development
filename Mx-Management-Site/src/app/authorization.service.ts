@@ -22,8 +22,10 @@ export class AuthorizationService {
   }
    async sendCode(code: string) {
     const url: string = "/api/auth/authorized?" + code;
-    let data = this.http.get<string>(url)
+    console.log("dfsfwsafawsefsxc")
+    let data = this.http.get<string>(url, {observe: 'response'})
       .subscribe(data => {
+        console.log(data.headers.get("authorization"))
     }
     )
   }

@@ -217,6 +217,7 @@ impl MxService for Pool<Sqlite> {
 
         match query {
             Ok(q) => {
+                println!("mx creaeted");
                 StatusCode::OK
             }
             Err(q) => {

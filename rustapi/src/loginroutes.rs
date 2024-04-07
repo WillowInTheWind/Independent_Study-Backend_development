@@ -9,6 +9,7 @@ use oauth2::reqwest::async_http_client;
 use http::StatusCode;
 use anyhow::Context;
 use axum::Json;
+use serde_json::json;
 use crate::{AppError, jwt};
 use crate::defaultroutes::user_manager::UserService;
 use crate::state::AppState;
@@ -70,7 +71,8 @@ pub(crate) async fn login_authorized(
 
         let user = state.dbreference.get_user_by_name(&user_data.name).await?;
         let jar = jwt::create_jwt_token(user.id.unwrap()).await?;
-        return Ok((jar, Redirect::to("/api")).into_response())
+        return Ok((jar, Json("i HATE YOU")).into_response())
+
     }
 
     let user = GoogleUser {
@@ -83,7 +85,7 @@ pub(crate) async fn login_authorized(
 
     let user_id = state.dbreference.create_user(user).await?;
     let jar = jwt::create_jwt_token( user_id).await?;
-    Ok((jar, Redirect::to("/api")).into_response())
+    Ok(jar.into_response())
 }
 
 pub(crate) async fn logout(
