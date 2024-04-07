@@ -136,7 +136,7 @@ impl MxService for Pool<Sqlite> {
 
         let mut mxs: Vec<MorningExercise> = Vec::new();
         for mx in query {
-            let user = self.get_user_by_id(mx.id as i32)
+            let user = self.get_user_by_id(mx.owner as i32)
                 .await
                 .map_err(|err|(StatusCode::INTERNAL_SERVER_ERROR, "GetUserFailed".to_string()))?;
             mxs.push(MorningExercise::new(mx.id ,user,mx.mx_index,mx.date,mx.title,mx.description, None));

@@ -31,7 +31,7 @@ pub fn router(app_state: AppState) -> Router {
     Router::new()
         .route("/", get(defaultroutes::root))
         .nest("/morningexercises", mx_routes)
-        // .layer(middleware::from_fn_with_state(app_state.clone(), auth))
+        .layer(middleware::from_fn_with_state(app_state.clone(), auth))
         .nest("/users", user_routes)
         .nest("/auth", auth_routes)
         .fallback(defaultroutes::error_404)

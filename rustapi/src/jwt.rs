@@ -8,7 +8,7 @@ use crate::loginroutes::{Claims, KEYS, TOKEN_LENGTH_SECONDS};
 
 use http::HeaderMap;
 
-pub async fn create_jwt_token(user_id: i64) -> Result<HeaderMap, AppError> {
+pub async fn create_jwt_token(user_id: i64) -> Result<CookieJar, AppError> {
     // println!("passed conditional");
     let mut now = Utc::now();
     let expires_in = Duration::try_seconds(TOKEN_LENGTH_SECONDS).unwrap();
@@ -25,11 +25,13 @@ pub async fn create_jwt_token(user_id: i64) -> Result<HeaderMap, AppError> {
         &KEYS.encoding,
     ).unwrap();
 
-    let mut headers = HeaderMap::new();
-    headers.insert(AUTHORIZATION, jwttoken.parse().unwrap());
 
-    // let jar = CookieJar::new().add(Cookie::build(("token", jwttoken)).secure(true).same_site(SameSite::Lax).http_only(true).path("/"));
-    Ok(headers)
+    let jar = CookieJar::new()
+        .add(Cookie::build(("token", jwttoken))
+            .secure(true)
+            .same_site(SameSite::Lax)
+            .path("/"));
+    Ok(jar)
     // Ok(jar)
 }
 pub async fn remove_jwt_token () -> Result<CookieJar, AppError> {

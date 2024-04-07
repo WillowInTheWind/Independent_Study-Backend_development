@@ -68,11 +68,9 @@ pub(crate) async fn login_authorized(
             .context("failed in finding if user exists").unwrap();
 
     if user_exists {
-
         let user = state.dbreference.get_user_by_name(&user_data.name).await?;
         let jar = jwt::create_jwt_token(user.id.unwrap()).await?;
-        return Ok((jar, Json("i HATE YOU")).into_response())
-
+        return Ok((jar, Redirect::to("/")).into_response())
     }
 
     let user = GoogleUser {
@@ -84,10 +82,9 @@ pub(crate) async fn login_authorized(
     };
 
     let user_id = state.dbreference.create_user(user).await?;
-    let jar = jwt::create_jwt_token( user_id).await?;
-    Ok(jar.into_response())
+    let jar = jwt::create_jwt_token(user_id).await?;
+    Ok((jar, Redirect::to("/")).into_response())
 }
-
 pub(crate) async fn logout(
 ) -> Result<Response, StatusCode> {
     println!("->> user logged out");
