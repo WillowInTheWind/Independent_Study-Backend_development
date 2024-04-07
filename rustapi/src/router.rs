@@ -1,14 +1,18 @@
 use axum::{middleware, Router};
 use axum::routing::{any, delete, get, post};
 use http::header::CONTENT_TYPE;
-use http::Method;
+use http::{HeaderValue, Method};
 use crate::{defaultroutes, loginroutes, MXroutes, UserRoutes};
 use crate::middlewares::auth;
 use crate::state::AppState;
 use tower_http::cors::{Any, CorsLayer};
 
 pub fn router(app_state: AppState) -> Router {
-    let cors = CorsLayer::permissive();
+    let cors = CorsLayer::new()
+        .allow_credentials(true)
+        .allow_methods([Method::GET, Method::POST])
+        .allow_origin("http://localhost:4200".parse::<HeaderValue>().unwrap())
+        ;
     let mx_routes = Router::new()
         .route("/", get(MXroutes::get_all_mxs))
         .route("/create", post(MXroutes::post_mx))
@@ -23,6 +27,7 @@ pub fn router(app_state: AppState) -> Router {
         .route("/logout", get(loginroutes::logout))
         .route("/login", get(loginroutes::login))
         .route("/authorized", get(loginroutes::login_authorized));
+    let routes =
     Router::new()
         .route("/", get(defaultroutes::root))
         .nest("/morningexercises", mx_routes)
@@ -30,6 +35,7 @@ pub fn router(app_state: AppState) -> Router {
         .nest("/users", user_routes)
         .nest("/auth", auth_routes)
         .fallback(defaultroutes::error_404)
-        .with_state(app_state)
-        .layer(cors)
+        .with_state(app_state);
+    Router::new().nest("/api", routes).layer(cors)
+
 }

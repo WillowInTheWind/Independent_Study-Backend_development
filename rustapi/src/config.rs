@@ -26,7 +26,7 @@ pub(crate) fn oauth_client() -> anyhow::Result<BasicClient, AppError> {
     dotenv::dotenv().ok();
     let client_id = env::var("CLIENT_ID").unwrap();
     let client_secret = env::var("CLIENT_SECRET").unwrap();
-    let redirect_url = "http://127.0.0.1:8080/auth/authorized".to_string();
+    let redirect_url = "http://127.0.0.1:8080/api/auth/authorized".to_string();
     let auth_url = AuthUrl::new("https://accounts.google.com/o/oauth2/v2/auth".to_string())
         .expect("Invalid authorization endpoint URL");
     let token_url = TokenUrl::new("https://www.googleapis.com/oauth2/v3/token".to_string())

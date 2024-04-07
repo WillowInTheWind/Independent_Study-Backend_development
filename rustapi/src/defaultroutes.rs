@@ -18,6 +18,5 @@ pub(crate) async fn root(Extension(user): Extension<GoogleUser>,
             "Hey {}! You're logged in!\nYou may now access `/protected`.\nLog out with `/logout`.",
             user.name
         )
-
 }
 

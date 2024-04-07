@@ -1,8 +1,8 @@
 use axum::body::Body;
 use axum::extract::{Request, State};
 use axum::middleware::Next;
-use axum::response::IntoResponse;
-use http::{header, StatusCode};
+use axum::response::{IntoResponse, Response};
+use http::{header, HeaderValue, StatusCode};
 use jsonwebtoken::{decode, Validation};
 use serde::Serialize;
 use crate::defaultroutes::user_manager::UserService;
@@ -21,25 +21,13 @@ pub async fn auth(
     State(state): State<AppState>,
     mut req: Request<Body>,
     next: Next,
-) -> Result<impl IntoResponse, StatusCode> {
-    let token = cookie_jar
-        .get("token")
-        .map(|cookie| cookie.value().to_string())
-        .or_else(|| {
-            req.headers()
-                .get(header::AUTHORIZATION)
-                .and_then(|auth_header| auth_header.to_str().ok())
-                .and_then(|auth_value| {
-                    if auth_value.starts_with("Bearer ") {
-                        Some(auth_value[7..].to_owned())
-                    } else {
-                        None
-                    }
-                })
-        });
-    let token = token.ok_or_else(|| {
+) -> Result<Response, StatusCode> {
+    let hi = req.headers().get("cookie");
+    let token = hi.ok_or_else(|| {
         StatusCode::UNAUTHORIZED
     })?;
+
+    let token = token.to_str().unwrap().replace("token=", "");
 
     let claims = decode::<Claims>(
         &token,

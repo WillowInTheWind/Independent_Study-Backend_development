@@ -67,9 +67,10 @@ pub(crate) async fn login_authorized(
             .context("failed in finding if user exists").unwrap();
 
     if user_exists {
+
         let user = state.dbreference.get_user_by_name(&user_data.name).await?;
         let jar = jwt::create_jwt_token(user.id.unwrap()).await?;
-        return Ok((jar,Redirect::to("/")).into_response())
+        return Ok((jar, Redirect::to("/api")).into_response())
     }
 
     let user = GoogleUser {
@@ -82,8 +83,7 @@ pub(crate) async fn login_authorized(
 
     let user_id = state.dbreference.create_user(user).await?;
     let jar = jwt::create_jwt_token( user_id).await?;
-
-    Ok((jar, Redirect::to("/")).into_response())
+    Ok((jar, Redirect::to("/api")).into_response())
 }
 
 pub(crate) async fn logout(
@@ -91,7 +91,7 @@ pub(crate) async fn logout(
     println!("->> user logged out");
 
     let cookies = jwt::remove_jwt_token().await.map_err(|e| StatusCode::INTERNAL_SERVER_ERROR)?;
-    Ok((cookies, Redirect::to("/")).into_response())
+    Ok((cookies, Redirect::to("/api")).into_response())
 }
 
 pub(crate) async fn login(State(client): State<BasicClient>) -> Response {
@@ -111,6 +111,7 @@ pub(crate) async fn login(State(client): State<BasicClient>) -> Response {
     let url = auth_url.to_string();
     let authurl = Json(url);
     authurl.into_response()
+    // Redirect::to(&auth_url.to_string()).into_response()
 }
 
 #[derive(Debug, Deserialize)]
@@ -125,3 +126,5 @@ pub struct Claims {
     pub sub: i32,
     pub exp: usize,
 }
+
+
