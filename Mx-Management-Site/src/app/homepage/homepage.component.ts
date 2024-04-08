@@ -17,10 +17,11 @@ import {MorningExService} from "../morning-ex.service";
 })
 export class HomepageComponent {
   submitMX() {
+    if (!this.mxform.value.title || !this.mxform.value.date ) {
+      return
+    }
     this.mxManager.postMx(
-      parseInt(<string>this.mxform.value.mx_index),
       <string>this.mxform.value.date,
-      parseInt(<string>this.mxform.value.owner),
       <string>this.mxform.value.title,
       <string>this.mxform.value.description,
     )
@@ -28,9 +29,7 @@ export class HomepageComponent {
   }
 
   mxform = new FormGroup({
-    mx_index: new FormControl('', {nonNullable: true}),
     date:  new FormControl('', {nonNullable: true}),
-    owner: new FormControl('', {nonNullable: true}) ,
     title: new FormControl('', {nonNullable: true}),
     description: new FormControl('', {nonNullable: true}),
   })

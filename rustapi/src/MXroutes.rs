@@ -3,6 +3,7 @@ use axum::{Extension, Json};
 use axum::response::{IntoResponse, Response};
 use axum_macros::debug_handler;
 use axum::http::StatusCode;
+use serde::{Deserialize, Serialize};
 use crate::state::AppState;
 use crate::defaultroutes::mx_service::MxService;
 use crate::types::{GoogleUser, MorningExercise};
@@ -24,9 +25,16 @@ pub async fn get_users_mxs(
     Json(state.dbreference.get_mxs_by_owner(user.id.unwrap()).await.unwrap())
 }
 #[debug_handler]
-pub async fn post_mx( State(state): State<AppState>, Json(Payload): Json<MorningExercise>,) -> StatusCode {
+pub async fn post_mx(State(state): State<AppState>,
+                     Extension(user): Extension<GoogleUser>,
+                     Json(payload): Json<MxPost>) -> StatusCode {
     println!("->> MX post request");
-    state.dbreference.create_mx(Payload).await
+
+    let mx = MorningExercise::new_with_date(
+        1, user, payload.date, payload.title, payload.description, None
+    );
+
+    state.dbreference.create_mx(mx).await
 }
 pub async fn delete_mx(State(state): State<AppState>,
                        Json(Payload): Json<MorningExercise>) -> Response {
@@ -34,4 +42,10 @@ pub async fn delete_mx(State(state): State<AppState>,
     let mx_id = Payload.title;
     state.dbreference.delete_mx_by_title(&mx_id).await.into_response()
 }
+#[derive(Debug, Serialize, Deserialize)]
 
+pub struct MxPost {
+    date: chrono::NaiveDate,
+    title: String,
+    description: String
+}

@@ -154,7 +154,7 @@ impl MxService for Pool<Sqlite> {
         let description: String = mx.description;
 
         let query = sqlx::query("INSERT into MX (mx_index,date,owner, title,description) values (?,?,?,?,?)")
-            .bind(index)
+            .bind(1)
             .bind(date)
             .bind(owner)
             .bind(title)

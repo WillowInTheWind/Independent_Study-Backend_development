@@ -52,7 +52,7 @@ pub async fn auth(
         .claims;
 
     let user_id = claims.sub;
-    let user = state.dbreference.get_user_by_id(user_id).await.unwrap();
+    let user = state.dbreference.get_user_by_id(user_id).await.map_err(|e| StatusCode::UNAUTHORIZED)?;
     req.extensions_mut().insert(user);
     Ok(next.run(req).await)
 }

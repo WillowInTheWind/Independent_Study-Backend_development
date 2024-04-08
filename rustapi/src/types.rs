@@ -75,7 +75,7 @@ impl MorningExercise {
                          date: NaiveDate,
                          title: String,
                          description: String,
-                         editors: Vec<GenericUser>)
+                         editors: Option<Vec<GenericUser>>)
                          -> Self {
         MorningExercise {
             id,
