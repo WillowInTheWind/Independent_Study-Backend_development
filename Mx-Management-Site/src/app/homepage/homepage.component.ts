@@ -41,9 +41,6 @@ export class HomepageComponent {
     this.hello.test()
   }
 
-  cookie() {
-    console.log(this.cookies.get("token"))
-  }
   constructor(private hello: AuthorizationService, private cookies: CookieService, private mxManager: MorningExService) {
     // this.login()
   }

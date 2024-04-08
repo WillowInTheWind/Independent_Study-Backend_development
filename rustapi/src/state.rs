@@ -7,13 +7,15 @@ use oauth2::{
 #[derive(Clone)]
 pub struct AppState {
     pub dbreference: Pool<Sqlite>,
-    pub(crate) oauth_client: BasicClient
+    pub(crate) oauth_client: BasicClient,
+    pub reqwestClient: reqwest::Client,
 }
 impl AppState {
-    pub fn new(db:  Pool<Sqlite>, oauth_client: BasicClient) -> Self {
+    pub fn new(db:  Pool<Sqlite>, oauth_client: BasicClient, client: reqwest::Client) -> Self {
         AppState {
             dbreference: db,
-            oauth_client
+            oauth_client,
+            reqwestClient: client,
         }
     }
 }

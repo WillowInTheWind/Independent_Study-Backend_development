@@ -48,8 +48,7 @@ pub(crate) async fn login_authorized(
         .await?;
     // Fetch user data from Google
 
-    let client = reqwest::Client::new();
-    let user_data = client
+    let user_data = state.reqwestClient
         .get("https://www.googleapis.com/oauth2/v3/userinfo")
         .bearer_auth(token.access_token().secret())
         .send()
@@ -103,6 +102,7 @@ pub(crate) async fn login(State(client): State<BasicClient>) -> Response {
 
     let (auth_url, _csrf_token) = client
         .authorize_url(CsrfToken::new_random)
+        .add_scope(Scope::new("https://www.googleapis.com/auth/calendar".to_string()))
         .add_scope(Scope::new("profile".to_string()))
         .add_scope(Scope::new("email".to_string()))
         .url();

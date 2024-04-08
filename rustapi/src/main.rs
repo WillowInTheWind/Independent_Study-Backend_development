@@ -37,9 +37,12 @@ async fn main(){
     //Init App State
         let pool = SqlitePoolOptions::new().connect(&database_url).await.expect("could not connect");
         let oauth_client = config::oauth_client().unwrap();
+        let client = reqwest::Client::new();
+
         let app_state: AppState = AppState {
             dbreference: pool,
             oauth_client,
+            reqwestClient: client,
         };
         println!("->> Successful connection to database: {:?}", &database_url);
     //Init App router

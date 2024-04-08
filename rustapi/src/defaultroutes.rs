@@ -16,6 +16,8 @@ pub(crate) async fn error_404() -> (StatusCode, &'static str) {
 pub(crate) async fn root(Extension(user): Extension<GoogleUser>,
                          State(state): State<AppState>,
 ) -> impl IntoResponse {
+    let data = state.reqwestClient
+        .get("https://www.googleapis.com/calendar/v3/calendars/calendarId/events/eventId");
    format!(
             "Hey {}! You're logged in!\nYou may now access `/protected`.\nLog out with `/logout`.",
             user.name
