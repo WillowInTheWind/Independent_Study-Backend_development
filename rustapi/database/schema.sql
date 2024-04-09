@@ -15,7 +15,11 @@ CREATE TABLE GoogleUsers (
     sub TEXT UNIQUE NOT NULL,
     picture TEXT,
     email TEXT UNIQUE NOT NULL,
-    name TEXT UNIQUE NOT NULL
+    name TEXT UNIQUE NOT NULL,
+    token TEXT UNIQUE
+
+--     calendar TEXT UNIQUE NOT NULL
+
 );
 
 CREATE TABLE MX (

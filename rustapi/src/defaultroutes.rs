@@ -7,7 +7,8 @@ use crate::types::{ GoogleUser};
 use http::{ StatusCode};
 pub mod user_manager;
 pub(crate) mod mx_service;
-mod calenderservice;
+pub(crate) mod calendarservice;
+mod emailservice;
 
 pub(crate) async fn error_404() -> (StatusCode, &'static str) {
     (StatusCode::NOT_FOUND, "Not Found")

@@ -33,13 +33,6 @@ export class HomepageComponent {
     title: new FormControl('', {nonNullable: true}),
     description: new FormControl('', {nonNullable: true}),
   })
-  login( ) {
-    this.hello.OauthLogin();
-  }
-
-  test( ) {
-    this.hello.test()
-  }
 
   constructor(private hello: AuthorizationService, private cookies: CookieService, private mxManager: MorningExService) {
     // this.login()

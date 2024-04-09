@@ -13,6 +13,7 @@ pub(crate) trait UserService: Send + Sync {
     async fn delete_user_by_user_name(&self, name: String) -> Result<i64, sqlx::Error>;
 
     async fn edit_username(&self, new_user: GoogleUser) ->  Result<GoogleUser, sqlx::Error>;
+    async fn reset_user_token(&self, token: String, id: i64) -> Result<i64, Error>;
     async fn delete_user_by_email(&self, email: String) -> Result<i64, Error>;
 }
 impl UserService for Pool<Sqlite> {
@@ -51,13 +52,15 @@ impl UserService for Pool<Sqlite> {
     }
 
     async fn create_user(&self, new_user: GoogleUser) -> Result<i64, Error> {
+        let token = new_user.token.unwrap().clone();
         let query =
             sqlx::query!(
-                "INSERT into GoogleUsers (sub, picture, email, name) values ($1,$2, $3, $4)",
+                "INSERT into GoogleUsers (sub, picture, email, name, token) values ($1,$2, $3, $4, $5)",
                 new_user.sub,
                 new_user.picture,
                 new_user.email,
-                new_user.name
+                new_user.name,
+                token
             )
                 .execute(self)
                 .await?
@@ -93,6 +96,21 @@ impl UserService for Pool<Sqlite> {
     }
     async fn edit_username(&self, new_user: GoogleUser) -> Result<GoogleUser, Error> {
         todo!()
+    }
+
+    async fn reset_user_token(&self, token: String, id: i64) -> Result<i64, Error> {
+
+        let query =
+            sqlx::query!(
+                "Update GoogleUsers SET token = $1 where id = $2",
+                token,
+                id
+            )
+                .execute(self)
+                .await?
+                .last_insert_rowid()
+            ;
+        Ok(query)
     }
     async fn delete_user_by_email(&self, email: String) -> Result<i64, Error> {
         let query =

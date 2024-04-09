@@ -4,7 +4,7 @@ use sqlx::FromRow;
 use serde::{Deserialize, Serialize};
 use axum::http::StatusCode;
 use axum::response::IntoResponse;
-use chrono::{Datelike, NaiveDate};
+use chrono::{Datelike, NaiveDate, NaiveDateTime};
 use crate::mx_date_algorithm;
 
 pub(crate) trait DateToString {
@@ -42,7 +42,7 @@ impl DateToString for NaiveDate {
         format!("{}/{}/{}",self.month(), self.day(), self.year()%1000)
     }
 }
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub(crate) struct MorningExercise {
     id: i64,
     pub(crate) mx_index: i64,
@@ -119,6 +119,7 @@ pub(crate) struct  GoogleUser {
     pub(crate) picture: Option<String>,
     pub(crate) email: String,
     pub(crate) name: String,
+    pub(crate) token: Option<String>
     // pub(crate) isAdmin: bool,
 }
 /// Errors, there are too many of them
@@ -191,4 +192,32 @@ impl From<&str> for OauthError {
     fn from(err: &str) -> Self {
         OauthError::new(err)
     }
+}
+
+#[derive(Debug,Deserialize,Serialize)]
+pub struct CalendarEvent {
+    summary: String,
+    start: time,
+    end: time,
+    description: String
+}
+
+impl CalendarEvent {
+    pub fn new(summary: String, start: NaiveDateTime, end: NaiveDateTime, description: String) -> Self {
+        CalendarEvent{
+            summary,
+            start: time {
+                dateTime: start, timeZone: "America/Chicago".to_string()
+            },
+            end: time {
+                dateTime: end, timeZone: "America/Chicago".to_string()
+            },
+            description,
+        }
+    }
+}
+#[derive(Debug,Deserialize,Serialize)]
+struct time {
+    dateTime: NaiveDateTime,
+    timeZone: String
 }

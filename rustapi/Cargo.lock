@@ -1774,6 +1774,7 @@ dependencies = [
  "oauth2",
  "once_cell",
  "reqwest 0.12.2",
+ "rustcrypto",
  "serde",
  "serde_json",
  "sqlx",
@@ -1791,6 +1792,12 @@ name = "rustc-demangle"
 version = "0.1.23"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d626bb9dae77e28219937af045c257c28bfd3f69333c512553507f5f9798cb76"
+
+[[package]]
+name = "rustcrypto"
+version = "0.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "31db50dfb330cfa12294c0126313c369de5cabf82219cf3cf43a8c63be26e295"
 
 [[package]]
 name = "rustix"

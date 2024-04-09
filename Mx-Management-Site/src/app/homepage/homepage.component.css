@@ -1,5 +1,19 @@
 .form {
   display: flex;
   flex-direction: column;
-  width: 500px;
+  width: 98vw;
+  margin: 1vw;
+}
+#date {
+
+}
+#title {
+
+}
+#description {
+  height: 20vw;
+}
+
+.submit {
+  margin-top: 10px ;
 }

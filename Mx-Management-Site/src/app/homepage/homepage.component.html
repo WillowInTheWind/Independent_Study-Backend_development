@@ -1,6 +1,5 @@
 <router-outlet>
-  <button (click) = login()>login</button>
-  <button (click) = test()>test</button>
+
 
   <form [formGroup]="mxform" class = "form" (submit)="submitMX()">
 
@@ -11,7 +10,7 @@
     <input id="title" type = "text" formControlName = "title">
 
     <label for="description">Describe the MX</label>
-    <input id="description" type = "text" formControlName = "description">
-    <button type = "submit">Submit</button>
+    <textarea id="description" type = "text" formControlName = "description"> </textarea>
+    <button class = "submit" type = "submit">Submit</button>
   </form>
 </router-outlet>

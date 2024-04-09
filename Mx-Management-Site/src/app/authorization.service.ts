@@ -27,5 +27,17 @@ export class AuthorizationService {
     }
     )
   }
-  constructor(public http: HttpClient, @Inject(DOCUMENT) private document: Document, private cookies:  CookieService) { }
+  async getuserimage() {
+     return this.http.get<GoogleUser>("/api/users/currentuser")
+  }
+
+  constructor(public http: HttpClient, @Inject(DOCUMENT) private document: Document, private cookies:  CookieService) {
+  }
+}
+ interface  GoogleUser {
+    sub: string,
+    picture: string,
+    email: string,
+    name: string,
+  // pub(crate) isAdmin: bool,
 }

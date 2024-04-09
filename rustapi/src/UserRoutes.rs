@@ -1,5 +1,5 @@
 use axum::extract::{Path, Query, State};
-use axum::Json;
+use axum::{Extension, Json};
 use axum::response::Response;
 use axum_macros::debug_handler;
 use http::StatusCode;
@@ -39,4 +39,8 @@ pub async fn get_all_users(
     println!("->> User get request");
 
     Json(state.dbreference.get_users().await.map_err(types::internal_error).unwrap())
+}
+
+pub async fn current_user(Extension(user): Extension<GoogleUser>) -> Json<GoogleUser> {
+    Json(user)
 }

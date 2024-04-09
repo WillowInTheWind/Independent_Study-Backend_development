@@ -9,11 +9,12 @@ use oauth2::reqwest::async_http_client;
 use http::StatusCode;
 use anyhow::Context;
 use axum::Json;
+use chrono::{Duration, NaiveDate, Utc};
 use serde_json::json;
 use crate::{AppError, jwt};
 use crate::defaultroutes::user_manager::UserService;
 use crate::state::AppState;
-use crate::types::{GoogleUser};
+use crate::types::{CalendarEvent, GoogleUser, MorningExercise};
 
 pub static KEYS: Lazy<Keys> = Lazy::new(|| {
     let secret = std::env::var("JWT_SECRET").expect("JWT_SECRET must be set");
@@ -48,7 +49,8 @@ pub(crate) async fn login_authorized(
         .await?;
     // Fetch user data from Google
 
-    let user_data = state.reqwestClient
+
+    let mut user_data/* Type */ = state.reqwestClient
         .get("https://www.googleapis.com/oauth2/v3/userinfo")
         .bearer_auth(token.access_token().secret())
         .send()
@@ -56,9 +58,30 @@ pub(crate) async fn login_authorized(
         .context("failed in sending request to target Url")?
         .json::<GoogleUser>()
         .await
-        .context("failed to deserialize response as JSON")?;
+        .context("failed to deserialize response as JSON")?
+        ;
 
-    // println!("{:?}", state.dbreference.get_user_by_name(&user_data.name).await?);
+    println!("->> user data found ");
+    // let mx = MorningExercise::new_with_date(
+    //     1, user_data.clone(), NaiveDate::from_ymd_opt(2024,6,6).unwrap(), "WOW".to_string(), "WOW".to_string(), None
+    // );
+    //
+    //
+    // let date = &mx.date.and_hms_opt(10,50,0);
+    // let enddate = &mx.date.and_hms_opt(11,30,0);
+
+    // let event = CalendarEvent::new(mx.clone().title, date.unwrap(), enddate.unwrap());
+    // let calendar/* Type */ = state.reqwestClient
+    //     .post("https://www.googleapis.com/calendar/v3/calendars/wayland.chase@gmail.com/events")
+    //     .bearer_auth(token.access_token().secret())
+    //     .json(&event)
+    //     .send()
+    //     .await
+    //     .map_err(|e| StatusCode::INTERNAL_SERVER_ERROR)
+    //     ;
+
+    // println!("{:?}",calendar);
+
     let user_exists: bool =
         sqlx::query_scalar("SELECT EXISTS(SELECT 1 FROM GoogleUsers WHERE name = $1)")
             .bind(&user_data.name)
@@ -68,6 +91,7 @@ pub(crate) async fn login_authorized(
 
     if user_exists {
         let user = state.dbreference.get_user_by_name(&user_data.name).await?;
+        state.dbreference.reset_user_token(token.access_token().secret().to_string(), user.id.unwrap()).await;
         let jar = jwt::create_jwt_token(user.id.unwrap()).await?;
         return Ok((jar, Redirect::to("/")).into_response())
     }
@@ -77,7 +101,8 @@ pub(crate) async fn login_authorized(
         sub: user_data.sub,
         picture: user_data.picture,
         email: user_data.email,
-        name: user_data.name
+        name: user_data.name,
+        token: Some(token.access_token().secret().to_string())
     };
 
     let user_id = state.dbreference.create_user(user).await?;
@@ -126,4 +151,16 @@ pub struct Claims {
     pub exp: usize,
 }
 
+#[derive(Serialize, Deserialize, Debug)]
+struct event {
+    summary: String,
+    // start: eventtime,
+    // end: eventtime
+}
+#[derive(Serialize, Deserialize, Debug)]
 
+struct eventtime {
+    date: chrono::NaiveDate,
+    dateTime: chrono::DateTime<Utc>,
+    timeZone: String
+}

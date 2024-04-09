@@ -15,7 +15,9 @@ import {AsyncPipe, CommonModule} from "@angular/common";
 export class MxAdminpageComponent {
 
   protected morningExs: Observable<MorningExercise[]> = this.mx.getallmxs();
-
+  approveMx(title: string) {
+    this.mx.approveMx(title)
+  }
   constructor(
     private mx: MorningExService
   ) {

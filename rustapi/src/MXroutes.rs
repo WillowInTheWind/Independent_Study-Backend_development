@@ -1,3 +1,4 @@
+use std::string::String;
 use axum::extract::{ State};
 use axum::{Extension, Json};
 use axum::response::{IntoResponse, Response};
@@ -6,7 +7,9 @@ use axum::http::StatusCode;
 use serde::{Deserialize, Serialize};
 use crate::state::AppState;
 use crate::defaultroutes::mx_service::MxService;
-use crate::types::{GoogleUser, MorningExercise};
+use crate::defaultroutes::calendarservice::CalendarService;
+
+use crate::types::{CalendarEvent, GoogleUser, MorningExercise};
 
 #[debug_handler]
 pub async fn get_all_mxs(
@@ -31,11 +34,37 @@ pub async fn post_mx(State(state): State<AppState>,
     println!("->> MX post request");
 
     let mx = MorningExercise::new_with_date(
-        1, user, payload.date, payload.title, payload.description, None
+        1, user.clone(), payload.date, payload.title, payload.description, None
     );
+
 
     state.dbreference.create_mx(mx).await
 }
+#[debug_handler]
+pub async fn approve_mx(State(state): State<AppState>,
+                     Extension(user): Extension<GoogleUser>,
+                     Json(payload): Json<Mxcalendarbody>) -> StatusCode {
+    println!("->> MX approval");
+
+
+    let morningex = state.dbreference.get_mx_by_title(&payload.title).await;
+    if morningex.is_err() {
+        return StatusCode::UNAUTHORIZED
+    }
+    let mx = morningex.unwrap();
+
+
+    let statuscode = state.reqwestClient.mxtocalendar(user, mx.clone()).await.map_err(|e| StatusCode::INTERNAL_SERVER_ERROR);
+    if statuscode == Ok(StatusCode::CREATED) {
+        println!("->> Calendar Event Created");
+        statuscode.unwrap()
+    }
+    else {
+        println!("->> Calendar Event failed");
+        StatusCode::INTERNAL_SERVER_ERROR
+    }
+}
+
 pub async fn delete_mx(State(state): State<AppState>,
                        Json(Payload): Json<MorningExercise>) -> Response {
     println!("->> MX delete request");
@@ -43,9 +72,12 @@ pub async fn delete_mx(State(state): State<AppState>,
     state.dbreference.delete_mx_by_title(&mx_id).await.into_response()
 }
 #[derive(Debug, Serialize, Deserialize)]
-
 pub struct MxPost {
     date: chrono::NaiveDate,
     title: String,
     description: String
+}
+#[derive(Debug, Serialize, Deserialize)]
+pub struct  Mxcalendarbody {
+    title: String
 }

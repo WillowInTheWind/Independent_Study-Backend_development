@@ -1,6 +1,15 @@
-<mat-toolbar color="primary">
+<mat-toolbar color="primary" class = "topbar">
+  <div class = "logo">
   <mat-icon>curtains</mat-icon>
   <span><a href = "/">Mx Manager</a></span>
+  </div>
+
+  <div *ngIf = "!isloggedin()">
+    <button  (click) = login()>login</button>
+  </div>
+
+    <a class = "loggedin" *ngIf="isloggedin()" href = "">
+      <img class = "loggedinimg" [src] = "image"></a>
 </mat-toolbar>
 
 <router-outlet>
