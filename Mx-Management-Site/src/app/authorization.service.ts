@@ -27,7 +27,7 @@ export class AuthorizationService {
     }
     )
   }
-  async getuserimage() {
+  async getuser() {
      return this.http.get<GoogleUser>("/api/users/currentuser")
   }
 

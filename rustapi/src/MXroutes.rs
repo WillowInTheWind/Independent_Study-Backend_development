@@ -25,7 +25,7 @@ pub async fn get_users_mxs(
 ) -> Json<Vec<MorningExercise>> {
     println!("->> MX get request by users");
 
-    Json(state.dbreference.get_mxs_by_owner(user.id.unwrap()).await.unwrap())
+    Json(state.dbreference.get_mxs_by_owner(user.id.unwrap()).await.unwrap())   
 }
 #[debug_handler]
 pub async fn post_mx(State(state): State<AppState>,

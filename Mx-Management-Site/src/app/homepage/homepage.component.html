@@ -3,8 +3,22 @@
 
   <form [formGroup]="mxform" class = "form" (submit)="submitMX()">
 
-    <label for="date">Date</label>
-    <input id="date" type = "text" formControlName = "date">
+<!--    <label for="date">Date</label>-->
+<!--    <input id="date" type = "date" formControlName = "date">-->
+    <mat-form-field>
+      <mat-label>Choose a date</mat-label>
+      <input matInput [matDatepicker]="picker" [matDatepickerFilter]="myFilter" formControlName = "date">
+      <mat-hint>YYYY/MM/DD</mat-hint>
+      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+<!--    <mat-form-field>-->
+<!--      <mat-label>Choose a date</mat-label>-->
+<!--      <input matInput [matDatepicker]="picker">-->
+<!--&lt;!&ndash;      <mat-hint>MM/DD/YYYY</mat-hint>&ndash;&gt;-->
+<!--      <mat-datepicker-toggle  matIconSuffix [for]="picker"></mat-datepicker-toggle>-->
+<!--      <mat-datepicker formControlName = "date" #picker></mat-datepicker>-->
+<!--    </mat-form-field>-->
 
     <label for="title">Mx-Title</label>
     <input id="title" type = "text" formControlName = "title">

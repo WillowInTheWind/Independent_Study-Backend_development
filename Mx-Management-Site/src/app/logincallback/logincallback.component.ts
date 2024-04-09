@@ -16,6 +16,7 @@ import {CookieService} from "ngx-cookie-service";
 export class LogincallbackComponent {
 
   queryparams: string = "";
+  user = "";
   constructor(private route: Router,
               private authservice: AuthorizationService,
               @Inject(DOCUMENT) private document: Document,

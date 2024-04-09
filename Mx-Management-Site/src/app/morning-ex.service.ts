@@ -9,13 +9,14 @@ export class MorningExService {
           date:string,
           title: string,
           description: string
-  ) {
+  )
+  {
     let morning_ex = {
       "date": date,
       "title": title,
       "description": description
     };
-    console.log("I GOR HEEW");
+    console.log(morning_ex)
     this.http.post("/api/morningexercises/create", morning_ex).subscribe(date => {})
   }
   editMx () {
@@ -26,6 +27,10 @@ export class MorningExService {
   }
   getmx () {
 
+  }
+  getusermxs() {
+    console
+    return this.http.get<MorningExercise[]>("/api/morningexercises/mine")
   }
   approveMx(title: string) {
     this.http.post("/api/morningexercises/approve", {title}).subscribe(data => {})

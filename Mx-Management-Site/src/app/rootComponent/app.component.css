@@ -3,11 +3,16 @@ a {
   color: white;
 }
 
+.styless {
+  border: none;
+  background-color: inherit;
+}
 .topbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  max-height: 5vh;
+  max-height: 7vh;
+  padding: 5px;
 }
 
 .logo {
@@ -21,5 +26,26 @@ align-items: center;
   max-height: 5vh;
 }
 .loggedinimg {
-  max-height: 4vh;
+  max-height: 5vh;
+}
+
+.loginbutton {
+  border: 1px solid black;
+  border-radius: 15px;
+  height: 5vh;
+  width: 5vw;
+background-color: goldenrod;
+}
+
+.loginbutton:hover {
+  border: 1px solid black;
+  border-radius: 15px;
+  height: 5vh;
+  width: 5vw;
+  background-color: lightgoldenrodyellow;
+  text-decoration: underline;
+}
+.notloggedin {
+  display: flex;
+  align-content: center;
 }
