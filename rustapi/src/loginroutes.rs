@@ -11,6 +11,7 @@ use anyhow::Context;
 use axum::Json;
 use chrono::{Duration, NaiveDate, Utc};
 use serde_json::json;
+use sqlx::encode::IsNull::No;
 use crate::{AppError, jwt};
 use crate::defaultroutes::user_manager::UserService;
 use crate::state::AppState;
@@ -102,7 +103,8 @@ pub(crate) async fn login_authorized(
         picture: user_data.picture,
         email: user_data.email,
         name: user_data.name,
-        token: Some(token.access_token().secret().to_string())
+        token: Some(token.access_token().secret().to_string()),
+        phone_number: None
     };
 
     let user_id = state.dbreference.create_user(user).await?;

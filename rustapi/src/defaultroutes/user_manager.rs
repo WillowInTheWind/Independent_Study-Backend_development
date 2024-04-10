@@ -1,8 +1,10 @@
+use http::StatusCode;
 use sqlx::{Sqlite, Pool, Error};
 use crate::types::{ GoogleUser};
 pub(crate) trait UserService: Send + Sync {
     async fn get_users(&self) -> Result<Vec<GoogleUser>, sqlx::Error>;
     async fn get_user_by_id(&self, id: i32) -> Result<GoogleUser, sqlx::Error>;
+    async fn set_user_phone_number(&self, number: String, id: i64) -> Result<i64, Error>;
     async fn get_user_by_name(&self, name:&str) -> Result<GoogleUser, sqlx::Error>;
     async fn get_user_by_sub(&self, sub:&str) -> Result<GoogleUser, sqlx::Error>;
     async fn get_user_by_email(&self, email:&str) -> Result<GoogleUser, sqlx::Error>;
@@ -30,6 +32,20 @@ impl UserService for Pool<Sqlite> {
         query
     }
 
+    async fn set_user_phone_number(&self, number: String, id: i64) -> Result<i64, Error> {
+        let query =
+            sqlx::query!(
+                "Update GoogleUsers SET phone_number = $1 where id = $2",
+                number,
+                id
+            )
+                .execute(self)
+                .await?
+                .last_insert_rowid()
+            ;
+
+        Ok(query)
+    }
     async fn get_user_by_name(&self, name: &str) -> Result<GoogleUser, Error> {
         let query = sqlx::query_as!(
             GoogleUser, "SELECT * FROM GoogleUsers Where name = $1", name)

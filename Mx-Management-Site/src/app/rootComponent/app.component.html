@@ -4,21 +4,24 @@
   <span><a href = "/">Mx Manager</a></span>
   </div>
 
-  <div class = "notloggedin"*ngIf = "!isloggedin()">
-    <button class = "loginbutton" (click) = login()>login</button>
-  </div>
-
   <button class = "loggedin styless" *ngIf="isloggedin()" [matMenuTriggerFor]="menu">
     <img class = "loggedinimg" [src] = "image">
+  </button>
+
+  <button class = "loggedin styless" *ngIf="!isloggedin()" [matMenuTriggerFor]="menu">
+    <mat-icon style="color: white">account_box</mat-icon>
   </button>
 </mat-toolbar>
 
 
 <mat-menu #menu = "matMenu">
 <!--  <button mat-menu-item>-->
-    <a href = "me/settings" mat-menu-item> settings</a>
-  <a href = "me/mxs" mat-menu-item> my-mxs</a>
-  <button (click) = "logout()" mat-menu-item> logout</button>
+  <button mat-menu-item (click) = login() *ngIf = "!isloggedin()">Login</button>
+  <button mat-menu-item (click) = login() *ngIf = "!isloggedin()">Create Account</button>
+
+  <a href = "me/settings" *ngIf = "isloggedin()" mat-menu-item> Settings</a>
+  <a href = "me/mxs"  *ngIf = "isloggedin()" mat-menu-item> My-mxs</a>
+  <button (click) = "logout()" *ngIf = "isloggedin()" mat-menu-item> Logout</button>
 
   <!--  </button>-->
 </mat-menu>

@@ -20,6 +20,7 @@ pub fn router(app_state: AppState) -> Router {
         .route("/mine", get(MXroutes::get_users_mxs));
     let user_routes = Router::new()
         .route("/currentuser", get(UserRoutes::current_user))
+        .route("/setphonenumber", post(UserRoutes::set_user_number))
         .layer(middleware::from_fn_with_state(app_state.clone(), auth))
         .route("/", get(UserRoutes::get_all_users))
         .route("/getbyid/:id", get(UserRoutes::get_user_by_id))

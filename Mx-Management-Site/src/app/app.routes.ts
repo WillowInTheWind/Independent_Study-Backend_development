@@ -1,10 +1,11 @@
 import { Routes } from '@angular/router';
 import { AppComponent } from "./rootComponent/app.component";
 import {LogincallbackComponent} from "./logincallback/logincallback.component";
-import {HomepageComponent} from "./homepage/homepage.component";
+import {MxFormComponent} from "./mx-form/mx-form.component";
 import {MxAdminpageComponent} from "./mx-adminpage/mx-adminpage.component";
 import {UserpageComponent} from "./userpage/userpage.component";
 import {UserMxsComponent} from "./user-mxs/user-mxs.component";
+import {HomepageComponent} from "./homepage/homepage.component";
 
 export const routes: Routes = [
   { path: 'home', component: HomepageComponent },

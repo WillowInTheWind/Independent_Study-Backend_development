@@ -119,7 +119,8 @@ pub(crate) struct  GoogleUser {
     pub(crate) picture: Option<String>,
     pub(crate) email: String,
     pub(crate) name: String,
-    pub(crate) token: Option<String>
+    pub(crate) token: Option<String>,
+    pub(crate) phone_number: Option<String>
     // pub(crate) isAdmin: bool,
 }
 /// Errors, there are too many of them

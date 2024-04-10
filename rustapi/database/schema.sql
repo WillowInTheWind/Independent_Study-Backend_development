@@ -16,7 +16,9 @@ CREATE TABLE GoogleUsers (
     picture TEXT,
     email TEXT UNIQUE NOT NULL,
     name TEXT UNIQUE NOT NULL,
-    token TEXT UNIQUE
+    token TEXT UNIQUE,
+    phone_number TEXT UNIQUE
+
 
 --     calendar TEXT UNIQUE NOT NULL
 

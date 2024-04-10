@@ -9,6 +9,8 @@ import { OnInit} from "@angular/core";
 import {AuthorizationService} from "../authorization.service";
 import {CommonModule, NgIf} from "@angular/common";
 import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
+import {MatDialog} from "@angular/material/dialog";
+import {LogoutDialogComponent} from "../logout-dialog/logout-dialog.component";
 
 
 @Component({
@@ -35,11 +37,8 @@ export class AppComponent {
       return false
     }
   }
-  logout() {
-    this.cookie.delete("token")
-  }
 
-  constructor(private user: AuthorizationService, private  cookie: CookieService) {
+  constructor(private dialog: MatDialog, private user: AuthorizationService, private  cookie: CookieService) {
   }
   ngOnInit() {
     this.user.getuser().then(r => r.subscribe( date => {
@@ -48,4 +47,12 @@ export class AppComponent {
     }))
     }
 
+    logout() {
+      const dialogRef = this.dialog.open(LogoutDialogComponent, {
+        width: '270px',
+        data: {
+
+        },
+      });
+    }
 }

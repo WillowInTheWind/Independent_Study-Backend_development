@@ -1,0 +1,49 @@
+<router-outlet>
+  <div class = "list">
+    <button (click) = "formpage = 0" class = "formnum" [ngClass]="formpage>=0 ? 'active ' : 'inactive'">1</button>
+    <div class = "formprog" [ngClass]="formpage>=1 ? 'full ' : ''"></div>
+    <button (click) = "formpage = 1"
+            class = "formnum"
+            [ngClass]="formpage>=1 ? 'active ' : 'inactive'">2</button>
+    <div class = "formprog" [ngClass]="formpage>=2 ? 'full': '' "></div>
+
+    <button (click) = "formpage = 2" class = "formnum" [ngClass]="formpage>=2 ? 'active ' : 'inactive'">3</button>
+
+  </div>
+  <form [formGroup]="mxform" class = "form" >
+      <fieldset class = "form" *ngIf="formpage ==0">
+        <legend>Input the basic information about your mx</legend>
+<!--          <label for="title">Mx-Title</label>-->
+          <input id="title" type = "text" formControlName = "title" placeholder="Mx-title">
+
+        <div class = "warning" *ngIf="!this.mxform.value.title">*Title is required</div>
+        <div style="padding: 5px"></div>
+
+          <textarea id="description" type = "text" formControlName = "description" placeholder="Describe the MX"> </textarea>
+            <div class = "warning" *ngIf="!this.mxform.value.description">*Description is required</div>
+
+            <div style="padding: 5px"></div>
+            <mat-form-field>
+              <mat-label>Choose a date</mat-label>
+              <input matInput [matDatepicker]="picker" [matDatepickerFilter]="myFilter" formControlName = "date">
+              <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+          <button class = "submit" (click) = "next()">Next</button>
+  </fieldset>
+  </form>
+  <form [formGroup]="prefform" class = "form" >
+    <fieldset class = "form" *ngIf="formpage ==1">
+      <legend>Specify details about your MX</legend>
+
+      <button class = "submit" (click) = "next()">Next</button>
+    </fieldset>
+  </form>
+  <form [formGroup]="prefform" class = "form" (submit)="submitMX()">
+    <fieldset class = "form" *ngIf="formpage ==2">
+      <legend>Final details</legend>
+
+      <button class = "submit" type = 'submit'>Submit</button>
+    </fieldset>
+  </form>
+</router-outlet>

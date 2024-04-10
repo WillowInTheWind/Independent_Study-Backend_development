@@ -13,6 +13,10 @@ export class AuthorizationService {
       withCredentials: true}).subscribe(data => {
     })
   }
+  setNumber(number:string) {
+    console.log(number)
+    this.http.post("/api/users/setphonenumber", {number}).subscribe(data => {})
+  }
   OauthLogin() {
     let me = this.http.get<string>("/api/auth/login").subscribe(data => {
       console.log(data)
@@ -39,5 +43,7 @@ export class AuthorizationService {
     picture: string,
     email: string,
     name: string,
-  // pub(crate) isAdmin: bool,
+   phone_number: string,
+
+   // pub(crate) isAdmin: bool,
 }
