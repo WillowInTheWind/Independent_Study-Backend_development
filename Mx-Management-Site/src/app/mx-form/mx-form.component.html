@@ -8,41 +8,86 @@
     <div class = "formprog" [ngClass]="formpage>=2 ? 'full': '' "></div>
 
     <button (click) = "formpage = 2" class = "formnum" [ngClass]="formpage>=2 ? 'active ' : 'inactive'">3</button>
+    <div class = "formprog" [ngClass]="formpage>=3 ? 'full': '' "></div>
 
+    <button (click) = "formpage = 3" class = "formnum" [ngClass]="formpage>=3 ? 'active ' : 'inactive'">4</button>
   </div>
   <form [formGroup]="mxform" class = "form" >
       <fieldset class = "form" *ngIf="formpage ==0">
         <legend>Input the basic information about your mx</legend>
 <!--          <label for="title">Mx-Title</label>-->
-          <input id="title" type = "text" formControlName = "title" placeholder="Mx-title">
-
-        <div class = "warning" *ngIf="!this.mxform.value.title">*Title is required</div>
-        <div style="padding: 5px"></div>
-
-          <textarea id="description" type = "text" formControlName = "description" placeholder="Describe the MX"> </textarea>
-            <div class = "warning" *ngIf="!this.mxform.value.description">*Description is required</div>
-
-            <div style="padding: 5px"></div>
-            <mat-form-field>
-              <mat-label>Choose a date</mat-label>
-              <input matInput [matDatepicker]="picker" [matDatepickerFilter]="myFilter" formControlName = "date">
-              <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-              <mat-datepicker #picker></mat-datepicker>
+            <mat-form-field class="">
+              <mat-label>Title of your presentation</mat-label>
+              <input matInput id="title" type = "text" formControlName = "title" placeholder="title">
             </mat-form-field>
+
+            <mat-form-field class="">
+              <mat-label>Description</mat-label>
+              <textarea id = "description" formControlName = "description" placeholder="Describe the MX" matInput></textarea>
+            </mat-form-field>
+
+
           <button class = "submit" (click) = "next()">Next</button>
   </fieldset>
   </form>
   <form [formGroup]="prefform" class = "form" >
     <fieldset class = "form" *ngIf="formpage ==1">
       <legend>Specify details about your MX</legend>
+      <mat-form-field subscriptSizing="dynamic">
+        <mat-label>Desired Date</mat-label>
+        <input matInput [matDatepicker]="picker" [matDatepickerFilter]="myFilter" formControlName = "date">
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+      <div style="display: flex; align-items: center">
+        <p style="padding-right: 10px"> This mx is appropriate for ages </p>
+        <mat-form-field subscriptSizing="dynamic">
+              <mat-label> Min grade </mat-label>
+              <mat-select #mingrade>
+                @for (grade of grades; track grade) {
+                  <mat-option  *ngIf="!maxgrade.value || $index < grades.indexOf(maxgrade.value)" [value]="grade">{{grade}}</mat-option>
+                }
+              </mat-select>
+        </mat-form-field>
+        <p style="padding: 10px"   > through </p>
+        <mat-form-field subscriptSizing="dynamic">
+          <mat-label> Max grade </mat-label>
+          <mat-select #maxgrade>
+            @for (grade of grades; track grade) {
+
+              <mat-option *ngIf="!mingrade.value || $index > grades.indexOf(mingrade.value)" [value]="grade">{{grade}}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
+        <mat-checkbox *ngIf=" maxgrade.value && maxgrade.value ">
+Have you already sought council with division heads or spoken to a faculty member to ensure that this MX is developmentally appropriate for grades {{mingrade.value}}-{{maxgrade.value}}?
+        </mat-checkbox>
+      <div style="padding: 5px;"></div>
+        <mat-form-field subscriptSizing="dynamic" *ngIf="maxgrade.value && mingrade.value && grades.indexOf(mingrade.value) < 7" class="">
+          <mat-label>How should teachers prepare younger students prior to attending this MX?</mat-label>
+          <textarea placeholder="" matInput></textarea>
+        </mat-form-field>
+        <mat-checkbox> Can this presentation be ready with less than 24 hours notice?</mat-checkbox>
 
       <button class = "submit" (click) = "next()">Next</button>
     </fieldset>
   </form>
+
   <form [formGroup]="prefform" class = "form" (submit)="submitMX()">
     <fieldset class = "form" *ngIf="formpage ==2">
-      <legend>Final details</legend>
+      <legend>Technical Requirements</legend>
+      <mat-checkbox>This presentation requires screens</mat-checkbox>
 
+      <button class = "submit" (click) = "next()">Next</button>
+    </fieldset>
+  </form>
+
+  <form [formGroup]="prefform" class = "form" (submit)="submitMX()">
+    <fieldset class = "form" *ngIf="formpage ==3">
+      <legend>Final details</legend>
+      Grades 3-5 will not be attending MX presentations held on Mondays.  This is a recent change due to additions to the curriculum.
+      <mat-checkbox> I understand</mat-checkbox>
       <button class = "submit" type = 'submit'>Submit</button>
     </fieldset>
   </form>

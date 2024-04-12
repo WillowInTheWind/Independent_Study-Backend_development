@@ -7,8 +7,11 @@ import {MorningExService} from "../morning-ex.service";
 import {MatFormFieldModule, MatHint} from "@angular/material/form-field";
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatInputModule} from '@angular/material/input';
-import {provideNativeDateAdapter} from "@angular/material/core";
+import {MatOption, provideNativeDateAdapter} from "@angular/material/core";
 import {CommonModule} from "@angular/common";
+import {MatCheckbox} from "@angular/material/checkbox";
+import {MatSelect} from "@angular/material/select";
+import {MatSelectModule} from '@angular/material/select';
 
 
 @Component({
@@ -18,20 +21,41 @@ import {CommonModule} from "@angular/common";
     RouterOutlet,
     ReactiveFormsModule,
     MatHint,
-    MatFormFieldModule, MatInputModule, MatDatepickerModule
+    MatFormFieldModule, MatInputModule, MatDatepickerModule, MatCheckbox, MatSelectModule
   ],
   providers: [provideNativeDateAdapter()],
   templateUrl: './mx-form.component.html',
   styleUrl: './mx-form.component.css'
 })
 export class MxFormComponent {
+  counter(i: number) {
+    return new Array(i);
+  }
+
+  grades = [
+    'JK',
+    'SK',
+  '1st',
+  '2nd',
+  '3rd',
+'4th',
+ '5th',
+'6th',
+ '7th',
+ '8th',
+ '9th',
+'10th',
+'11th',
+ '12th',
+
+  ]
   protected formpage: number = 0;
   submitMX() {
     // @ts-ignore
     var date = dateformat(this.mxform.value.date)
     console.log(date)
 
-    if (!this.mxform.value.title || !this.mxform.value.date ) {
+    if (!this.mxform.value.title || !this.mxform.value.description ) {
       return
     }
     // let date = dateformat(this.mxform.value.date)
@@ -55,9 +79,13 @@ export class MxFormComponent {
   })
 
   next() {
-    if (!this.mxform.value.title || !this.mxform.value.date ) {
+    if (this.formpage == 0 && !this.mxform.value.title || !this.mxform.value.description ) {
       return
     }
+    if (this.formpage == 1 && !this.prefform.value.title || !this.mxform.value.date ) {
+      return
+    }
+
     this.formpage++
   }
   constructor(private hello: AuthorizationService, private cookies: CookieService, private mxManager: MorningExService) {

@@ -1,5 +1,5 @@
 use std::string::String;
-use axum::extract::{ State};
+use axum::extract::{Path, State};
 use axum::{Extension, Json};
 use axum::response::{IntoResponse, Response};
 use axum_macros::debug_handler;
@@ -8,6 +8,7 @@ use serde::{Deserialize, Serialize};
 use crate::state::AppState;
 use crate::defaultroutes::mx_service::MxService;
 use crate::defaultroutes::calendarservice::CalendarService;
+use crate::defaultroutes::user_manager::UserService;
 
 use crate::types::{CalendarEvent, GoogleUser, MorningExercise};
 
@@ -65,6 +66,10 @@ pub async fn approve_mx(State(state): State<AppState>,
     }
 }
 
+pub async fn get_user_mxs_by_name(Path(params): Path<String>, State(state): State<AppState>) -> Json<Vec<MorningExercise>>  {
+    let user = state.dbreference.get_user_by_name(&params).await.unwrap();
+    Json(state.dbreference.get_mxs_by_owner(user.id.unwrap()).await.unwrap())
+}
 pub async fn delete_mx(State(state): State<AppState>,
                        Json(Payload): Json<MorningExercise>) -> Response {
     println!("->> MX delete request");

@@ -1,4 +1,13 @@
-<div *ngIf="(morningExs | async)?.length==0"> No Mxs </div>
+<div class="user">
+<img class = 'img'[src] = "picture">
+  <div class ="userinfo">
+<p>{{ name }}</p>
+<p>{{ email }}</p>
+<p>{{ phone_number }}</p>
+  </div>
+</div>
+<p style="padding: 5px"></p>
+<!--<div *ngIf="(morningExs | async)?.length==0"> No Mxs </div>-->
 <ul class = "styless"*ngFor="let morningEx of morningExs| async">
   <li class = "mxlist" >
     <div class = "title">
@@ -7,12 +16,8 @@
     <div class = "date">
       {{morningEx.date}}
     </div>
-    <div class = 'user'>
-      <a [href] = "morningEx.owner.name">{{morningEx.owner.name}}</a>
-    </div>
     <div class = "description">
       <div class = "desctext">{{morningEx.description}}</div>
-      <button class = "submit" (click) = approveMx(morningEx.title)> approve </button>
     </div >
 
   </li>

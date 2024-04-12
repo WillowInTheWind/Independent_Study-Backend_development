@@ -14,7 +14,7 @@
 .description {
   width: 80vw; /* change to your preferences */
   padding: 5px;
-display: flex;
+  display: flex;
   justify-content: space-between;
   align-items: center;
 
@@ -23,11 +23,11 @@ display: flex;
   white-space: nowrap; /* paragraph to one line */
   overflow: hidden; /* older browsers */
   text-overflow: ellipsis; /* will make [...] at the end */
-width: 55vw;
+  width: 55vw;
 }
 .date {
   text-overflow: ellipsis; /* will make [...] at the end */
-  width: 15vw; /* change to your preferences */
+  width: 10vw; /* change to your preferences */
   white-space: nowrap; /* paragraph to one line */
   overflow: hidden; /* older browsers */
   padding: 5px;
@@ -37,7 +37,7 @@ width: 55vw;
 }
 .title {
   text-overflow: ellipsis; /* will make [...] at the end */
-  width: 10vw; /* change to your preferences */
+  width: 15vw; /* change to your preferences */
   white-space: nowrap; /* paragraph to one line */
   overflow: hidden; /* older browsers */
   padding: 5px;
@@ -45,23 +45,22 @@ width: 55vw;
 .submit {
   background: lavender;
   color: inherit;
-  border: none;
+
   font: inherit;
   cursor: pointer;
   outline: inherit;
-border-radius: 15px;
+  border-radius: 15px;
   padding: 5px ;
   border: 2px solid black;
+
   /*border-left: 2px solid black;*/
 
 }
 
 .user {
-  border-right: 2px solid black;
-  white-space: nowrap; /* paragraph to one line */
-  overflow: hidden; /* older browsers */
-  text-overflow: ellipsis; /* will make [...] at the end */
-  width: 15vw;
-  padding: 5px;
-
+  display: flex;
+  justify-content: space-around;
+}
+.img {
+  width: 122px;
 }

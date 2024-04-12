@@ -14,6 +14,8 @@ pub fn router(app_state: AppState) -> Router {
         .allow_origin("http://localhost:4200".parse::<HeaderValue>().unwrap());
     let mx_routes = Router::new()
         .route("/", get(MXroutes::get_all_mxs))
+        .route("/:username", get(MXroutes::get_user_mxs_by_name))
+
         .route("/approve", post(MXroutes::approve_mx))
         .route("/create", post(MXroutes::post_mx))
         .route("/delete", delete(MXroutes::delete_mx))

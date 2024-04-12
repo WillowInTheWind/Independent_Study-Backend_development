@@ -38,7 +38,7 @@ export class AuthorizationService {
   constructor(public http: HttpClient, @Inject(DOCUMENT) private document: Document, private cookies:  CookieService) {
   }
 }
- interface  GoogleUser {
+  export interface  GoogleUser {
     sub: string,
     picture: string,
     email: string,

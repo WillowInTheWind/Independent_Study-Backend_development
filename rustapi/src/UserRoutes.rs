@@ -52,7 +52,7 @@ pub async fn set_user_number(Extension(user): Extension<GoogleUser>, State(state
     if (payload.number.chars().count() != 10 && payload.number.chars().count() != 12) {
         return Err(StatusCode::NOT_ACCEPTABLE)
     }
-    if (!payload.number.parse::<i64>().is_ok()) {
+    if (!payload.number  .parse::<i64>().is_ok()) {
         println!("->> phone number was not number");
         return Err(StatusCode::NOT_ACCEPTABLE)
     }

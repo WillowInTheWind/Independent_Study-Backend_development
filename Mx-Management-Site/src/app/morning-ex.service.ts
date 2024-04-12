@@ -29,8 +29,12 @@ export class MorningExService {
 
   }
   getusermxs() {
-    console
+
     return this.http.get<MorningExercise[]>("/api/morningexercises/mine")
+  }
+  getusermxsbyname(name: string) {
+    console
+    return this.http.get<MorningExercise[]>("/api/morningexercises/" +name)
   }
   approveMx(title: string) {
     this.http.post("/api/morningexercises/approve", {title}).subscribe(data => {
