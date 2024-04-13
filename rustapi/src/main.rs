@@ -12,7 +12,6 @@ mod router;
 
 use oauth2::TokenResponse;
 use axum::{middleware, Router, routing::get};
-use sqlx::sqlite::SqlitePoolOptions;
 use std::env;
 use dotenv::dotenv;
 use anyhow::Context;
@@ -20,10 +19,10 @@ use axum::response::{IntoResponse, Response};
 use axum::routing::{delete, post};
 use http::StatusCode;
 use serde::{Deserialize, Serialize};
-use sqlx::sqlite::SqliteJournalMode::Delete;
 use crate::defaultroutes::user_manager::UserService;
 use crate::middlewares::auth;
 use crate::state::AppState;
+use sqlx::postgres::PgPoolOptions;
 
 //TODO: Add CSRF token Validation
 //TODO: Consolidate Error Types
@@ -32,10 +31,14 @@ async fn main(){
     //Init enviorment variables and tracing
         dotenv().ok();
         tracing_subscriber::fmt::init();
-        let database_url = env::var("DATABASE_URL").expect("DATABASE_URL must set");
+        let database_url =env::var("DATABASE_URL").expect("DATABASE_URL must set");
         let environment_variables = config::initialize_environment_variable().await;
     //Init App State
-        let pool = SqlitePoolOptions::new().connect(&database_url).await.expect("could not connect");
+        let pool = PgPoolOptions::new()
+            .max_connections(5)
+            .connect(&database_url).await.expect("could not connect");
+
+
         let oauth_client = config::oauth_client().unwrap();
         let client = reqwest::Client::new();
 

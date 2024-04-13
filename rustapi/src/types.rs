@@ -44,8 +44,8 @@ impl DateToString for NaiveDate {
 }
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub(crate) struct MorningExercise {
-    id: i64,
-    pub(crate) mx_index: i64,
+    id: i32,
+    pub(crate) mx_index: i32,
     pub(crate) date:  chrono::NaiveDate,
     pub(crate) owner: GoogleUser,
     pub(crate) title: String,
@@ -54,9 +54,9 @@ pub(crate) struct MorningExercise {
 }
 impl MorningExercise {
     //constructors
-    pub fn new_with_index(id:i64,
+    pub fn new_with_index(id:i32,
                           owner: GoogleUser,
-                          mx_index: i64,
+                          mx_index: i32,
                           title: String,
                           description: String,
                           editors: Vec<GenericUser>)
@@ -70,7 +70,7 @@ impl MorningExercise {
             description ,
         }
     }
-    pub fn new_with_date(id:i64,
+    pub fn new_with_date(id:i32,
                          owner: GoogleUser,
                          date: NaiveDate,
                          title: String,
@@ -80,15 +80,15 @@ impl MorningExercise {
         MorningExercise {
             id,
             date,
-            mx_index: mx_date_algorithm::weekly_date_to_index() as i64,
+            mx_index: mx_date_algorithm::weekly_date_to_index() as i32,
             owner,
             title ,
             description ,
         }
     }
-    pub fn new(id:i64,
+    pub fn new(id:i32,
                owner: GoogleUser,
-               mx_index: i64,
+               mx_index: i32,
                date: NaiveDate,
                title: String,
                description: String,
@@ -114,7 +114,7 @@ pub(crate) struct GenericUser {
 }
 #[derive(FromRow, Debug, Deserialize, Serialize, Clone)]
 pub(crate) struct  GoogleUser {
-    pub(crate) id: Option<i64>,
+    pub(crate) id: Option<i32>,
     pub(crate) sub: String,
     pub(crate) picture: Option<String>,
     pub(crate) email: String,

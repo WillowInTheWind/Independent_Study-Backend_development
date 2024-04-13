@@ -6,3 +6,5 @@ obj
 .vs
 makefile
 bin
+Dockerfile
+docker-compose.yaml

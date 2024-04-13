@@ -62,7 +62,7 @@ pub async fn userisadmin(
     State(state): State<AppState>,
     mut req: Request<Body>,
     next: Next,
-) -> Result<StatusCode, StatusCode> {
+) -> Result<Response, StatusCode> {
     let token = cookie_jar
         .get("token")
         .map(|cookie| cookie.value().to_string())
@@ -95,8 +95,10 @@ pub async fn userisadmin(
     let user_id = claims.sub;
     let user = state.dbreference.get_user_by_id(user_id).await.map_err(|e| StatusCode::UNAUTHORIZED)?;
 
-    if (user.email != "Wayland.chase@gmail.com") {
-        Err(StatusCode::UNAUTHORIZED)
+    if (user.email != "wayland.chase@gmail.com") {
+        println!("->> Non admin user tried to access admin routes");
+
+        return Err(StatusCode::UNAUTHORIZED);
     }
-    Ok(StatusCode::OK)
+    Ok(next.run(req).await)
 }

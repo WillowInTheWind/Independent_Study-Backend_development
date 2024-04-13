@@ -1,17 +1,17 @@
 use axum::extract::FromRef;
-use sqlx::{Pool, Sqlite};
+use sqlx::{Pool, Postgres};
 use oauth2::{
     basic::BasicClient
 };
 //Define AppState
 #[derive(Clone)]
 pub struct AppState {
-    pub dbreference: Pool<Sqlite>,
+    pub dbreference: Pool<Postgres>,
     pub(crate) oauth_client: BasicClient,
     pub reqwestClient: reqwest::Client,
 }
 impl AppState {
-    pub fn new(db:  Pool<Sqlite>, oauth_client: BasicClient, client: reqwest::Client) -> Self {
+    pub fn new(db:  Pool<Postgres>, oauth_client: BasicClient, client: reqwest::Client) -> Self {
         AppState {
             dbreference: db,
             oauth_client,

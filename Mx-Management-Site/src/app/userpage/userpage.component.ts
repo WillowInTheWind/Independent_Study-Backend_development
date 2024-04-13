@@ -16,17 +16,22 @@ protected validNum: Boolean = false;
   setnumber(number: string) {
 
     this.user.setNumber(number)
+    location.reload();
   }
   hasnumber() {
     this.user.getuser().then(data => {
       data.subscribe(
         data=> {
-          if (!data) {
-            this.hasnum = false
+          if (data.phone_number) {
+            this.hasnum = true
           }
           else{ this.hasnum = true; }
         }
     )})
+  }
+  ngOnInit() {
+    this.hasnumber();
+
   }
   constructor(private user: AuthorizationService) {
   }

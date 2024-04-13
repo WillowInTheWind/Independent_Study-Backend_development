@@ -1,7 +1,7 @@
 use axum::http::StatusCode;
 use axum_macros::debug_handler;
 use chrono::{NaiveDate};
-use sqlx::{Pool, Sqlite};
+use sqlx::{Pool, Postgres};
 use crate::defaultroutes::user_manager::UserService;
 use crate::types;
 use crate::types::{ MorningExercise};
@@ -10,7 +10,7 @@ pub trait MxService {
     async fn get_mx_by_date(&self, date: NaiveDate) -> Result<types::MorningExercise, (StatusCode, String)>;
     async fn get_mx_by_index(&self, index: i64) -> Result<types::MorningExercise, (StatusCode, String)>;
     async fn get_mx_by_title(&self, title: &str) -> Result<types::MorningExercise, (StatusCode, String)>;
-    async fn get_mxs_by_owner(&self, owner_id: i64) -> Result<Vec<types::MorningExercise>, (StatusCode, String)>;
+    async fn get_mxs_by_owner(&self, owner_id: i32) -> Result<Vec<types::MorningExercise>, (StatusCode, String)>;
     async fn get_mxs(&self) ->Result<Vec<types::MorningExercise>, (StatusCode, String)>;
     async fn create_mx(&self, mx: MorningExercise) -> StatusCode;
     async fn delete_mx_by_id(&self, id: i64) -> StatusCode;
@@ -18,9 +18,9 @@ pub trait MxService {
     async fn delete_mx_by_title(&self, title: &str) -> StatusCode;
     async fn edit_mx(&self) ->  StatusCode;
 }
-impl MxService for Pool<Sqlite> {
+impl MxService for Pool<Postgres> {
     async fn get_mx_by_id(&self, id: i64) -> Result<types::MorningExercise, (StatusCode, String)> {
-        let query : Result<(i64, i64, i64, NaiveDate, String, String), _> = sqlx::query_as
+        let query : Result<(i32, i32, i32, NaiveDate, String, String), _> = sqlx::query_as
             ("SELECT * FROM MX WHERE id = ?")
             .bind(id)
             .fetch_one(self)
@@ -40,7 +40,7 @@ impl MxService for Pool<Sqlite> {
         Ok(mx)
     }
     async fn get_mx_by_date(&self, date: NaiveDate) -> Result<types::MorningExercise, (StatusCode, String)> {
-        let query : Result<(i64, i64, i64, NaiveDate, String, String), _> = sqlx::query_as
+        let query : Result<(i32, i32, i32, NaiveDate, String, String), _> = sqlx::query_as
             ("SELECT * FROM MX WHERE date = ?")
             .bind(date)
             .fetch_one(self)
@@ -60,7 +60,7 @@ impl MxService for Pool<Sqlite> {
         Ok(mx)
     }
     async fn get_mx_by_index(&self, index: i64) -> Result<types::MorningExercise, (StatusCode, String)> {
-        let query : Result<(i64, i64, i64, NaiveDate, String, String), _> = sqlx::query_as
+        let query : Result<(i32, i32, i32, NaiveDate, String, String), _> = sqlx::query_as
             ("SELECT * FROM MX WHERE mx_index = ?")
             .bind(index)
             .fetch_one(self)
@@ -80,7 +80,7 @@ impl MxService for Pool<Sqlite> {
         Ok(mx)
     }
     async fn get_mx_by_title(&self, title: &str) -> Result<types::MorningExercise, (StatusCode, String)> {
-        let query : Result<(i64, i64, i64, NaiveDate, String, String), _> = sqlx::query_as
+        let query : Result<(i32, i32, i32, NaiveDate, String, String), _> = sqlx::query_as
             ("SELECT * FROM MX WHERE title = ?")
             .bind(title)
             .fetch_one(self)
@@ -99,13 +99,14 @@ impl MxService for Pool<Sqlite> {
         };
         Ok(mx)
     }
-    async fn get_mxs_by_owner(&self, owner_id: i64) -> Result<Vec<types::MorningExercise>, (StatusCode, String)> {
-        let query : Result<Vec<(i64, i64, i64, NaiveDate, String, String)>, _> = sqlx::query_as
+    async fn get_mxs_by_owner(&self, owner_id: i32) -> Result<Vec<types::MorningExercise>, (StatusCode, String)> {
+        let query : Result<Vec<(i32, i32, i32, NaiveDate, String, String)>, _> = sqlx::query_as
             ("SELECT * FROM MX where owner = ? ")
             .bind(owner_id)
             .fetch_all(self)
             .await;
 
+        println!("->> MX found");
         let mxs = match query {
             Ok(query) => {
                 let mut mxs: Vec<MorningExercise> = Vec::new();
@@ -147,21 +148,22 @@ impl MxService for Pool<Sqlite> {
         Ok(mxs)
     }
     async fn create_mx(&self, mx: MorningExercise) -> StatusCode {
-        let index: i64 = mx.mx_index;
+        let index: i32 = mx.mx_index.try_into().unwrap();
         let date: NaiveDate = mx.date ;
-        let owner: i64 = mx.owner.id.unwrap();
+        let owner: i32 = mx.owner.id.unwrap();
         let title: String = mx.title;
         let description: String = mx.description;
 
-        let query = sqlx::query("INSERT into MX (mx_index,date,owner, title,description) values (?,?,?,?,?)")
-            .bind(1)
-            .bind(date)
-            .bind(owner)
-            .bind(title)
-            .bind(description)
+        println!("->> Inserting MX");
+        let query = sqlx::query!(
+            r#"INSERT into MX (date,owner, title,description) VALUES ($1,$2,$3,$4)"#,
+            date,
+            owner,
+            title,
+            description)
             .execute(self)
             .await
-            .map_err(|err| println!("{}", err));
+   ;
 
         match query {
             Ok(q) => {
@@ -232,9 +234,9 @@ impl MxService for Pool<Sqlite> {
 
 #[derive(Debug)]
 struct mxquery {
-    id: i64,
-    mx_index: i64,
-    owner: i64,
+    id: i32,
+    mx_index: i32,
+    owner: i32,
     date: NaiveDate,
     title: String,
     description: String

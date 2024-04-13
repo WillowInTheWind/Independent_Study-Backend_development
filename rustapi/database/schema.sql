@@ -1,23 +1,17 @@
-DROP TABLE IF EXISTS user;
 DROP TABLE IF EXISTS GoogleUsers;
 DROP TABLE IF EXISTS MX;
 
 
-CREATE TABLE user (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT UNIQUE NOT NULL,
-    user_identifier INTEGER NOT NULL,
-    user_email TEXT UNIQUE NOT NULL
-);
+
 
 CREATE TABLE GoogleUsers (
-    id integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+    id  serial NOT NULL PRIMARY KEY ,
     sub TEXT UNIQUE NOT NULL,
     picture TEXT,
     email TEXT UNIQUE NOT NULL,
     name TEXT UNIQUE NOT NULL,
     token TEXT UNIQUE,
-    phone_number TEXT UNIQUE
+    phone_number TEXT
 
 
 --     calendar TEXT UNIQUE NOT NULL
@@ -25,7 +19,7 @@ CREATE TABLE GoogleUsers (
 );
 
 CREATE TABLE MX (
-    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    id serial NOT NULL PRIMARY KEY ,
     mx_index INTEGER NOT NULL,
     owner INTEGER  NOT NULL,
     date DATE UNIQUE NOT NULL,

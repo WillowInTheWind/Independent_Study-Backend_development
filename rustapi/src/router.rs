@@ -3,7 +3,7 @@ use axum::routing::{any, delete, get, post};
 use http::header::CONTENT_TYPE;
 use http::{HeaderValue, Method};
 use crate::{defaultroutes, loginroutes, middlewares, MXroutes, UserRoutes};
-use crate::middlewares::auth;
+use crate::middlewares::{auth, userisadmin};
 use crate::state::AppState;
 use tower_http::cors::{Any, CorsLayer};
 
@@ -14,8 +14,8 @@ pub fn router(app_state: AppState) -> Router {
         .allow_origin("http://localhost:4200".parse::<HeaderValue>().unwrap());
     let mx_routes = Router::new()
         .route("/", get(MXroutes::get_all_mxs))
+        .layer(middleware::from_fn_with_state(app_state.clone(), userisadmin))
         .route("/:username", get(MXroutes::get_user_mxs_by_name))
-
         .route("/approve", post(MXroutes::approve_mx))
         .route("/create", post(MXroutes::post_mx))
         .route("/delete", delete(MXroutes::delete_mx))
@@ -26,7 +26,7 @@ pub fn router(app_state: AppState) -> Router {
         .layer(middleware::from_fn_with_state(app_state.clone(), auth))
         .route("/", get(UserRoutes::get_all_users))
         .route("/getbyid/:id", get(UserRoutes::get_user_by_id))
-        .route("/getuserby/:user_property", get(UserRoutes::get_user_by))
+        .route("/getuserby", get(UserRoutes::get_user_by))
         .route("/delete", delete(UserRoutes::delete_user));
     let auth_routes = Router::new()
         .route("/logout", get(loginroutes::logout))

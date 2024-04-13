@@ -22,10 +22,10 @@ export class UserinfoComponent {
   name: string = '';
   phone_number: string = '';
 
-  morningExs : Observable<MorningExercise[]> = this.mx.getusermxs();
+  morningExs : Observable<MorningExercise[]> = new Observable<MorningExercise[]>();
 
   ngOnInit() {
-    this.auth.getuser().then(r => {
+    this.auth.getuserbyname(this.route.url).then(r => {
       r.subscribe(
         data => {
           this.name= data.name;
@@ -33,6 +33,7 @@ export class UserinfoComponent {
 
           this.picture= data.picture;
           this.phone_number= data.phone_number;
+          this.morningExs = this.mx.getusermxsbyname(this.name)
 
         } )
     }

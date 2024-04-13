@@ -1,4 +1,4 @@
-POST http://127.0.0.1:8080/morningexercises/create
+POST http://127.0.0.1:8080/api/morningexercises/create
 Content-Type: application/json
 
 {

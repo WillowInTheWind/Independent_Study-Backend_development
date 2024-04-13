@@ -8,10 +8,11 @@ import {MatFormFieldModule, MatHint} from "@angular/material/form-field";
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatInputModule} from '@angular/material/input';
 import {MatOption, provideNativeDateAdapter} from "@angular/material/core";
-import {CommonModule} from "@angular/common";
+import {CommonModule, formatDate} from "@angular/common";
 import {MatCheckbox} from "@angular/material/checkbox";
 import {MatSelect} from "@angular/material/select";
 import {MatSelectModule} from '@angular/material/select';
+import { DateAdapter } from '@angular/material/core';
 
 
 @Component({
@@ -31,28 +32,53 @@ export class MxFormComponent {
   counter(i: number) {
     return new Array(i);
   }
-
   grades = [
     'JK',
     'SK',
-  '1st',
-  '2nd',
-  '3rd',
-'4th',
- '5th',
-'6th',
- '7th',
- '8th',
- '9th',
-'10th',
-'11th',
- '12th',
-
+    '1st',
+    '2nd',
+    '3rd',
+    '4th',
+    '5th',
+    '6th',
+    '7th',
+    '8th',
+    '9th',
+    '10th',
+    '11th',
+    '12th'
+  ]
+  techReqs = [
+"Projector/Screen" ,
+"Special presentation specific lighting" ,
+"Additional handheld microphones" ,
+"On body \"Lav\" microphones",
+  ]
+  mxdesc = [
+    "Extension of an UPPER SCHOOL course or activity\n" ,
+    "Extension of a MIDDLE SCHOOL course or activity\n" ,
+    "Extension of an INTERMEDIATE SCHOOL course or activity\n" ,
+    "Extension of a LOWER SCHOOL course or activity\n" ,
+    "Student Musical Performance\n" ,
+    "Outside Musical Perfromance\n" ,
+    "Outside Speaker\n" ,
+    "Student Theatre Performance\n" ,
+    "Outside Theatre Performance"
+  ]
+  mxDetails = [
+    "MX goes from 10:55 until 11:25. " +
+    "There are NO extended MXs." +
+    " Programs should be prepared to last 30 minutes or 25 minutes with 5 minutes for questions.",
+    "Please be specific in the program description on the form––it will be used as the official description and shared with the entire community" ,
+    "MXs should allow time for students to be seated and for announcements after the presentation.",
+    "Once scheduled, if this MX needs to be cancelled, it is the faculty sponsor’s responsibility to work with the MX committee to schedule or plan a suitable replacement.            ",
+    "Tech will automatically provide one microphone, standard stage lighting, and a podium. Any other tech needs must be listed below.               ",
+    "If special cues are needed, any video, power point, or music, along with a full script of the presentation, should be sent one week prior to performance to allow adequate technical rehearsal."
   ]
   protected formpage: number = 0;
   submitMX() {
     // @ts-ignore
-    var date = dateformat(this.mxform.value.date)
+    var date = dateformat(new Date(this.mxform.value.date));
     console.log(date)
 
     if (!this.mxform.value.title || !this.mxform.value.description ) {
@@ -60,7 +86,7 @@ export class MxFormComponent {
     }
     // let date = dateformat(this.mxform.value.date)
     this.mxManager.postMx(
-      date,
+      "2024-04-15",
       <string>this.mxform.value.title,
       <string>this.mxform.value.description,
     )
@@ -82,16 +108,16 @@ export class MxFormComponent {
     if (this.formpage == 0 && !this.mxform.value.title || !this.mxform.value.description ) {
       return
     }
-    if (this.formpage == 1 && !this.prefform.value.title || !this.mxform.value.date ) {
-      return
-    }
 
     this.formpage++
   }
-  constructor(private hello: AuthorizationService, private cookies: CookieService, private mxManager: MorningExService) {
+  constructor(private dateAdapter: DateAdapter<Date>, private hello: AuthorizationService, private cookies: CookieService, private mxManager: MorningExService) {
     // this.login()
+    this.dateAdapter.setLocale('en-US');
+
   }
   myFilter = (d: Date | null): boolean => {
+    // @ts-ignore
     const day = (d || new Date()).getDay();
 
     return day == 1 || day == 5;
@@ -99,7 +125,7 @@ export class MxFormComponent {
 }
 
 function dateformat(date: Date): string {
-
+  //
   if ((date.getMonth() - 10) < 0) {
     var month = "0" + (date.getMonth()+1).toString()
   }

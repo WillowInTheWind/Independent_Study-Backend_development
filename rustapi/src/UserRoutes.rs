@@ -19,19 +19,26 @@ pub async fn get_user_by_id(Path(params): Path<i32>,State(state): State<AppState
     Json(state.dbreference.get_user_by_id(params).await.unwrap())
 }
 #[debug_handler]
-pub async fn get_user_by(Path(params): Path<String>,State(state): State<AppState>,) -> Result<Json<GoogleUser>, StatusCode> {
-    println!("->> User get request by {}", params);
+pub async fn get_user_by(Query(params): Query<GetUserBy>,State(state): State<AppState>,) -> Result<Json<GoogleUser>, StatusCode> {
+    println!("->> User get request by {}", params.user_property);
 
-    match params.as_str(){
+    match params.user_property.as_str(){
         "email" => {
-            Ok(Json(state.dbreference.get_user_by_email(&params).await.unwrap()))
+            Ok(Json(state.dbreference.get_user_by_email(&params.property).await.unwrap()))
         }
         "sub" => {
-            Ok(Json(state.dbreference.get_user_by_sub(&params).await.unwrap()))        }
+            Ok(Json(state.dbreference.get_user_by_sub(&params.property).await.unwrap()))        }
         "name" => {
-            Ok(Json(state.dbreference.get_user_by_name(&params).await.unwrap()) )       }
+            let name = params.property.replace("%20", " ").replace("/", "");
+            println!("{}", name);
+            Ok(Json(state.dbreference.get_user_by_name(&name).await.unwrap()) )       }
         _ => {Err(StatusCode::NOT_FOUND)}
     }
+}
+#[derive(Deserialize, Serialize)]
+pub struct  GetUserBy {
+    user_property: String,
+    property: String
 }
 #[debug_handler]
 pub async fn get_all_users(
@@ -47,7 +54,7 @@ pub async fn current_user(Extension(user): Extension<GoogleUser>) -> Json<Google
 }
 #[debug_handler]
 pub async fn set_user_number(Extension(user): Extension<GoogleUser>, State(state): State<AppState>, Json(payload): Json<test>) -> Result<Response, StatusCode> {
-    println!("->> user {} phone number set", user.name);
+    println!("->> user {} tried to set phone number", user.name);
 
     if (payload.number.chars().count() != 10 && payload.number.chars().count() != 12) {
         return Err(StatusCode::NOT_ACCEPTABLE)
@@ -56,6 +63,8 @@ pub async fn set_user_number(Extension(user): Extension<GoogleUser>, State(state
         println!("->> phone number was not number");
         return Err(StatusCode::NOT_ACCEPTABLE)
     }
+    println!("->> user {} was succesfully set", user.name);
+
     let request = state.dbreference.set_user_phone_number(payload.number, user.id.unwrap()).await.map_err(|e| StatusCode::INTERNAL_SERVER_ERROR)?;
    Ok(Json(request).into_response())
 }
