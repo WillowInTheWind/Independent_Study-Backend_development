@@ -26,8 +26,9 @@ impl UserService for Pool<Postgres> {
         query
     }
     async fn get_user_by_id(&self, id: i32) -> Result<GoogleUser, Error> {
-        let query = sqlx::query_as!(
-            GoogleUser, "SELECT * FROM GoogleUsers Where id = $1", id)
+        let query = sqlx::query_as(
+             "SELECT * FROM GoogleUsers where id = $1")
+            .bind( id)
             .fetch_one(self).await;
         query
     }

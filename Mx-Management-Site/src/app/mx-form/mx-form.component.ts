@@ -7,7 +7,7 @@ import {MorningExService} from "../morning-ex.service";
 import {MatFormFieldModule, MatHint} from "@angular/material/form-field";
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatInputModule} from '@angular/material/input';
-import {MatOption, provideNativeDateAdapter} from "@angular/material/core";
+import {MatOption, NativeDateAdapter, provideNativeDateAdapter} from "@angular/material/core";
 import {CommonModule, formatDate} from "@angular/common";
 import {MatCheckbox} from "@angular/material/checkbox";
 import {MatSelect} from "@angular/material/select";
@@ -22,9 +22,12 @@ import { DateAdapter } from '@angular/material/core';
     RouterOutlet,
     ReactiveFormsModule,
     MatHint,
-    MatFormFieldModule, MatInputModule, MatDatepickerModule, MatCheckbox, MatSelectModule
+    MatFormFieldModule,
+    MatInputModule, MatDatepickerModule, MatCheckbox, MatSelectModule
   ],
-  providers: [provideNativeDateAdapter()],
+  providers: [
+    provideNativeDateAdapter()
+    ],
   templateUrl: './mx-form.component.html',
   styleUrl: './mx-form.component.css'
 })
@@ -69,24 +72,24 @@ export class MxFormComponent {
     "MX goes from 10:55 until 11:25. " +
     "There are NO extended MXs." +
     " Programs should be prepared to last 30 minutes or 25 minutes with 5 minutes for questions.",
-    "Please be specific in the program description on the form––it will be used as the official description and shared with the entire community" ,
+    "Please be specific in the presentation description on the form––it will be used as the official description and shared with the entire community" ,
     "MXs should allow time for students to be seated and for announcements after the presentation.",
     "Once scheduled, if this MX needs to be cancelled, it is the faculty sponsor’s responsibility to work with the MX committee to schedule or plan a suitable replacement.            ",
-    "Tech will automatically provide one microphone, standard stage lighting, and a podium. Any other tech needs must be listed below.               ",
-    "If special cues are needed, any video, power point, or music, along with a full script of the presentation, should be sent one week prior to performance to allow adequate technical rehearsal."
+    "Tech will automatically provide one microphone, standard stage lighting, and a podium. Any other tech needs should have listed in the prior section.               ",
+    "If special cues are needed, any video, power point, or music, along with a full script of the presentation, should be sent at least one week prior to performance, either through the MX website or email,  to allow adequate technical rehearsal."
   ]
   protected formpage: number = 0;
   submitMX() {
     // @ts-ignore
-    var date = dateformat(new Date(this.mxform.value.date));
-    console.log(date)
+    var newdate = new Date(this.mxform.value.date);
+    var date = dateformat(newdate);
 
     if (!this.mxform.value.title || !this.mxform.value.description ) {
       return
     }
     // let date = dateformat(this.mxform.value.date)
     this.mxManager.postMx(
-      "2024-04-15",
+      date,
       <string>this.mxform.value.title,
       <string>this.mxform.value.description,
     )

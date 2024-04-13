@@ -12,10 +12,18 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
-#  db:
-#    image:
-#    restart: always
-#    environment:
-#
-#    ports:
-#      - ""
+    depends_on:
+      - db
+  db:
+    image: postgres:15.2-alpine
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: "69184fed7a8a637fbc4e2ee206c82acf46f8c9ff47728397bc92ee9bf3ac7e5b"
+    ports:
+      - "5432:5432"
+    volumes:
+      - db:/var/lib/postgresql/data
+
+volumes:
+  db:
+    driver: local

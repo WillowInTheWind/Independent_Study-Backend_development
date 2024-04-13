@@ -1,7 +1,8 @@
 use axum::http::StatusCode;
 use axum_macros::debug_handler;
 use chrono::{NaiveDate};
-use sqlx::{Pool, Postgres};
+use sqlx::{Error, Pool, Postgres};
+use sqlx::postgres::PgQueryResult;
 use crate::defaultroutes::user_manager::UserService;
 use crate::types;
 use crate::types::{ MorningExercise};
@@ -100,28 +101,23 @@ impl MxService for Pool<Postgres> {
         Ok(mx)
     }
     async fn get_mxs_by_owner(&self, owner_id: i32) -> Result<Vec<types::MorningExercise>, (StatusCode, String)> {
-        let query : Result<Vec<(i32, i32, i32, NaiveDate, String, String)>, _> = sqlx::query_as
-            ("SELECT * FROM MX where owner = ? ")
-            .bind(owner_id)
+        println!("{}", owner_id);
+        let query : Vec<(i32, i32, i32, NaiveDate, String, String)> = sqlx::query_as
+            ("SELECT * FROM MX where owner = 1 ")
             .fetch_all(self)
-            .await;
+            .await
+            .map_err(|err| (StatusCode::INTERNAL_SERVER_ERROR, "query failed".to_owned()))?;
 
         println!("->> MX found");
-        let mxs = match query {
-            Ok(query) => {
-                let mut mxs: Vec<MorningExercise> = Vec::new();
-                for mx in query {
-                    let user = self.get_user_by_id(mx.1 as i32)
-                        .await
-                        .map_err(|err|(StatusCode::INTERNAL_SERVER_ERROR, "GetUserFailed".to_string()))?;
-                    mxs.push(MorningExercise::new(mx.0,user,mx.2,mx.3,mx.4,mx.5, None));
-                }
-                mxs
-            }
-            Err(query) => {
-                return Err((StatusCode::INTERNAL_SERVER_ERROR, "Query Failed".to_string()))
-            }
-        };
+        let mut mxs: Vec<MorningExercise> = Vec::new();
+        for mx in query {
+
+            let user = self.get_user_by_id(mx.1)
+                .await
+                .map_err(|err|(StatusCode::INTERNAL_SERVER_ERROR, "GetUserFailed".to_string()))?;
+            println!("{:?}", user);
+            mxs.push(MorningExercise::new(mx.0,user,mx.2,mx.3,mx.4,mx.5, None));
+        }
         Ok(mxs)
 
     }
@@ -156,23 +152,25 @@ impl MxService for Pool<Postgres> {
 
         println!("->> Inserting MX");
         let query = sqlx::query!(
-            r#"INSERT into MX (date,owner, title,description) VALUES ($1,$2,$3,$4)"#,
+            r#"INSERT into MX (mx_index, date,owner, title,description) VALUES ($1,$2,$3,$4, $5)"#,
+            1,
             date,
             owner,
             title,
             description)
             .execute(self)
             .await
-   ;
+       ;
 
         match query {
-            Ok(q) => {
+            Ok(query) => {
                 StatusCode::CREATED
             }
-            Err(q) => {
+            Err(query) => {
                 StatusCode::INTERNAL_SERVER_ERROR
             }
         }
+
     }
     async fn delete_mx_by_id(&self, id: i64) -> StatusCode {
        let query = sqlx::query("Delete FROM MX WHERE id = ?")
