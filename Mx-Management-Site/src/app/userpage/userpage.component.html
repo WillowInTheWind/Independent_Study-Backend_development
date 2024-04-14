@@ -1,4 +1,4 @@
-<div *ngIf = "hasnum">
+<div *ngIf = "!hasnum">
 <form  (submit)="setnumber(number.value)">
   <input #number type="text" id = "number">
 <!--  <p *ngIf="validNum">invalid or missing phone number</p>-->

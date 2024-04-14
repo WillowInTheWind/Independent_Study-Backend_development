@@ -35,6 +35,14 @@ export class AuthorizationService {
      return this.http.get<GoogleUser>("/api/users/currentuser")
   }
 
+  async getuserbyname (name: string ) {
+    console.log(name)
+    return this.http.get<GoogleUser>("/api/users/getuserby",  {params: {
+        user_property: 'name',
+        property: name
+      }})
+
+  }
   constructor(public http: HttpClient, @Inject(DOCUMENT) private document: Document, private cookies:  CookieService) {
   }
 }

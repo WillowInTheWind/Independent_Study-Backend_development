@@ -1,6 +1,3 @@
-use jsonwebtoken::{DecodingKey, EncodingKey};
-use once_cell::sync::Lazy;
-use serde::{Deserialize, Serialize};
 use axum::extract::{Query, State};
 use oauth2::basic::BasicClient;
 use axum::response::{IntoResponse, Redirect, Response};
@@ -9,34 +6,12 @@ use oauth2::reqwest::async_http_client;
 use http::StatusCode;
 use anyhow::Context;
 use axum::Json;
-use chrono::{Duration, NaiveDate, Utc};
-use serde_json::json;
-use sqlx::encode::IsNull::No;
-use crate::{AppError, jwt};
-use crate::defaultroutes::user_manager::UserService;
-use crate::state::AppState;
-use crate::types::{CalendarEvent, GoogleUser, MorningExercise};
 
-pub static KEYS: Lazy<Keys> = Lazy::new(|| {
-    let secret = std::env::var("JWT_SECRET").expect("JWT_SECRET must be set");
-    Keys::new(secret.as_bytes())
-});
-
-pub struct Keys {
-    pub encoding: EncodingKey,
-    pub decoding: DecodingKey,
-}
-
-impl Keys {
-    fn new(secret: &[u8]) -> Self {
-        Self {
-            encoding: EncodingKey::from_secret(secret),
-            decoding: DecodingKey::from_secret(secret),
-        }
-    }
-}
-
-pub static TOKEN_LENGTH_SECONDS: i64 = 12*60*60;
+use crate::jwt;
+use crate::services::user_manager::UserService;
+use crate::types::state::AppState;
+use crate::types::data_representations::{AuthRequest, GoogleUser};
+use crate::types::errors::AppError;
 
 pub(crate) async fn login_authorized(
     State(state): State<AppState>,
@@ -51,7 +26,7 @@ pub(crate) async fn login_authorized(
     // Fetch user data from Google
 
 
-    let mut user_data/* Type */ = state.reqwestClient
+    let user_data/* Type */ = state.reqwest_client
         .get("https://www.googleapis.com/oauth2/v3/userinfo")
         .bearer_auth(token.access_token().secret())
         .send()
@@ -72,7 +47,7 @@ pub(crate) async fn login_authorized(
     // let enddate = &mx.date.and_hms_opt(11,30,0);
 
     // let event = CalendarEvent::new(mx.clone().title, date.unwrap(), enddate.unwrap());
-    // let calendar/* Type */ = state.reqwestClient
+    // let calendar/* Type */ = state.reqwest_client
     //     .post("https://www.googleapis.com/calendar/v3/calendars/wayland.chase@gmail.com/events")
     //     .bearer_auth(token.access_token().secret())
     //     .json(&event)
@@ -92,7 +67,7 @@ pub(crate) async fn login_authorized(
 
     if user_exists {
         let user = state.dbreference.get_user_by_name(&user_data.name).await?;
-        state.dbreference.reset_user_token(token.access_token().secret().to_string(), user.id.unwrap()).await;
+        state.dbreference.reset_user_token(token.access_token().secret().to_string(), user.id.unwrap()).await.expect("TODO: panic message");
         let jar = jwt::create_jwt_token(user.id.unwrap()).await?;
         return Ok((jar, Redirect::to("/")).into_response())
     }
@@ -115,7 +90,7 @@ pub(crate) async fn logout(
 ) -> Result<Response, StatusCode> {
     println!("->> user logged out");
 
-    let cookies = jwt::remove_jwt_token().await.map_err(|e| StatusCode::INTERNAL_SERVER_ERROR)?;
+    let cookies = jwt::remove_jwt_token().await.map_err(|_e| StatusCode::INTERNAL_SERVER_ERROR)?;
     Ok((cookies, Redirect::to("/api")).into_response())
 }
 
@@ -140,29 +115,3 @@ pub(crate) async fn login(State(client): State<BasicClient>) -> Response {
     // Redirect::to(&auth_url.to_string()).into_response()
 }
 
-#[derive(Debug, Deserialize)]
-#[allow(dead_code)]
-pub(crate) struct AuthRequest {
-    code: String,
-    state: String,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct Claims {
-    pub sub: i32,
-    pub exp: usize,
-}
-
-#[derive(Serialize, Deserialize, Debug)]
-struct event {
-    summary: String,
-    // start: eventtime,
-    // end: eventtime
-}
-#[derive(Serialize, Deserialize, Debug)]
-
-struct eventtime {
-    date: chrono::NaiveDate,
-    dateTime: chrono::DateTime<Utc>,
-    timeZone: String
-}

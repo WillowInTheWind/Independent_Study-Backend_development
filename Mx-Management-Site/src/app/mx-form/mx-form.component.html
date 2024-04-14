@@ -23,9 +23,15 @@
 
             <mat-form-field class="">
               <mat-label>Description</mat-label>
+              <mat-hint> Minimum of 4-5 sentences.  NOTE: This description will be forwarded to students and faculty, so be sure to describe your MX in as much detail as possible. </mat-hint>
               <textarea id = "description" formControlName = "description" placeholder="Describe the MX" matInput></textarea>
             </mat-form-field>
-
+        <mat-form-field subscriptSizing="dynamic">
+          <mat-label>Desired Date</mat-label>
+          <input matInput [matDatepicker]="picker" [matDatepickerFilter]="myFilter" formControlName = "date">
+          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
 
           <button class = "submit" (click) = "next()">Next</button>
   </fieldset>
@@ -33,13 +39,9 @@
   <form [formGroup]="prefform" class = "form" >
     <fieldset class = "form" *ngIf="formpage ==1">
       <legend>Specify details about your MX</legend>
-      <mat-form-field subscriptSizing="dynamic">
-        <mat-label>Desired Date</mat-label>
-        <input matInput [matDatepicker]="picker" [matDatepickerFilter]="myFilter" formControlName = "date">
-        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-        <mat-datepicker #picker></mat-datepicker>
-      </mat-form-field>
+
       <div style="display: flex; align-items: center">
+
         <p style="padding-right: 10px"> This mx is appropriate for ages </p>
         <mat-form-field subscriptSizing="dynamic">
               <mat-label> Min grade </mat-label>
@@ -78,7 +80,18 @@ Have you already sought council with division heads or spoken to a faculty membe
     <fieldset class = "form" *ngIf="formpage ==2">
       <legend>Technical Requirements</legend>
       <mat-checkbox>This presentation requires screens</mat-checkbox>
+      <mat-label>Please check any of the following that you will need technology wise        </mat-label>
 
+
+      <ng-container *ngFor="let requirement of techReqs; let i=index">
+        <mat-checkbox> {{requirement }}</mat-checkbox>
+      </ng-container>
+
+      <mat-form-field class="">
+        <mat-label>Please describe any additional technical requirements below
+        </mat-label>
+        <input matInput id="techer" type = "text"  placeholder="None">
+      </mat-form-field>
       <button class = "submit" (click) = "next()">Next</button>
     </fieldset>
   </form>
@@ -88,6 +101,31 @@ Have you already sought council with division heads or spoken to a faculty membe
       <legend>Final details</legend>
       Grades 3-5 will not be attending MX presentations held on Mondays.  This is a recent change due to additions to the curriculum.
       <mat-checkbox> I understand</mat-checkbox>
+      <figure style="display: contents;">
+        <figcaption ><b>The following are the requirements for any MX</b></figcaption>
+      <ol style="padding-top: 0">
+
+
+        <ng-container *ngFor="let item of mxDetails; let i=index">
+          <li>{{ item}} </li>
+        </ng-container>
+      </ol>
+        <mat-checkbox> I understand</mat-checkbox>
+
+      </figure>
+
+      <mat-form-field >
+        <mat-label>This MX could best be described as:
+        </mat-label>
+        <mat-select #maxgrade>
+          @for (desc of mxdesc; track desc) {
+
+            <mat-option>{{ desc}}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+
       <button class = "submit" type = 'submit'>Submit</button>
     </fieldset>
   </form>

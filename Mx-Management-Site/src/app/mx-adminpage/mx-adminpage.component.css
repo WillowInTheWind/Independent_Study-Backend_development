@@ -63,5 +63,18 @@ border-radius: 15px;
   text-overflow: ellipsis; /* will make [...] at the end */
   width: 15vw;
   padding: 5px;
+}
 
+.userlink {
+  color: black;
+  text-decoration: none;
+  padding: 10px;
+  background-color: lightgray;
+  border-radius: 25px;
+  border: none;
+}
+.userlink:hover {
+text-decoration: underline;
+  background-color: gray;
+  color: white;
 }
