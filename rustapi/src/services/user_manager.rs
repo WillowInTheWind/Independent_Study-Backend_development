@@ -1,6 +1,6 @@
 use http::StatusCode;
-use sqlx::{Pool, Error, Postgres, PgPool};
-use crate::types::{ GoogleUser};
+use sqlx::{Pool, Error, Postgres};
+use crate::types::data_representations::{ GoogleUser};
 pub(crate) trait UserService: Send + Sync {
     async fn get_users(&self) -> Result<Vec<GoogleUser>, sqlx::Error>;
     async fn get_user_by_id(&self, id: i32) -> Result<GoogleUser, sqlx::Error>;
@@ -34,7 +34,6 @@ impl UserService for Pool<Postgres> {
     }
 
     async fn set_user_phone_number(&self, number: String, id: i32) -> Result<StatusCode, Error> {
-        let query =
             sqlx::query!(
                 "Update GoogleUsers SET phone_number = $1 where id = $2",
                 number,
@@ -88,7 +87,6 @@ impl UserService for Pool<Postgres> {
     }
 
     async fn delete_user_by_id(&self, id: i32) -> Result<StatusCode, Error> {
-        let query =
             sqlx::query!(
                 "Delete from GoogleUsers where id = $1",
                 id
@@ -100,7 +98,6 @@ impl UserService for Pool<Postgres> {
     }
 
     async fn delete_user_by_user_name(&self, name: String) -> Result<StatusCode, Error> {
-        let query =
             sqlx::query!(
                 "Delete from GoogleUsers where name = $1",
                 name
@@ -110,13 +107,12 @@ impl UserService for Pool<Postgres> {
 
         Ok(StatusCode::OK)
     }
-    async fn edit_username(&self, new_user: GoogleUser) -> Result<GoogleUser, Error> {
+    async fn edit_username(&self, _new_user: GoogleUser) -> Result<GoogleUser, Error> {
         todo!()
     }
 
     async fn reset_user_token(&self, token: String, id: i32) -> Result<StatusCode, Error> {
 
-        let query =
             sqlx::query!(
                 "Update GoogleUsers SET token = $1 where id = $2",
                 token,
@@ -128,7 +124,7 @@ impl UserService for Pool<Postgres> {
         Ok(StatusCode::OK)
     }
     async fn delete_user_by_email(&self, email: String) -> Result<StatusCode, Error> {
-        let query =
+
             sqlx::query!(
                 "Delete from GoogleUsers where email = $1",
                 email

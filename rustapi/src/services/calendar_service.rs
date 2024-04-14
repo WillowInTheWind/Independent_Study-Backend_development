@@ -1,6 +1,5 @@
-use chrono::NaiveDate;
 use http::StatusCode;
-use crate::types::{CalendarEvent, GoogleUser, MorningExercise};
+use crate::types::data_representations::{CalendarEvent, GoogleUser, MorningExercise};
 
 pub trait CalendarService {
     async fn mxtocalendar(&self,user: GoogleUser, mx: MorningExercise) -> Result<StatusCode, StatusCode>;
@@ -16,13 +15,13 @@ impl CalendarService for reqwest::Client {
          if user.token.is_none() {
              return Err(StatusCode::UNAUTHORIZED);
          }
-         let user_calendar  = self
+         let _user_calendar  = self
              .post(format!("https://www.googleapis.com/calendar/v3/calendars/{}/events",user.email))
              .bearer_auth(user.token.unwrap())
              .json(&event)
              .send()
              .await
-             .map_err(|e| StatusCode::INTERNAL_SERVER_ERROR)?;
+             .map_err(|_e| StatusCode::INTERNAL_SERVER_ERROR)?;
 
          println!("->> Calendar created ");
          Ok(StatusCode::CREATED)

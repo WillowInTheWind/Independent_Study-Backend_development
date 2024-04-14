@@ -5,12 +5,12 @@ use axum::response::{IntoResponse, Response};
 use axum_macros::debug_handler;
 use axum::http::StatusCode;
 use serde::{Deserialize, Serialize};
-use crate::state::AppState;
-use crate::defaultroutes::mx_service::MxService;
-use crate::defaultroutes::calendarservice::CalendarService;
-use crate::defaultroutes::user_manager::UserService;
+use crate::types::state::AppState;
+use crate::services::mx_service::MxService;
+use crate::services::calendar_service::CalendarService;
+use crate::services::user_manager::UserService;
 
-use crate::types::{CalendarEvent, GoogleUser, MorningExercise};
+use crate::types::data_representations::{GoogleUser, MorningExercise};
 
 #[debug_handler]
 pub async fn get_all_mxs(
@@ -55,7 +55,7 @@ pub async fn approve_mx(State(state): State<AppState>,
     let mx = morningex.unwrap();
 
 
-    let statuscode = state.reqwestClient.mxtocalendar(user, mx.clone()).await.map_err(|e| StatusCode::INTERNAL_SERVER_ERROR);
+    let statuscode = state.reqwest_client.mxtocalendar(user, mx.clone()).await.map_err(|_e| StatusCode::INTERNAL_SERVER_ERROR);
     if statuscode == Ok(StatusCode::CREATED) {
         println!("->> Calendar Event Created");
         statuscode.unwrap()
@@ -71,9 +71,9 @@ pub async fn get_user_mxs_by_name(Path(params): Path<String>, State(state): Stat
     Json(state.dbreference.get_mxs_by_owner(user.id.unwrap()).await.unwrap())
 }
 pub async fn delete_mx(State(state): State<AppState>,
-                       Json(Payload): Json<MorningExercise>) -> Response {
+                       Json(payload): Json<MorningExercise>) -> Response {
     println!("->> MX delete request");
-    let mx_id = Payload.title;
+    let mx_id = payload.title;
     state.dbreference.delete_mx_by_title(&mx_id).await.into_response()
 }
 #[derive(Debug, Serialize, Deserialize)]

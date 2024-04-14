@@ -12,10 +12,7 @@ CREATE TABLE GoogleUsers (
     name TEXT UNIQUE NOT NULL,
     token TEXT UNIQUE,
     phone_number TEXT
-
-
 --     calendar TEXT UNIQUE NOT NULL
-
 );
 
 CREATE TABLE MX (
