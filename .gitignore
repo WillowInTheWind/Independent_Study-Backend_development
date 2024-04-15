@@ -8,3 +8,4 @@ makefile
 bin
 Dockerfile
 docker-compose.yaml
+Secrets.toml

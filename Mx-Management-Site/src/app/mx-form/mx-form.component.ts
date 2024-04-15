@@ -80,6 +80,7 @@ export class MxFormComponent {
   ]
   protected formpage: number = 0;
   submitMX() {
+    if (!this.mxform.value.date) {return;}
     // @ts-ignore
     var newdate = new Date(this.mxform.value.date);
     var date = dateformat(newdate);

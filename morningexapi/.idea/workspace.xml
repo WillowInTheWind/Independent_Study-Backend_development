@@ -1,0 +1,861 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="ALL" />
+  </component>
+  <component name="CargoProjects">
+    <cargoProject FILE="$PROJECT_DIR$/Cargo.toml" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="d9f67dc8-f5a9-4741-a4ec-37f79d40ae2e" name="Changes" comment="Routing mostly done">
+      <change afterPath="$PROJECT_DIR$/.dockerignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources/0f77fea5-bd39-4153-bed9-85db51cd931a.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources/0f77fea5-bd39-4153-bed9-85db51cd931a/storage_v2/_src_/schema/main.uQUzAA.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources/8d3dbe80-22fd-42ac-b073-3087dcfd7a90.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources/8d3dbe80-22fd-42ac-b073-3087dcfd7a90/storage_v2/_src_/database/postgres.edMnLQ.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources/8d3dbe80-22fd-42ac-b073-3087dcfd7a90/storage_v2/_src_/database/postgres.edMnLQ/schema/public.abK9xQ.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources/a334e1fc-fbb3-4c8b-8511-fc783e69e5da/storage_v2/_src_/schema/main.uQUzAA.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/httpRequests/2024-04-03T184326.422.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/httpRequests/http-client.cookies" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/httpRequests/http-requests-log.http" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/morningexapi.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_4_13_2024_10_47_PM_[Changes]/shelved.patch" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_4_13_2024_10_47_PM_[Changes]1/shelved.patch" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_4_13_2024_10_47_PM__Changes_.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_4_13_2024_10_47_PM__Changes_1.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Cargo.lock" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Cargo.toml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/schema.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/config.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/jwt.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/routes.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/routes/default_routes.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/routes/login_routes.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/routes/middlewares.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/routes/mx_routes.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/routes/user_routes.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/services/calendar_service.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/services/email_service.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/services/mod.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/services/mx_service.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/services/user_manager.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/types/data_representations.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/types/errors.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/types/mod.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/types/mx_date_algorithm.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/types/state.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../rustapi/.idea/shelf/Uncommitted_changes_before_Update_at_4_13_2024_10_47_PM_[Changes]/shelved.patch" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../rustapi/.idea/shelf/Uncommitted_changes_before_Update_at_4_13_2024_10_47_PM_[Changes]1/shelved.patch" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../rustapi/.idea/shelf/Uncommitted_changes_before_Update_at_4_13_2024_10_47_PM__Changes_.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../rustapi/.idea/shelf/Uncommitted_changes_before_Update_at_4_13_2024_10_47_PM__Changes_1.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.vscode/launch.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/.idea/.idea.TodoApi/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/.idea/.idea.TodoApi/.idea/encodings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/.idea/.idea.TodoApi/.idea/indexLayout.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/.idea/.idea.TodoApi/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi.sln" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/Controllers/TodoItemsController.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/Controllers/WeatherForecastController.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/Models/ToDoContext.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/Models/TodoItem.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/Program.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/Properties/launchSettings.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/TodoApi.csproj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/TodoApi.csproj.user" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/TodoApi.http" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/WeatherForecast.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/appsettings.Development.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/appsettings.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/Humanizer.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/Microsoft.AspNetCore.Razor.Language.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/Microsoft.Bcl.AsyncInterfaces.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/Microsoft.Build.Framework.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/Microsoft.Build.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/Microsoft.CodeAnalysis.AnalyzerUtilities.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/Microsoft.CodeAnalysis.CSharp.Features.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/Microsoft.CodeAnalysis.CSharp.Workspaces.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/Microsoft.CodeAnalysis.CSharp.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/Microsoft.CodeAnalysis.Elfie.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/Microsoft.CodeAnalysis.Features.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/Microsoft.CodeAnalysis.Razor.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/Microsoft.CodeAnalysis.Scripting.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/Microsoft.CodeAnalysis.Workspaces.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/Microsoft.CodeAnalysis.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/Microsoft.DiaSymReader.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/Microsoft.DotNet.Scaffolding.Shared.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/Microsoft.EntityFrameworkCore.Abstractions.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/Microsoft.EntityFrameworkCore.Design.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/Microsoft.EntityFrameworkCore.InMemory.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/Microsoft.EntityFrameworkCore.Relational.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/Microsoft.EntityFrameworkCore.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/Microsoft.Extensions.DependencyModel.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/Microsoft.NET.StringTools.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/Microsoft.OpenApi.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/Microsoft.VisualStudio.Web.CodeGeneration.Core.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/Microsoft.VisualStudio.Web.CodeGeneration.EntityFrameworkCore.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/Microsoft.VisualStudio.Web.CodeGeneration.Templating.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/Microsoft.VisualStudio.Web.CodeGeneration.Utils.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/Microsoft.VisualStudio.Web.CodeGeneration.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/Microsoft.VisualStudio.Web.CodeGenerators.Mvc.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/Microsoft.Win32.SystemEvents.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/Mono.TextTemplating.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/Newtonsoft.Json.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/NuGet.Common.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/NuGet.Configuration.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/NuGet.DependencyResolver.Core.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/NuGet.Frameworks.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/NuGet.LibraryModel.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/NuGet.Packaging.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/NuGet.ProjectModel.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/NuGet.Protocol.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/NuGet.Versioning.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/Swashbuckle.AspNetCore.Swagger.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/Swashbuckle.AspNetCore.SwaggerGen.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/Swashbuckle.AspNetCore.SwaggerUI.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/System.CodeDom.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/System.Composition.AttributedModel.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/System.Composition.Convention.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/System.Composition.Hosting.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/System.Composition.Runtime.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/System.Composition.TypedParts.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/System.Configuration.ConfigurationManager.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/System.Drawing.Common.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/System.Reflection.MetadataLoadContext.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/System.Security.Cryptography.ProtectedData.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/System.Security.Permissions.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/System.Windows.Extensions.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/TodoApi.deps.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/TodoApi.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/TodoApi.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/TodoApi.pdb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/TodoApi.runtimeconfig.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/af/Humanizer.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/appsettings.Development.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/appsettings.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/ar/Humanizer.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/az/Humanizer.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/bg/Humanizer.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/bn-BD/Humanizer.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/cs/Humanizer.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/cs/Microsoft.CodeAnalysis.CSharp.Features.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/cs/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/cs/Microsoft.CodeAnalysis.CSharp.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/cs/Microsoft.CodeAnalysis.Features.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/cs/Microsoft.CodeAnalysis.Scripting.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/cs/Microsoft.CodeAnalysis.Workspaces.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/cs/Microsoft.CodeAnalysis.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/da/Humanizer.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/de/Humanizer.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/de/Microsoft.CodeAnalysis.CSharp.Features.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/de/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/de/Microsoft.CodeAnalysis.CSharp.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/de/Microsoft.CodeAnalysis.Features.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/de/Microsoft.CodeAnalysis.Scripting.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/de/Microsoft.CodeAnalysis.Workspaces.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/de/Microsoft.CodeAnalysis.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/dotnet-aspnet-codegenerator-design.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/el/Humanizer.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/es/Humanizer.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/es/Microsoft.CodeAnalysis.CSharp.Features.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/es/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/es/Microsoft.CodeAnalysis.CSharp.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/es/Microsoft.CodeAnalysis.Features.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/es/Microsoft.CodeAnalysis.Scripting.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/es/Microsoft.CodeAnalysis.Workspaces.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/es/Microsoft.CodeAnalysis.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/fa/Humanizer.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/fi-FI/Humanizer.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/fr-BE/Humanizer.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/fr/Humanizer.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/fr/Microsoft.CodeAnalysis.CSharp.Features.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/fr/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/fr/Microsoft.CodeAnalysis.CSharp.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/fr/Microsoft.CodeAnalysis.Features.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/fr/Microsoft.CodeAnalysis.Scripting.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/fr/Microsoft.CodeAnalysis.Workspaces.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/fr/Microsoft.CodeAnalysis.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/he/Humanizer.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/hr/Humanizer.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/hu/Humanizer.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/hy/Humanizer.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/id/Humanizer.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/is/Humanizer.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/it/Humanizer.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/it/Microsoft.CodeAnalysis.CSharp.Features.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/it/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/it/Microsoft.CodeAnalysis.CSharp.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/it/Microsoft.CodeAnalysis.Features.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/it/Microsoft.CodeAnalysis.Scripting.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/it/Microsoft.CodeAnalysis.Workspaces.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/it/Microsoft.CodeAnalysis.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/ja/Humanizer.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/ja/Microsoft.CodeAnalysis.CSharp.Features.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/ja/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/ja/Microsoft.CodeAnalysis.CSharp.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/ja/Microsoft.CodeAnalysis.Features.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/ja/Microsoft.CodeAnalysis.Scripting.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/ja/Microsoft.CodeAnalysis.Workspaces.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/ja/Microsoft.CodeAnalysis.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/ko-KR/Humanizer.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/ko/Microsoft.CodeAnalysis.CSharp.Features.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/ko/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/ko/Microsoft.CodeAnalysis.CSharp.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/ko/Microsoft.CodeAnalysis.Features.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/ko/Microsoft.CodeAnalysis.Scripting.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/ko/Microsoft.CodeAnalysis.Workspaces.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/ko/Microsoft.CodeAnalysis.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/ku/Humanizer.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/lv/Humanizer.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/ms-MY/Humanizer.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/mt/Humanizer.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/nb-NO/Humanizer.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/nb/Humanizer.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/nl/Humanizer.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/pl/Humanizer.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/pl/Microsoft.CodeAnalysis.CSharp.Features.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/pl/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/pl/Microsoft.CodeAnalysis.CSharp.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/pl/Microsoft.CodeAnalysis.Features.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/pl/Microsoft.CodeAnalysis.Scripting.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/pl/Microsoft.CodeAnalysis.Workspaces.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/pl/Microsoft.CodeAnalysis.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/pt-BR/Microsoft.CodeAnalysis.CSharp.Features.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/pt-BR/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/pt-BR/Microsoft.CodeAnalysis.CSharp.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/pt-BR/Microsoft.CodeAnalysis.Features.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/pt-BR/Microsoft.CodeAnalysis.Scripting.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/pt-BR/Microsoft.CodeAnalysis.Workspaces.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/pt-BR/Microsoft.CodeAnalysis.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/pt/Humanizer.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/ro/Humanizer.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/ru/Humanizer.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/ru/Microsoft.CodeAnalysis.CSharp.Features.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/ru/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/ru/Microsoft.CodeAnalysis.CSharp.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/ru/Microsoft.CodeAnalysis.Features.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/ru/Microsoft.CodeAnalysis.Scripting.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/ru/Microsoft.CodeAnalysis.Workspaces.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/ru/Microsoft.CodeAnalysis.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/runtimes/win/lib/net7.0/Microsoft.Win32.SystemEvents.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/runtimes/win/lib/net7.0/System.Drawing.Common.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/runtimes/win/lib/net7.0/System.Security.Cryptography.ProtectedData.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/runtimes/win/lib/net7.0/System.Windows.Extensions.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/sk/Humanizer.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/sl/Humanizer.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/sr-Latn/Humanizer.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/sr/Humanizer.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/sv/Humanizer.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/th-TH/Humanizer.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/tr/Humanizer.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/tr/Microsoft.CodeAnalysis.CSharp.Features.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/tr/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/tr/Microsoft.CodeAnalysis.CSharp.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/tr/Microsoft.CodeAnalysis.Features.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/tr/Microsoft.CodeAnalysis.Scripting.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/tr/Microsoft.CodeAnalysis.Workspaces.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/tr/Microsoft.CodeAnalysis.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/uk/Humanizer.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/uz-Cyrl-UZ/Humanizer.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/uz-Latn-UZ/Humanizer.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/vi/Humanizer.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/zh-CN/Humanizer.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/zh-Hans/Humanizer.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/zh-Hans/Microsoft.CodeAnalysis.CSharp.Features.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/zh-Hans/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/zh-Hans/Microsoft.CodeAnalysis.CSharp.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/zh-Hans/Microsoft.CodeAnalysis.Features.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/zh-Hans/Microsoft.CodeAnalysis.Scripting.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/zh-Hans/Microsoft.CodeAnalysis.Workspaces.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/zh-Hans/Microsoft.CodeAnalysis.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/zh-Hant/Humanizer.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/zh-Hant/Microsoft.CodeAnalysis.CSharp.Features.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/zh-Hant/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/zh-Hant/Microsoft.CodeAnalysis.CSharp.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/zh-Hant/Microsoft.CodeAnalysis.Features.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/zh-Hant/Microsoft.CodeAnalysis.Scripting.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/zh-Hant/Microsoft.CodeAnalysis.Workspaces.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ASPNETTestApp/TodoApi/TodoApi/bin/Debug/net8.0/zh-Hant/Microsoft.CodeAnalysis.resources.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Angular-Tutorial-App/.angular/cache/17.0.9/angular.io-example/.tsbuildinfo" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Angular-Tutorial-App/.angular/cache/17.0.9/vite/deps/@angular_common.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Angular-Tutorial-App/.angular/cache/17.0.9/vite/deps/@angular_common.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Angular-Tutorial-App/.angular/cache/17.0.9/vite/deps/@angular_common_http.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Angular-Tutorial-App/.angular/cache/17.0.9/vite/deps/@angular_common_http.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Angular-Tutorial-App/.angular/cache/17.0.9/vite/deps/@angular_core.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Angular-Tutorial-App/.angular/cache/17.0.9/vite/deps/@angular_core.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Angular-Tutorial-App/.angular/cache/17.0.9/vite/deps/@angular_forms.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Angular-Tutorial-App/.angular/cache/17.0.9/vite/deps/@angular_forms.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Angular-Tutorial-App/.angular/cache/17.0.9/vite/deps/@angular_platform-browser.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Angular-Tutorial-App/.angular/cache/17.0.9/vite/deps/@angular_platform-browser.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Angular-Tutorial-App/.angular/cache/17.0.9/vite/deps/@angular_router.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Angular-Tutorial-App/.angular/cache/17.0.9/vite/deps/@angular_router.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Angular-Tutorial-App/.angular/cache/17.0.9/vite/deps/_metadata.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Angular-Tutorial-App/.angular/cache/17.0.9/vite/deps/chunk-CRCQPSCX.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Angular-Tutorial-App/.angular/cache/17.0.9/vite/deps/chunk-CRCQPSCX.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Angular-Tutorial-App/.angular/cache/17.0.9/vite/deps/chunk-KGEAT5EH.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Angular-Tutorial-App/.angular/cache/17.0.9/vite/deps/chunk-KGEAT5EH.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Angular-Tutorial-App/.angular/cache/17.0.9/vite/deps/chunk-RVJY6LI4.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Angular-Tutorial-App/.angular/cache/17.0.9/vite/deps/chunk-RVJY6LI4.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Angular-Tutorial-App/.angular/cache/17.0.9/vite/deps/chunk-THWPMT2E.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Angular-Tutorial-App/.angular/cache/17.0.9/vite/deps/chunk-THWPMT2E.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Angular-Tutorial-App/.angular/cache/17.0.9/vite/deps/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Angular-Tutorial-App/.stackblitzrc" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Angular-Tutorial-App/angular.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Angular-Tutorial-App/package-lock.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Angular-Tutorial-App/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Angular-Tutorial-App/src/app/app.component.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Angular-Tutorial-App/src/app/app.component.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Angular-Tutorial-App/src/app/app.component.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Angular-Tutorial-App/src/app/app.module.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Angular-Tutorial-App/src/app/cart.service.spec.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Angular-Tutorial-App/src/app/cart.service.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Angular-Tutorial-App/src/app/cart/cart.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/Secrets.toml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Angular-Tutorial-App/src/app/cart/cart.component.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Angular-Tutorial-App/src/app/cart/cart.component.spec.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Angular-Tutorial-App/src/app/cart/cart.component.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Angular-Tutorial-App/src/app/product-alerts/product-alerts.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/Shuttle.toml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Angular-Tutorial-App/src/app/product-alerts/product-alerts.component.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Angular-Tutorial-App/src/app/product-alerts/product-alerts.component.spec.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Angular-Tutorial-App/src/app/product-alerts/product-alerts.component.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Angular-Tutorial-App/src/app/product-details/product-details.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/../rustapi/docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Angular-Tutorial-App/src/app/product-details/product-details.component.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Angular-Tutorial-App/src/app/product-details/product-details.component.spec.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Angular-Tutorial-App/src/app/product-details/product-details.component.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Angular-Tutorial-App/src/app/product-list/product-list.component.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Angular-Tutorial-App/src/app/product-list/product-list.component.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Angular-Tutorial-App/src/app/product-list/product-list.component.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Angular-Tutorial-App/src/app/products.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Angular-Tutorial-App/src/app/shipping/shipping.component.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Angular-Tutorial-App/src/app/shipping/shipping.component.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Angular-Tutorial-App/src/app/shipping/shipping.component.spec.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Angular-Tutorial-App/src/app/shipping/shipping.component.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Angular-Tutorial-App/src/app/top-bar/top-bar.component.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Angular-Tutorial-App/src/app/top-bar/top-bar.component.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Angular-Tutorial-App/src/app/top-bar/top-bar.component.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Angular-Tutorial-App/src/assets/shipping.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Angular-Tutorial-App/src/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Angular-Tutorial-App/src/main.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Angular-Tutorial-App/src/styles.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Angular-Tutorial-App/tsconfig.app.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Angular-Tutorial-App/tsconfig.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../BackendTestApp/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../BackendTestApp/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../BackendTestApp/.idea/BackendTestApp.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../BackendTestApp/.idea/dataSources.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../BackendTestApp/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../BackendTestApp/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../BackendTestApp/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../BackendTestApp/.idea/sqldialects.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sqldialects.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../BackendTestApp/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../BackendTestApp/flaskr/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../BackendTestApp/flaskr/auth.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../BackendTestApp/flaskr/blog.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../BackendTestApp/flaskr/db.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../BackendTestApp/flaskr/schema.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../BackendTestApp/flaskr/static/style.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../BackendTestApp/flaskr/templates/auth/login.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../BackendTestApp/flaskr/templates/auth/register.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../BackendTestApp/flaskr/templates/base.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../BackendTestApp/flaskr/templates/blog/create.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../BackendTestApp/flaskr/templates/blog/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../BackendTestApp/flaskr/templates/blog/update.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../BackendTestApp/hello.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Mx-Management-Site/src/app/mx-form/mx-form.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Mx-Management-Site/src/app/mx-form/mx-form.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../RustTestProject/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../RustTestProject/.idea/RustTestProject.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../RustTestProject/.idea/dataSources.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../RustTestProject/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../RustTestProject/.idea/sqldialects.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../RustTestProject/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../RustTestProject/Cargo.lock" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../RustTestProject/Cargo.toml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../RustTestProject/Database/schema.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../RustTestProject/identifier.sqlite" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../RustTestProject/src/main.rs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../RustTestProject/tests/quick_dev.rs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../WebApplication1/.idea/.idea.WebApplication1/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../WebApplication1/.idea/.idea.WebApplication1/.idea/encodings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../WebApplication1/.idea/.idea.WebApplication1/.idea/indexLayout.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../WebApplication1/.idea/.idea.WebApplication1/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../WebApplication1/WebApplication1.sln" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../WebApplication1/WebApplication1/Program.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../WebApplication1/WebApplication1/Properties/launchSettings.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../WebApplication1/WebApplication1/WebApplication1.csproj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../WebApplication1/WebApplication1/WebApplication1.http" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../WebApplication1/WebApplication1/appsettings.Development.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../WebApplication1/WebApplication1/appsettings.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../kanban-fir/.editorconfig" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../kanban-fir/.firebaserc" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../kanban-fir/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../kanban-fir/.vscode/extensions.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../kanban-fir/.vscode/launch.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../kanban-fir/.vscode/tasks.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../kanban-fir/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../kanban-fir/angular.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../kanban-fir/firebase.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../kanban-fir/package-lock.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../kanban-fir/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../kanban-fir/src/app/app-routing.module.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../kanban-fir/src/app/app.component.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../kanban-fir/src/app/app.component.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../kanban-fir/src/app/app.component.spec.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../kanban-fir/src/app/app.component.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../kanban-fir/src/app/app.module.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../kanban-fir/src/app/task-dialog/task-dialog.component.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../kanban-fir/src/app/task-dialog/task-dialog.component.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../kanban-fir/src/app/task-dialog/task-dialog.component.spec.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../kanban-fir/src/app/task-dialog/task-dialog.component.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../kanban-fir/src/app/task/task.component.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../kanban-fir/src/app/task/task.component.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../kanban-fir/src/app/task/task.component.spec.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../kanban-fir/src/app/task/task.component.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../kanban-fir/src/app/task/task.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../kanban-fir/src/assets/.gitkeep" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../kanban-fir/src/environments/environment.development.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../kanban-fir/src/environments/environment.prod.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../kanban-fir/src/environments/environment.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../kanban-fir/src/favicon.ico" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../kanban-fir/src/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../kanban-fir/src/main.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../kanban-fir/src/styles.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../kanban-fir/tsconfig.app.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../kanban-fir/tsconfig.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../kanban-fir/tsconfig.spec.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../my-app/.editorconfig" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../my-app/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../my-app/.vscode/extensions.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../my-app/.vscode/launch.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../my-app/.vscode/tasks.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../my-app/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../my-app/angular.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../my-app/package-lock.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../my-app/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../my-app/src/app/api.service.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../my-app/src/app/apiservice.service.spec.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../my-app/src/app/app-routing.module.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../my-app/src/app/app.component.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../my-app/src/app/app.component.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../my-app/src/app/app.component.spec.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../my-app/src/app/app.component.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../my-app/src/app/app.module.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../my-app/src/app/room-service.service.spec.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../my-app/src/app/room-service.service.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../my-app/src/assets/.gitkeep" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../my-app/src/assets/rooms.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../my-app/src/favicon.ico" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../my-app/src/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../my-app/src/main.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../my-app/src/styles.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../my-app/tsconfig.app.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../my-app/tsconfig.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../my-app/tsconfig.spec.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../rustapi/.dockerignore" beforeDir="false" afterPath="$PROJECT_DIR$/../rustapi/.dockerignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../rustapi/.idea/dataSources/8d3dbe80-22fd-42ac-b073-3087dcfd7a90.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../rustapi/.idea/dataSources/8d3dbe80-22fd-42ac-b073-3087dcfd7a90.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../rustapi/Cargo.lock" beforeDir="false" afterPath="$PROJECT_DIR$/../rustapi/Cargo.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../rustapi/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/../rustapi/Cargo.toml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../rustapi/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/../rustapi/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../rustapi/src/config.rs" beforeDir="false" afterPath="$PROJECT_DIR$/../rustapi/src/config.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../rustapi/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/../rustapi/src/main.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../rustapi/src/routes/user_routes.rs" beforeDir="false" afterPath="$PROJECT_DIR$/../rustapi/src/routes/user_routes.rs" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Rust File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$/.." value="main" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="MacroExpansionManager">
+    <option name="directoryName" value="hgl6rinv" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 6
+}</component>
+  <component name="ProjectId" id="2dvrqdC6dZlwNj3SvwQqbyAwbLS" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Cargo.Run rustapi in debug.executor": "Run",
+    "Cargo.Run rustapi.executor": "Run",
+    "Database Script.schema.sql.executor": "Run",
+    "Docker.Unnamed.executor": "Run",
+    "HTTP Request.httprequests | #1.executor": "Run",
+    "RunOnceActivity.OpenDatabaseViewOnStart": "true",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.rust.reset.selective.auto.import": "true",
+    "git-widget-placeholder": "postgres",
+    "last_opened_file_path": "C:/Users/Chase Wayland/Independent_Study-Backend_development/morningexapi",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "org.rust.cargo.project.model.PROJECT_DISCOVERY": "true",
+    "org.rust.cargo.project.model.impl.CargoExternalSystemProjectAware.subscribe.first.balloon": "",
+    "run.code.analysis.last.selected.profile": "pProject Default",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "ts.external.directory.path": "C:\\Program Files\\JetBrains\\RustRover 233.14015.153\\plugins\\javascript-impl\\jsLanguageServicesImpl\\external",
+    "vue.rearranger.settings.migration": "true"
+  },
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "sqlite",
+      "postgresql"
+    ],
+    "RunConfigurationTargetLRU": [
+      "5b86cbb7-799d-4772-aabd-986c18091391",
+      "0f77fea5-bd39-4153-bed9-85db51cd931a",
+      "8d3dbe80-22fd-42ac-b073-3087dcfd7a90"
+    ],
+    "com.intellij.ide.scratch.LRUPopupBuilder$1/SQL Dialect": [
+      "PostgreSQL"
+    ]
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Chase Wayland\Independent_Study-Backend_development\rustapi\src\router" />
+      <recent name="C:\Users\Chase Wayland\Independent_Study-Backend_development\rustapi\src\services" />
+      <recent name="C:\Users\Chase Wayland\Independent_Study-Backend_development\rustapi\src\types" />
+      <recent name="C:\Users\Chase Wayland\Independent_Study-Backend_development\rustapi\Database" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Cargo.Run rustapi in debug">
+    <configuration name="Run rustapi in debug" type="CargoCommandRunConfiguration" factoryName="Cargo Command">
+      <option name="command" value="run" />
+      <option name="workingDirectory" value="file://$PROJECT_DIR$" />
+      <envs />
+      <option name="emulateTerminal" value="true" />
+      <option name="channel" value="DEFAULT" />
+      <option name="requiredFeatures" value="true" />
+      <option name="allFeatures" value="false" />
+      <option name="withSudo" value="false" />
+      <option name="buildTarget" value="REMOTE" />
+      <option name="backtrace" value="SHORT" />
+      <option name="isRedirectInput" value="false" />
+      <option name="redirectInputPath" value="" />
+      <method v="2">
+        <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Run rustapi in release" type="CargoCommandRunConfiguration" factoryName="Cargo Command" temporary="true">
+      <option name="command" value="run --release" />
+      <option name="workingDirectory" value="file://$PROJECT_DIR$" />
+      <envs />
+      <option name="emulateTerminal" value="true" />
+      <option name="channel" value="DEFAULT" />
+      <option name="requiredFeatures" value="true" />
+      <option name="allFeatures" value="false" />
+      <option name="withSudo" value="false" />
+      <option name="buildTarget" value="REMOTE" />
+      <option name="backtrace" value="SHORT" />
+      <option name="isRedirectInput" value="false" />
+      <option name="redirectInputPath" value="" />
+      <method v="2">
+        <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="schema.sql" type="DatabaseScript" editBeforeRun="true" temporary="true" nameIsGenerated="true">
+      <script-file value="$PROJECT_DIR$/database/schema.sql" />
+      <script-mode>FILE</script-mode>
+      <data-source id="8d3dbe80-22fd-42ac-b073-3087dcfd7a90" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="docker-deploy" factoryName="dockerfile" temporary="true">
+      <deployment type="dockerfile">
+        <settings />
+      </deployment>
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Cargo.Run rustapi in debug" />
+      <item itemvalue="Cargo.Run rustapi in release" />
+      <item itemvalue="Database Script.schema.sql" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Cargo.Run rustapi in release" />
+        <item itemvalue="Database Script.schema.sql" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="RustProjectSettings">
+    <option name="toolchainHomeDirectory" value="$USER_HOME$/.cargo/bin" />
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="d9f67dc8-f5a9-4741-a4ec-37f79d40ae2e" name="Changes" comment="" />
+      <created>1710899584608</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1710899584608</updated>
+      <workItem from="1710899585632" duration="2716000" />
+      <workItem from="1710902704780" duration="3171000" />
+      <workItem from="1710966455471" duration="1288000" />
+      <workItem from="1710971200590" duration="10172000" />
+      <workItem from="1711065425433" duration="11925000" />
+      <workItem from="1711146008903" duration="6230000" />
+      <workItem from="1711158204203" duration="4277000" />
+      <workItem from="1711163864767" duration="1233000" />
+      <workItem from="1711201795483" duration="1883000" />
+      <workItem from="1711223972843" duration="385000" />
+      <workItem from="1711235368479" duration="19628000" />
+      <workItem from="1711337368801" duration="13343000" />
+      <workItem from="1711503228108" duration="4746000" />
+      <workItem from="1711578633612" duration="4760000" />
+      <workItem from="1711587853010" duration="1979000" />
+      <workItem from="1711679456188" duration="601000" />
+      <workItem from="1711680678384" duration="4073000" />
+      <workItem from="1711809051866" duration="23000" />
+      <workItem from="1711821789238" duration="11352000" />
+      <workItem from="1711834528078" duration="34162000" />
+      <workItem from="1712175541947" duration="9268000" />
+      <workItem from="1712191315172" duration="2962000" />
+      <workItem from="1712278355069" duration="2958000" />
+      <workItem from="1712282879422" duration="789000" />
+      <workItem from="1712423084080" duration="12149000" />
+      <workItem from="1712438517087" duration="13065000" />
+      <workItem from="1712515715956" duration="5030000" />
+      <workItem from="1712523573783" duration="6210000" />
+      <workItem from="1712541971940" duration="243000" />
+      <workItem from="1712605208580" duration="18274000" />
+      <workItem from="1712698238766" duration="7813000" />
+      <workItem from="1712775949378" duration="4271000" />
+      <workItem from="1712800845028" duration="1112000" />
+      <workItem from="1712951138221" duration="16126000" />
+      <workItem from="1713026420043" duration="12529000" />
+      <workItem from="1713103897524" duration="5235000" />
+      <workItem from="1713150442999" duration="1060000" />
+    </task>
+    <task id="LOCAL-00001" summary="Rust app!">
+      <option name="closed" value="true" />
+      <created>1710995784453</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1710995784453</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Rust app!">
+      <option name="closed" value="true" />
+      <created>1711080660831</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1711080660831</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Rust app!">
+      <option name="closed" value="true" />
+      <created>1711081859876</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1711081859876</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Databse stuff!!! its happenign!!!">
+      <option name="closed" value="true" />
+      <created>1711165087101</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1711165087101</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Databse stuff!!! its happenign!!!">
+      <option name="closed" value="true" />
+      <created>1711224346245</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1711224346245</updated>
+    </task>
+    <task id="LOCAL-00006" summary="MXservice implementation begins">
+      <option name="closed" value="true" />
+      <created>1711318505802</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1711318505802</updated>
+    </task>
+    <task id="LOCAL-00007" summary="MXservice implementation begins">
+      <option name="closed" value="true" />
+      <created>1711319348600</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1711319348600</updated>
+    </task>
+    <task id="LOCAL-00008" summary="MXservice implementation begins">
+      <option name="closed" value="true" />
+      <created>1711337266201</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1711337266201</updated>
+    </task>
+    <task id="LOCAL-00009" summary="MXservice implementation begins">
+      <option name="closed" value="true" />
+      <created>1711419073876</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1711419073876</updated>
+    </task>
+    <task id="LOCAL-00010" summary="MXservice implementation begins">
+      <option name="closed" value="true" />
+      <created>1711422832902</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1711422832902</updated>
+    </task>
+    <task id="LOCAL-00011" summary="MXservice implementation begins">
+      <option name="closed" value="true" />
+      <created>1711506243293</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1711506243293</updated>
+    </task>
+    <task id="LOCAL-00012" summary="MXservice implementation begins">
+      <option name="closed" value="true" />
+      <created>1711686662186</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1711686662186</updated>
+    </task>
+    <task id="LOCAL-00013" summary="MXservice implementation begins">
+      <option name="closed" value="true" />
+      <created>1711686900857</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1711686900857</updated>
+    </task>
+    <task id="LOCAL-00014" summary="MXservice implementation begins">
+      <option name="closed" value="true" />
+      <created>1711687343694</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1711687343694</updated>
+    </task>
+    <task id="LOCAL-00015" summary="MXservice implementation begins">
+      <option name="closed" value="true" />
+      <created>1711854593282</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1711854593282</updated>
+    </task>
+    <task id="LOCAL-00016" summary="Oauth with JWT">
+      <option name="closed" value="true" />
+      <created>1712094276690</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1712094276690</updated>
+    </task>
+    <task id="LOCAL-00017" summary="OAUTH IS FINALLY DONE, END ME">
+      <option name="closed" value="true" />
+      <created>1712106660579</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1712106660579</updated>
+    </task>
+    <task id="LOCAL-00018" summary="Routing mostly done">
+      <option name="closed" value="true" />
+      <created>1712191434114</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1712191434114</updated>
+    </task>
+    <task id="LOCAL-00019" summary="Routing mostly done">
+      <option name="closed" value="true" />
+      <created>1712191486537</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1712191486537</updated>
+    </task>
+    <task id="LOCAL-00020" summary="Routing mostly done">
+      <option name="closed" value="true" />
+      <created>1712969062081</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1712969062081</updated>
+    </task>
+    <task id="LOCAL-00021" summary="Routing mostly done">
+      <option name="closed" value="true" />
+      <created>1712972018388</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1712972018388</updated>
+    </task>
+    <task id="LOCAL-00022" summary="Routing mostly done">
+      <option name="closed" value="true" />
+      <created>1713066457475</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1713066457475</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Rust app!" />
+    <MESSAGE value="Databse stuff!!! its happenign!!!" />
+    <MESSAGE value="MXservice implementation begins" />
+    <MESSAGE value="Oauth with JWT" />
+    <MESSAGE value="OAUTH IS FINALLY DONE, END ME" />
+    <MESSAGE value="Routing mostly done" />
+    <option name="LAST_COMMIT_MESSAGE" value="Routing mostly done" />
+  </component>
+</project>

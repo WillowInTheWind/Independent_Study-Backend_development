@@ -4,8 +4,8 @@ use oauth2::{AuthUrl, ClientId, ClientSecret, RedirectUrl, TokenUrl};
 use anyhow::Context;
 use once_cell::sync::Lazy;
 use crate::types::errors::AppError;
-use crate::types::data_representations::Keys;
-use crate::types::internal_types::EnvironmentVariables;
+use crate::types::data_representations::{EnvironmentVariables, Keys};
+
 
 
 pub static KEYS: Lazy<Keys> = Lazy::new(|| {

@@ -10,9 +10,8 @@ use axum::Json;
 use crate::jwt;
 use crate::services::user_manager::UserService;
 use crate::types::state::AppState;
-use crate::types::data_representations::GoogleUser;
+use crate::types::data_representations::{AuthRequest, GoogleUser};
 use crate::types::errors::AppError;
-use crate::types::internal_types::AuthRequest;
 
 pub(crate) async fn login_authorized(
     State(state): State<AppState>,

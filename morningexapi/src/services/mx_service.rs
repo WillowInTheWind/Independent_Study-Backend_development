@@ -2,9 +2,7 @@ use axum::http::StatusCode;
 use chrono::NaiveDate;
 use sqlx::{Pool, Postgres};
 use crate::services::user_manager::UserService;
-use crate::types::data_representations::MorningExercise;
-use crate::types::internal_types::MxQuery;
-
+use crate::types::data_representations::{MorningExercise, MxQuery};
 pub trait MxService {
     async fn get_mx_by_id(&self, id:i64) -> Result<MorningExercise, (StatusCode, String)>;
     async fn get_mx_by_date(&self, date: NaiveDate) -> Result<MorningExercise, (StatusCode, String)>;
