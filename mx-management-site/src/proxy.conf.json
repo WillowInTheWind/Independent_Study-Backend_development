@@ -1,0 +1,8 @@
+{
+  "/api": {
+    "target": "https://mxapi-2s6pv32ija-uc.a.run.app",
+    "secure": false,
+    "changeOrigin": true,
+    "cookieDomainRewrite": "https://mxapi-2s6pv32ija-uc.a.run.app"
+  }
+}

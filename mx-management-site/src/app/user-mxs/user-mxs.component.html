@@ -1,0 +1,18 @@
+<p>Your Mxs:</p>
+
+<!--<div *ngIf="(morningExs | async)?.length==0"> No Mxs </div>-->
+<ul class = "styless"*ngFor="let morningEx of morningExs| async">
+  <li class = "mxlist" >
+    <div class = "title">
+      {{morningEx.title}}
+    </div>
+    <div class = "date">
+      {{morningEx.date}}
+    </div>
+    <div class = "description">
+      <div class = "desctext">{{morningEx.description}}</div>
+      <button class = "submit" (click) = editMx(morningEx.title)> edit </button>
+    </div >
+
+  </li>
+</ul>
