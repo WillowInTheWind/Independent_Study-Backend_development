@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {AuthorizationService} from "../authorization.service";
-import {RouterOutlet} from "@angular/router";
+import {Router, RouterOutlet} from "@angular/router";
 import {CookieService} from "ngx-cookie-service";
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MorningExService} from "../morning-ex.service";
@@ -95,6 +95,8 @@ export class MxFormComponent {
       <string>this.mxform.value.description,
     )
     this.mxform.reset()
+    this.route.navigate(['']);
+
   }
 
   mxform = new FormGroup({
@@ -115,7 +117,7 @@ export class MxFormComponent {
 
     this.formpage++
   }
-  constructor(private dateAdapter: DateAdapter<Date>, private hello: AuthorizationService, private cookies: CookieService, private mxManager: MorningExService) {
+  constructor(private route: Router, private dateAdapter: DateAdapter<Date>, private hello: AuthorizationService, private cookies: CookieService, private mxManager: MorningExService) {
     // this.login()
     this.dateAdapter.setLocale('en-US');
 

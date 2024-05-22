@@ -32,7 +32,7 @@ export class AuthorizationService {
     )
   }
   async getuser() {
-     return this.http.get<GoogleUser>("/api/users/currentuser")
+     return this.http.get<GoogleUser>("/api/users/currentuser",{withCredentials: true})
   }
 
   async getuserbyname (name: string ) {

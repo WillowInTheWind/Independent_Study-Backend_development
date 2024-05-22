@@ -7,6 +7,7 @@ import {UserpageComponent} from "./userpage/userpage.component";
 import {UserMxsComponent} from "./user-mxs/user-mxs.component";
 import {HomepageComponent} from "./homepage/homepage.component";
 import {UserinfoComponent} from "./userinfo/userinfo.component";
+import {SucessComponent} from "./sucess/sucess.component";
 
 export const routes: Routes = [
   { path: 'home', component: HomepageComponent },
@@ -16,7 +17,7 @@ export const routes: Routes = [
   { path: 'me', component: UserpageComponent },
   { path: 'me/mxs', component: UserMxsComponent },
   { path: 'me/settings', component: UserpageComponent },
-  { path: ':user', component: UserinfoComponent }
-
+  { path: ':user', component: UserinfoComponent },
+  { path: 'success', component: SucessComponent}
 ];
 

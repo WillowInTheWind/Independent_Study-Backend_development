@@ -30,10 +30,9 @@ export class MorningExService {
   }
   getusermxs() {
 
-    return this.http.get<MorningExercise[]>("/api/morningexercises/mine")
+    return this.http.get<MorningExercise[]>("/api/morningexercises/mine",{withCredentials: true})
   }
   getusermxsbyname(name: string) {
-    console
     return this.http.get<MorningExercise[]>("/api/morningexercises/" +name)
   }
   approveMx(title: string) {
@@ -42,7 +41,7 @@ export class MorningExService {
     })
   }
   getallmxs () {
-    return this.http.get<MorningExercise[]>("/api/morningexercises")
+    return this.http.get<MorningExercise[]>("/api/morningexercises", {withCredentials: true})
   }
   constructor(private http: HttpClient) { }
 }
