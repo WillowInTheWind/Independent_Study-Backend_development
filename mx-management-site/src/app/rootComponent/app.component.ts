@@ -22,7 +22,7 @@ import {LogoutDialogComponent} from "../logout-dialog/logout-dialog.component";
 })
 export class AppComponent {
   title = 'mx-management-site';
-
+  admin = false;
   protected image = "";
   username = "";
   login( ) {
@@ -30,7 +30,7 @@ export class AppComponent {
   }
 
   isloggedin( ) {
-    if (this.cookie.get("token")) {
+    if (this.cookie.get("__session")) {
       return true
     }
     else {
@@ -44,6 +44,7 @@ export class AppComponent {
     this.user.getuser().then(r => r.subscribe( date => {
       this.image = date.picture;
       this.username = date.name;
+      this.admin = date.is_admin
     }))
     }
 

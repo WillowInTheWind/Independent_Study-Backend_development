@@ -1,0 +1,36 @@
+<div class = "wrapper">
+  <div class = "header">{{ mx.title }}</div>
+  <div class = "shortdesc">{{ mx.short_description }}</div>
+
+  <div class = "smallinfo">
+    <div> {{ mx.date }} </div>
+    <div class = 'user'>
+      <a class = 'userlink' [href] = "mx.owner.name">{{mx.owner.name}}</a>
+    </div>
+    <div>
+      {{mingrade}} to {{maxgrade}}
+    </div>
+    {{ mx.is_available_in_day? "This Morning Exercise CAN be done with 24 hours notice": "This Morning Exercise CAN NOT be done with 24 hours notice" }}
+  </div>
+  <div class = "info">
+    <div>{{ mx.description }}</div>
+    <div style="margin-bottom: 15px"></div>
+    <div *ngIf="mx.young_student_prep_instructions">For younger students: {{mx.young_student_prep_instructions}}</div>
+  </div>
+  <mat-expansion-panel class = "panel" >
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Technical requirements
+      </mat-panel-title>
+      <mat-panel-description>
+        These are very basic details and need further follow up
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <div *ngFor="let i of techreqs">
+      {{ i }}
+    </div>
+  </mat-expansion-panel>
+  <div class = "approvebutton">
+    <button *ngIf="!mx.is_approved && document.iseditor" class = "approve" (click) = "editMx(mx.title)">Edit MX</button>
+  </div>
+</div>

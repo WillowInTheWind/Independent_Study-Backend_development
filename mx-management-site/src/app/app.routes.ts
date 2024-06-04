@@ -10,8 +10,9 @@ import {UserinfoComponent} from "./userinfo/userinfo.component";
 import {SucessComponent} from "./sucess/sucess.component";
 
 export const routes: Routes = [
-  { path: 'home', component: HomepageComponent },
+  { path: 'home', component: HomepageComponent},
   { path: '', redirectTo: 'home', pathMatch: 'full' },
+  { path: 'form', component: MxFormComponent},
   { path: 'auth', component: LogincallbackComponent },
   { path: 'mxs', component: MxAdminpageComponent },
   { path: 'me', component: UserpageComponent },

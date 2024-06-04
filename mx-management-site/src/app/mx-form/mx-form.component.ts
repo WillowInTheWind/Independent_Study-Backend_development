@@ -32,6 +32,8 @@ import { DateAdapter } from '@angular/material/core';
   styleUrl: './mx-form.component.css'
 })
 export class MxFormComponent {
+  show: string = "";
+
   counter(i: number) {
     return new Array(i);
   }
@@ -51,12 +53,12 @@ export class MxFormComponent {
     '11th',
     '12th'
   ]
-  techReqs = [
-"Projector/Screen" ,
-"Special presentation specific lighting" ,
-"Additional handheld microphones" ,
-"On body \"Lav\" microphones",
-  ]
+  techReqs = {
+    Projector: "Projector/Screen",
+    PresentationSpecificLighting: "Special presentation specific lighting",
+    HandheldMics: "Additional handheld microphones",
+    LavMics: "On body \"Lav\" microphones",
+  }
   mxdesc = [
     "Extension of an UPPER SCHOOL course or activity\n" ,
     "Extension of a MIDDLE SCHOOL course or activity\n" ,
@@ -80,41 +82,84 @@ export class MxFormComponent {
   ]
   protected formpage: number = 0;
   submitMX() {
-    if (!this.mxform.value.date) {return;}
-    // @ts-ignore
-    var newdate = new Date(this.mxform.value.date);
-    var date = dateformat(newdate);
-
-    if (!this.mxform.value.title || !this.mxform.value.description ) {
-      return
+    if (!this.basicdetailsform.value.date) {return;}
+    if (!this.basicdetailsform.value.title || !this.basicdetailsform.value.description ) {return}
+    var required_tech_json: string = "";
+    console.log(this.techform.value.Projector)
+    if (this.techform.value.Projector){
+      required_tech_json += "Projector/Screen::";
     }
-    // let date = dateformat(this.mxform.value.date)
+    if ( this.techform.value.PresentationSpecificLighting ){
+      required_tech_json += "Special presentation specific lighting::";
+    }
+    if ( this.techform.value.HandheldMics ){
+      required_tech_json += "Additional handheld microphones::";
+    }
+    if (    this.techform.value.LavMics ){
+      required_tech_json += "On body Lav microphones::";
+    }
+    required_tech_json += this.techform.value.additionalreqs;
+    // @ts-ignore
+    var newdate = new Date(this.basicdetailsform.value.date);
+    var date = dateformat(newdate);
+    var title: string = <string>this.basicdetailsform.value.title;
+    var description: string = <string>this.basicdetailsform.value.description;
+    // @ts-ignore
+    var min_grade: number = this.grades.indexOf(<string>this.prefform.value.mingrade);
+    // @ts-ignore
+    var max_grade: number =  this.grades.indexOf(<string>this.prefform.value.maxgrade);
+    var young_student_prep_instructions: string = <string>this.prefform.value.young_student_prep_instructions;
+    var is_available_in_day: boolean = <string>this.prefform.value.is_available_in_day=="true";
+    var short_description: string = <string>this.shortdescfoorm.value.shortdescription;
+    var editors_json: string = "";
+    var is_approved: boolean = false;
     this.mxManager.postMx(
       date,
-      <string>this.mxform.value.title,
-      <string>this.mxform.value.description,
+      title,
+      description,
+      min_grade,
+      max_grade,
+      young_student_prep_instructions,
+      is_available_in_day,
+      required_tech_json,
+      short_description,
+      editors_json,
+      is_approved,
     )
-    this.mxform.reset()
+          // this.basicdetailsform.reset()
     this.route.navigate(['']);
 
   }
 
-  mxform = new FormGroup({
+  basicdetailsform = new FormGroup({
     date:  new FormControl('', Validators.required),
     title: new FormControl('', Validators.required),
     description: new FormControl('', Validators.required),
   })
   prefform = new FormGroup({
-    date:  new FormControl('',{nonNullable: true}),
-    title: new FormControl('', {nonNullable: true}),
-    description: new FormControl('', {nonNullable: true}),
+    mingrade:  new FormControl('',{nonNullable: true}),
+    maxgrade: new FormControl('', {nonNullable: true}),
+    young_student_prep_instructions: new FormControl('', {nonNullable: true}),
+    is_available_in_day: new FormControl('', {nonNullable: true})
+  })
+  techform = new FormGroup({
+    Projector:  new FormControl('',{nonNullable: true}),
+    PresentationSpecificLighting: new FormControl('', {nonNullable: true}),
+    HandheldMics: new FormControl('', {nonNullable: true}),
+    LavMics: new FormControl('', {nonNullable: true}),
+    additionalreqs: new FormControl('', {nonNullable: true})
+  })
+  shortdescfoorm = new FormGroup({
+    shortdescription:  new FormControl('',{nonNullable: true})
   })
 
   next() {
-    if (this.formpage == 0 && !this.mxform.value.title || !this.mxform.value.description ) {
+    if (this.formpage == 0 && !this.basicdetailsform.value.title || !this.basicdetailsform.value.description ) {
       return
     }
-
+    // if (this.formpage == 1 && !this.prefform.value.mingrade || !this.prefform.value.maxgrade ) {
+    //   return
+    // }
     this.formpage++
   }
   constructor(private route: Router, private dateAdapter: DateAdapter<Date>, private hello: AuthorizationService, private cookies: CookieService, private mxManager: MorningExService) {

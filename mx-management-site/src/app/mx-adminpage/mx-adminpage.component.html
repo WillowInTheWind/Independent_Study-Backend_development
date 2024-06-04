@@ -1,19 +1,105 @@
-<div *ngIf="(morningExs | async)?.length==0"> No Mxs </div>
-<ul class = "styless"*ngFor="let morningEx of morningExs| async">
-  <li class = "mxlist" >
-    <div class = "title">
-      {{morningEx.title}}
-    </div>
-    <div class = "date">
-      {{morningEx.date}}
-    </div>
-    <div class = 'user'>
-      <a class = 'userlink' [href] = "morningEx.owner.name">{{morningEx.owner.name}}</a>
-    </div>
-    <div class = "description">
-      <div class = "desctext">{{morningEx.description}}</div>
-      <button class = "submit" (click) = approveMx(morningEx.title)> approve </button>
-    </div >
+<div class = "wrapper">
+<h1>MX MANAGEMENT PAGE</h1>
 
-  </li>
-</ul>
+  <form [formGroup]="filterform" class = "form" >
+        <div class = 'filter'>
+          <mat-form-field subscriptSizing="dynamic">
+            <mat-label>Title </mat-label>
+            <input matInput id="title" type = "text" formControlName = "title" placeholder="title">
+          </mat-form-field>
+          <mat-form-field subscriptSizing="dynamic">
+            <mat-label>Desired Date</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName = "date">
+            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+
+        <mat-form-field subscriptSizing="dynamic">
+          <mat-label> Min grade </mat-label>
+          <mat-select formControlName = "mingrade"  #mingrade>
+            @for (grade of grades; track grade) {
+              <mat-option *ngIf="!maxgrade.value || $index < grades.indexOf(maxgrade.value)" [value]="grade">{{ grade }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field subscriptSizing="dynamic">
+          <mat-label> Max grade </mat-label>
+          <mat-select formControlName = "maxgrade"  #maxgrade>
+            @for (grade of grades; track grade) {
+              <mat-option *ngIf="!mingrade.value || $index > grades.indexOf(mingrade.value)"  [value]="grade">{{ grade }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+          <mat-form-field subscriptSizing="dynamic">
+            <mat-label> owner </mat-label>
+            <mat-select formControlName = "owner"  #maxgrade>
+              @for (user of (Users|async); track user) {
+                <mat-option *ngIf="!mingrade.value || $index > grades.indexOf(mingrade.value)"  [value]="user">{{ user.name }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        <button class = "filterbutton" (click) = "filter()">Filter</button>
+</div>
+      </form>
+<p></p>
+<div *ngIf="(approvedMorningExs | async)?.length==0&&(pendingMorningExs | async)?.length==0"> No Mxs </div>
+  <mat-expansion-panel class = "panel"  [hideToggle]= "(pendingMorningExs | async)?.length == 0">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        PENDING MXS
+      </mat-panel-title>
+      <mat-panel-description>
+        These MXs have not been approved and need to be reviewed
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <div class = "case">
+      <ul class = "styless" *ngFor="let morningEx of pendingMorningExs| async">
+        <li class ="mx">
+          <button class = "mxitem" (click) = viewMX(morningEx.title)>
+          <div class = "title">
+            {{morningEx.title}}
+          </div>
+          <div class = "otherinfo">
+          <div class = "date">
+            {{morningEx.date}}
+          </div>
+          <div class = 'user'>
+            <a class = 'userlink' [href] = "morningEx.owner.name">{{morningEx.owner.name}}</a>
+          </div>
+<!--          <button class = "submit" (click) = viewMX(morningEx.title)> Learn more </button>-->
+          </div>
+          </button>
+        </li>
+      </ul>
+    </div>
+  </mat-expansion-panel>
+  <mat-expansion-panel class = "panel"  [hideToggle]= "(approvedMorningExs | async)?.length == 0">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        APPROVED MXS
+      </mat-panel-title>
+      <mat-panel-description>
+        These MXs have been approved and will run on the scheduled date
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <div class = "case">
+      <ul class = "styless" *ngFor="let morningEx of approvedMorningExs| async">
+        <li class ="mx">
+          <button class = "mxitem" (click) = viewMX(morningEx.title)>
+            <div class = "title">
+              {{morningEx.title}}
+            </div>
+            <div class = "otherinfo">
+              <div class = "date">
+                {{morningEx.date}}
+              </div>
+              <div class = 'user'>
+                <a class = 'userlink' [href] = "morningEx.owner.name">{{morningEx.owner.name}}</a>
+              </div>
+            </div>
+          </button>
+        </li>
+      </ul>
+    </div>
+  </mat-expansion-panel>
+

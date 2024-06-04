@@ -5,18 +5,41 @@ import {GoogleUser} from "../authorization.service";
 import {AsyncPipe, NgForOf} from "@angular/common";
 import {MorningExercise, MorningExService} from "../morning-ex.service";
 import {Observable} from "rxjs";
+import {
+    MatExpansionPanel,
+    MatExpansionPanelDescription,
+    MatExpansionPanelHeader,
+    MatExpansionPanelTitle
+} from "@angular/material/expansion";
+import {MxinfoComponent} from "../mxinfo/mxinfo.component";
+import {MatDialog} from "@angular/material/dialog";
+import {MxinfouserComponent} from "../mxinfouser/mxinfouser.component";
 @Component({
   selector: 'app-userinfo',
   standalone: true,
-  imports: [
-    AsyncPipe,
-    NgForOf
-  ],
+    imports: [
+        AsyncPipe,
+        NgForOf,
+        MatExpansionPanel,
+        MatExpansionPanelDescription,
+        MatExpansionPanelHeader,
+        MatExpansionPanelTitle
+    ],
   templateUrl: './userinfo.component.html',
   styleUrl: './userinfo.component.css'
 })
 export class UserinfoComponent {
-
+  viewMX (title: string) {
+    var morningExercise: Observable<MorningExercise[]> = this.mx.getmx(title);
+    const dialogRef = this.dialog.open(MxinfouserComponent, {
+        width: '90vw',
+        data: {
+          mx: morningExercise,
+          iseditor: false
+        }
+      }
+    );
+  }
   picture: string  = '' ;
   email: string = ' ';
   name: string = '';
@@ -41,7 +64,8 @@ export class UserinfoComponent {
   }
 
   constructor(
-    private route: Router, private auth: AuthorizationService, private mx: MorningExService
+    private route: Router, private auth: AuthorizationService, private mx: MorningExService,
+    private dialog: MatDialog
   ) {
 
   }

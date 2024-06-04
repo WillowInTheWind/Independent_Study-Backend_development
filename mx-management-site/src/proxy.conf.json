@@ -1,8 +1,8 @@
 {
   "/api": {
-    "target": "127.0.0.1:8080",
+    "target": "http://127.0.0.1:8080",
     "secure": false,
     "changeOrigin": true,
-    "cookieDomainRewrite": "127.0.0.1:8080"
+    "cookieDomainRewrite": "http://127.0.0.1:8080"
   }
 }

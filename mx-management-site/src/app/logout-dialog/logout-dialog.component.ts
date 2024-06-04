@@ -25,7 +25,7 @@ cancel() {
 }
 
 logout() {
-  this.cookie.delete("token", '/')
+  this.cookie.delete("__session", '/')
   this.dialogRef.close();
   this.document.location.href = '/'
 

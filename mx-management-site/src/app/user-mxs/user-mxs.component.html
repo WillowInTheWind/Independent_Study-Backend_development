@@ -1,18 +1,30 @@
-<p>Your Mxs:</p>
 
-<!--<div *ngIf="(morningExs | async)?.length==0"> No Mxs </div>-->
-<ul class = "styless"*ngFor="let morningEx of morningExs| async">
-  <li class = "mxlist" >
-    <div class = "title">
-      {{morningEx.title}}
-    </div>
-    <div class = "date">
-      {{morningEx.date}}
-    </div>
-    <div class = "description">
-      <div class = "desctext">{{morningEx.description}}</div>
-      <button class = "submit" (click) = editMx(morningEx.title)> edit </button>
-    </div >
-
-  </li>
-</ul>
+<mat-expansion-panel class = "panel" [hideToggle]= "(morningExs | async)?.length==0">
+  <mat-expansion-panel-header>
+    <mat-panel-title>
+      YOUR MXS
+    </mat-panel-title>
+    <mat-panel-description>
+      These MXs are one you have submitted
+    </mat-panel-description>
+  </mat-expansion-panel-header>
+  <div class = "case">
+    <ul class = "styless" *ngFor="let morningEx of morningExs| async">
+      <li class ="mx">
+        <button class = "mxitem" (click) = viewMX(morningEx.title)>
+          <div class = "title">
+            {{morningEx.title}}
+          </div>
+          <div class = "otherinfo">
+            <div class = "date">
+              {{morningEx.date}}
+            </div>
+            <div class = 'user'>
+              <a class = 'userlink' [href] = "morningEx.owner.name">{{morningEx.owner.name}}</a>
+            </div>
+          </div>
+        </button>
+      </li>
+    </ul>
+  </div>
+</mat-expansion-panel>

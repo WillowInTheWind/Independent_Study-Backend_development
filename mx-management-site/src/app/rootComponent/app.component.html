@@ -21,6 +21,8 @@
 
   <a href = "me/settings" *ngIf = "isloggedin()" mat-menu-item> Settings</a>
   <a href = "me/mxs"  *ngIf = "isloggedin()" mat-menu-item> My-mxs</a>
+  <a href = "mxs"  *ngIf = "isloggedin() && admin" mat-menu-item> Admin Page</a>
+
   <button (click) = "logout()" *ngIf = "isloggedin()" mat-menu-item> Logout</button>
 
   <!--  </button>-->

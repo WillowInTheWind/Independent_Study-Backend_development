@@ -2,6 +2,7 @@ import {Inject, Injectable} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { DOCUMENT } from '@angular/common';
 import {CookieService} from "ngx-cookie-service";
+import {MorningExercise} from "./morning-ex.service";
 
 @Injectable({
   providedIn: 'root',
@@ -32,9 +33,11 @@ export class AuthorizationService {
     )
   }
   async getuser() {
-     return this.http.get<GoogleUser>("/api/users/currentuser",{withCredentials: true})
+    return this.http.get<GoogleUser>("/api/users/currentuser",{withCredentials: true})
   }
-
+  getusers() {
+    return this.http.get<GoogleUser[]>("/api/users",{withCredentials: true})
+  }
   async getuserbyname (name: string ) {
     console.log(name)
     return this.http.get<GoogleUser>("/api/users/getuserby",  {params: {
@@ -52,6 +55,6 @@ export class AuthorizationService {
     email: string,
     name: string,
    phone_number: string,
-
+  is_admin: boolean
    // pub(crate) isAdmin: bool,
 }

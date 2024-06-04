@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import {AuthorizationService} from "../authorization.service";
 import {CommonModule} from "@angular/common";
+import {MatDialog} from "@angular/material/dialog";
 
 @Component({
   selector: 'app-userpage',

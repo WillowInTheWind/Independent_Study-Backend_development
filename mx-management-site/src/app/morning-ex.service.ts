@@ -8,16 +8,37 @@ export class MorningExService {
   postMx (
           date:string,
           title: string,
-          description: string
-  )
-  {
+          description: string,
+          min_grade: number,
+          max_grade: number,
+          young_student_prep_instructions: string,
+          is_available_in_day: boolean,
+          required_tech_json: string,
+          short_description: string,
+          editors_json: string,
+          is_approved: boolean
+  ) {
     let morning_ex = {
       "date": date,
       "title": title,
-      "description": description
+      "description": description,
+      "min_grade": min_grade,
+      "max_grade": max_grade,
+      "young_student_prep_instructions": young_student_prep_instructions,
+      "is_available_in_day": is_available_in_day,
+      "required_tech_json": required_tech_json,
+      "short_description": short_description,
+      "editors_json": editors_json
     };
-    console.log(morning_ex)
-    this.http.post("/api/morningexercises/create", morning_ex).subscribe(date => {})
+    console.log("beleeop")
+
+    let me = this.http.post("/api/morningexercises/create", morning_ex).subscribe(
+      date => {
+
+      })
+    console.log("beleeop")
+
+
   }
   editMx () {
 
@@ -25,8 +46,13 @@ export class MorningExService {
   deletemx () {
 
   }
-  getmx () {
-
+  getmx (title: string) {
+    return this.http.get<MorningExercise[]>("/api/morningexercises/getbytitle",{params: {
+        name: title}, withCredentials: true})
+  }
+  getmxsbyfilter(filter: string) {
+    return this.http.get<MorningExercise[]>("/api/morningexercises/filterby",{params: {
+      filter: filter}, withCredentials: true})
   }
   getusermxs() {
 
@@ -58,6 +84,14 @@ export interface MorningExercise{
   },
   title: string,
   description: string,
+  min_grade: number,
+   max_grade: number,
+   young_student_prep_instructions: string,
+   is_available_in_day: boolean,
+   required_tech_json: string[],
+   short_description: string,
+   editors_json: number[],
+   is_approved: boolean
   // editors: Vec<GenericUser>
 }
 
