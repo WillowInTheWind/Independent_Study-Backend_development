@@ -43,7 +43,7 @@ pub struct Claims {
 
 /*
     Below  are the constructors and methods of the above types
- */
+*/
 
 impl CalendarEvent {
     pub fn new(summary: String, start: NaiveDateTime, end: NaiveDateTime, description: String) -> Self {

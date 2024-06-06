@@ -1,0 +1,72 @@
+.user {
+  white-space: nowrap; /* paragraph to one line */
+  text-overflow: ellipsis; /* will make [...] at the end */
+  /*width: 15vw;*/
+  padding: 5px;
+  padding-left: 0px;
+}
+.mxitem:hover {
+  outline: 2px solid black;
+}
+.userlink {
+  color: black;
+  text-decoration: none;
+  padding: 5px;
+
+  background-color: #f1f1f1;
+  border-radius: 5px;
+  border: none;
+}
+.info {
+  background-color: white;
+  margin-top: 15px;
+  margin-bottom: 10px;
+  min-width: 50px;
+  border: 2px white solid;
+  border-radius: 5px;
+  padding: 15px 15px 15px 20px;
+}
+.shortdesc {
+  color: #f0f0f0;
+  /*padding-left: 5px;*/
+  margin-bottom: 10px;
+  margin-top: 0px;
+  font-size: 20px;
+}
+.header {
+  font-weight: bold;
+  font-size: 50px;
+  font-family: "Crimson Text", Roboto, "Helvetica Neue", sans-serif;
+  margin-bottom: 0px;
+  color: white;
+}
+.smallinfo {
+  margin-left: 10px;
+  padding-left: 10px;
+  border-left: 2px solid black;
+  color: white;
+  font-family: "Crimson Text", Roboto, "Helvetica Neue", sans-serif;
+
+}
+.wrapper {
+  padding-top: 5px;
+  padding: 15px;
+  background-color: #0072cf;
+}
+
+
+.approvebutton {
+  display: flex;
+  justify-content: center;
+  padding: 5px;
+}
+
+.approve {
+  background-color: white;
+  padding: 15px 20px 15px 20px;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  font-size: 20px;
+}
+.approve:hover {
+  background-color: #f2f2f2;
+}

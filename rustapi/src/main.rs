@@ -31,7 +31,7 @@ async fn main()
             oauth_client,
             reqwest_client: client,
         };
-        println!("->> Successful connection to postgres database \n");
+        println!("->> Successful connection to postgres database");
     //Init App routes
         let app_router = routes::router(app_state);
     //Launch Server

@@ -1,0 +1,164 @@
+.styless {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+/*.mxlist {*/
+/*  display: flex;*/
+/*  !*padding: 5px;*!*/
+/*  border-top: 2px solid black;*/
+/*  justify-content: space-between;*/
+/*  align-items: center;*/
+
+/*}*/
+/*.description {*/
+/*  width: 80vw; !* change to your preferences *!*/
+/*  padding: 5px;*/
+/*  display: flex;*/
+/*  justify-content: space-between;*/
+/*  align-items: center;*/
+
+/*}*/
+/*.desctext {*/
+/*  white-space: nowrap; !* paragraph to one line *!*/
+/*  overflow: hidden; !* older browsers *!*/
+/*  text-overflow: ellipsis; !* will make [...] at the end *!*/
+/*  width: 55vw;*/
+/*}*/
+/*.date {*/
+/*  text-overflow: ellipsis; !* will make [...] at the end *!*/
+/*  width: 10vw; !* change to your preferences *!*/
+/*  white-space: nowrap; !* paragraph to one line *!*/
+/*  overflow: hidden; !* older browsers *!*/
+/*  padding: 5px;*/
+/*  border-left: 2px solid black;*/
+/*  border-right: 2px solid black;*/
+
+/*}*/
+/*.title {*/
+/*  text-overflow: ellipsis; !* will make [...] at the end *!*/
+/*  width: 15vw; !* change to your preferences *!*/
+/*  white-space: nowrap; !* paragraph to one line *!*/
+/*  overflow: hidden; !* older browsers *!*/
+/*  padding: 5px;*/
+/*}*/
+/*.submit {*/
+/*  background: lavender;*/
+/*  color: inherit;*/
+
+/*  font: inherit;*/
+/*  cursor: pointer;*/
+/*  outline: inherit;*/
+/*  border-radius: 15px;*/
+/*  padding: 5px ;*/
+/*  border: 2px solid black;*/
+
+/*  !*border-left: 2px solid black;*!*/
+
+/*}*/
+
+.user {
+  display: flex;
+  justify-content: space-around;
+}
+.img {
+  width: 122px;
+}
+.styless {
+  list-style-type: none;
+  margin: 2px;
+  padding: 0;
+
+  /*flex-wrap: ;*/
+}
+.case {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+.mxitem {
+  border: 2px black solid;
+  border-radius: 5px;
+  padding: 10px;
+  background-color: #f2f2f2;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-width: 450px;
+  max-width: 600px;
+}
+
+/*.desctext {*/
+/*  white-space: nowrap; !* paragraph to one line *!*/
+/*  overflow: hidden; !* older browsers *!*/
+/*  text-overflow: ellipsis; !* will make [...] at the end *!*/
+/*width: 55vw;*/
+/*}*/
+.wrapper {
+  margin: 2px;
+
+}
+.date {
+  text-overflow: ellipsis; /* will make [...] at the end */
+  /*width: 15vw; !* change to your preferences *!*/
+  white-space: nowrap; /* paragraph to one line */
+  overflow: hidden; /* older browsers */
+  padding: 5px;
+
+
+}
+.panel {
+  margin: 2px;
+}
+.title {
+  text-overflow: ellipsis; /* will make [...] at the end */
+  /*width: 10vw; !* change to your preferences *!*/
+  white-space: nowrap; /* paragraph to one line */
+  /*overflow: hidden; !* older browsers *!*/
+  padding: 10px;
+  font-family: "Crimson Text", Roboto, sans-serif;
+  font-size: 50px;
+}
+.submit {
+  background: none;
+  text-decoration: none;
+  border: none;
+  font-size: 15px;
+  /*border-radius: 15px;*/
+  /*padding: 5px ;*/
+  /*border: 2px solid black;*/
+  /*border-left: 2px solid black;*/
+
+}
+.submit:hover {
+  text-decoration: underline;
+}
+.otherinfo {
+  border-left: 2px solid black;
+  margin-left: 10px;
+  display: flex;
+  justify-content: space-between;}
+.user {
+  white-space: nowrap; /* paragraph to one line */
+  overflow: hidden; /* older browsers */
+  text-overflow: ellipsis; /* will make [...] at the end */
+  /*width: 15vw;*/
+  padding: 5px;
+
+}
+.mxitem:hover {
+  outline: 2px solid black;
+}
+.userlink {
+  color: black;
+  text-decoration: none;
+  padding: 10px;
+  background-color: lightgray;
+  border-radius: 25px;
+  border: none;
+}
+.userlink:hover {
+  text-decoration: underline;
+  background-color: gray;
+  color: white;
+}

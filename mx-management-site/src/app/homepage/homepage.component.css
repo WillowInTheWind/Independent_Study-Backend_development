@@ -1,0 +1,20 @@
+#homepage {
+  display: flex;
+  flex-direction: column;
+}
+
+.button {
+  background-color: #0072cf ;
+  border: 2px black solid;
+  font-size: 50px;
+  display: flex;
+  justify-content: center;
+  border-radius: 5px;
+  margin: 3px;
+  color: white;
+  text-decoration: none;
+}
+.button:hover {
+  text-decoration: underline;
+  background-color: #0072b0;
+}

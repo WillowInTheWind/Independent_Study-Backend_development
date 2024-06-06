@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "mx-management-site": {
+      "hosting": {
+        "mx-management-site": [
+          "mx-management-site"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "mx-management-site"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "hosting": {
+    "target": "mx-management-site",
+    "source": ".",
+    "frameworksBackend": {},
+    "rewrites": [ {
+      "source": "/api/**",
+      "run": {
+        "serviceId": "mx",
+        "region": "us-central1",
+        "pinTag": true
+      }
+    } ]
+  }
+}
