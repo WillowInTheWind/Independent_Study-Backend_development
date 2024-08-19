@@ -33,6 +33,3 @@ once_cell = "1.19.0"
 tower = "0.4.13"
 tower-http = { version = "0.5.2", features = ["cors"] }
 rustcrypto = "0.0.0"
-shuttle = "0.7.0"
-shuttle-axum = "0.43.0"
-shuttle-runtime = "0.43.0"

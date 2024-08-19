@@ -1,0 +1,30 @@
+.wrapper {
+  background: #ff0000;
+  border-radius: 0px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 40px;
+}
+.errortext {
+  font-size: 45px;
+  text-align: center;
+}
+.approvebutton {
+  display: flex;
+  justify-content: center;
+}
+
+.approve {
+  border: 5px black;
+  background-color: white;
+  padding: 15px 20px 15px 20px;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  font-size: 20px;
+  text-decoration: none;
+  margin: 15px 15px 15px 2px;
+}
+.approve:hover {
+  background-color: #f2f2f2;
+}

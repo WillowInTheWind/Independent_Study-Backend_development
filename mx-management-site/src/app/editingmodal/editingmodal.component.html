@@ -1,0 +1,78 @@
+<form [formGroup]= "mx_details" class = "wrapper" (submit)="submitMX()">
+<!--  <div class = "header">{{ mx.title }}</div>-->
+  <input (keydown.enter)="false"  matInput id="title" class =  "header" type = "text" formControlName = "title" >
+<p style ="margin: 0px"></p>
+<!--  <div class = "shortdesc">{{ mx.short_description }}</div>-->
+  <mat-form-field class ="shortdesc">
+    <mat-select formControlName = "shortdescription">
+      @for (desc of mxdesc; track desc) {
+        <mat-option [value]=desc>{{ desc}}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+  <div class = "smallinfo">
+    <div>
+      <div>
+        <mat-form-field style ="margin-bottom: 10px" subscriptSizing="dynamic">
+          <mat-label>Desired Date</mat-label>
+          <input matInput [matDatepicker]="picker" [matDatepickerFilter]="myFilter" formControlName = "date">
+          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class = 'user'>
+      <a class = 'userlink' [href] = "mx.owner.name">{{mx.owner.name}}</a>
+    </div>
+    <div style="display: flex; align-items: center">
+      <mat-form-field subscriptSizing="dynamic">
+        <mat-label> Min grade </mat-label>
+        <mat-select formControlName = "mingrade"  #mingrade>
+          @for (grade of grades; track grade) {
+            <mat-option  *ngIf="!maxgrade.value || $index < grades.indexOf(maxgrade.value)" [value]="grade">{{grade}}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      <p style="padding: 10px"   > through </p>
+        <mat-form-field subscriptSizing="dynamic">
+        <mat-label> Max grade </mat-label>
+        <mat-select formControlName = "maxgrade" #maxgrade>
+          @for (grade of grades; track grade) {
+
+            <mat-option *ngIf="!mingrade.value || $index > grades.indexOf(mingrade.value)" [value]="grade">{{grade}}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+    {{ mx.is_available_in_day? "This Morning Exercise CAN be done with 24 hours notice": "This Morning Exercise CAN NOT be done with 24 hours notice" }}
+  </div>
+  <div class = "info">
+    <textarea formControlName="description" class="input"></textarea>
+    <div style="margin-bottom: 15px"></div>
+    <div *ngIf="mx.young_student_prep_instructions">For younger students: {{mx.young_student_prep_instructions}}</div>
+  </div>
+  <mat-expansion-panel class = "panel" >
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Technical requirements
+      </mat-panel-title>
+      <mat-panel-description>
+        These are very basic details and need further follow up
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <div style="display: flex; flex-direction:  column">
+      <mat-checkbox formControlName = "Projector" > Projector/Screen </mat-checkbox>
+      <mat-checkbox formControlName= "PresentationSpecificLighting"> Special presentation specific lighting</mat-checkbox>
+      <mat-checkbox formControlName= "HandheldMics"> Additional handheld microphones </mat-checkbox>
+      <mat-checkbox formControlName= "LavMics"> On body Lav microphones </mat-checkbox>
+      <mat-form-field>
+        <mat-label>Please describe any additional technical requirements below</mat-label>
+        <input matInput placeholder="None">
+      </mat-form-field>
+    </div>
+  </mat-expansion-panel>
+  <div class = "approvebutton">
+    <button type = 'submit' class = "approve" (click) = "submitMX()">Save</button>
+
+  </div>
+</form>

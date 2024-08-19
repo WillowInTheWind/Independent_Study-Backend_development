@@ -1,0 +1,32 @@
+<mat-toolbar color="primary" class = "topbar">
+  <div class = "logo">
+  <mat-icon>curtains</mat-icon>
+  <span><a href = "/">Mx Manager</a></span>
+  </div>
+
+  <button class = "loggedin styless" *ngIf="isloggedin()" [matMenuTriggerFor]="menu">
+    <img class = "loggedinimg" [src] = "image">
+  </button>
+
+  <button class = "loggedin styless" *ngIf="!isloggedin()" [matMenuTriggerFor]="menu">
+    <mat-icon style="color: white">account_box</mat-icon>
+  </button>
+</mat-toolbar>
+
+
+<mat-menu #menu = "matMenu">
+<!--  <button mat-menu-item>-->
+  <button mat-menu-item (click) = login() *ngIf = "!isloggedin()">Login</button>
+  <button mat-menu-item (click) = login() *ngIf = "!isloggedin()">Create Account</button>
+
+  <a href = "me/settings" *ngIf = "isloggedin()" mat-menu-item> Settings</a>
+  <a href = "me/mxs"  *ngIf = "isloggedin()" mat-menu-item> My-mxs</a>
+  <a href = "mxs"  *ngIf = "isloggedin() && admin" mat-menu-item> Admin Page</a>
+
+  <button (click) = "logout()" *ngIf = "isloggedin()" mat-menu-item> Logout</button>
+
+  <!--  </button>-->
+</mat-menu>
+<router-outlet>
+
+</router-outlet>

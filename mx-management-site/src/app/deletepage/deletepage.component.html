@@ -1,0 +1,7 @@
+<div class = "wrapper">
+
+  <p class = "errortext">Are you sure you want to delete {{ this.title }}?</p>
+  <div class = "approvebutton">
+    <button  (click) = delete() class="approve">Yes</button>
+    <button  (click) = this.dialogref.close() class="approve">no</button>
+</div>
