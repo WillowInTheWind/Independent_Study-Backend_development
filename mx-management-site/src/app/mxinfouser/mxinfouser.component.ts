@@ -7,8 +7,9 @@ import {
 } from "@angular/material/expansion";
 import {NgForOf, NgIf} from "@angular/common";
 import {MorningExercise, MorningExService} from "../morning-ex.service";
-import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
+import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from "@angular/material/dialog";
 import {Observable} from "rxjs";
+import {EditingmodalComponent} from "../editingmodal/editingmodal.component";
 
 @Component({
   selector: 'app-mxinfouser',
@@ -45,7 +46,7 @@ export class MxinfouserComponent {
   maxgrade: string;
   techreqs: string[];
   protected mx: MorningExercise;
-  constructor(   public morningex: MorningExService, public dialogRef: MatDialogRef<MxinfouserComponent>,
+  constructor(   public dialog: MatDialog, public morningex: MorningExService, public dialogRef: MatDialogRef<MxinfouserComponent>,
                  @Inject(MAT_DIALOG_DATA) protected document: modal,) {
     document.mx.subscribe(mx => {
       this.mx = mx;
@@ -56,12 +57,21 @@ export class MxinfouserComponent {
   }
 
   editMx(title: string) {
-    // this.morningex.approveMx(title)
+    this.dialog.open(EditingmodalComponent, {
+      width: '90vw',
+      data: (this.document.mx),
+    });
+    this.dialogRef.close()
+  }
+
+  deleteMx(id: number) {
+    this.morningex.deleteMx(id)
     window.location.reload()
   }
 }
 
 export interface modal {
   mx: Observable<MorningExercise>,
-iseditor: boolean
+iseditor: boolean,
+  isdisplay: boolean,
 }

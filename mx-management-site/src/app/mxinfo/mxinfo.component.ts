@@ -1,15 +1,17 @@
 import {Component, Inject} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
+import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from "@angular/material/dialog";
 import {CookieService} from "ngx-cookie-service";
 import {AsyncPipe, DOCUMENT, NgForOf, NgIf} from "@angular/common";
 import {MorningExercise, MorningExService} from "../morning-ex.service";
-import {Observable} from "rxjs";
+import {Observable, of} from "rxjs";
 import {
   MatExpansionPanel,
   MatExpansionPanelDescription,
   MatExpansionPanelHeader,
   MatExpansionPanelTitle
 } from "@angular/material/expansion";
+import {EditingmodalComponent} from "../editingmodal/editingmodal.component";
+import {DeletepageComponent} from "../deletepage/deletepage.component";
 
 @Component({
   selector: 'app-mxinfo',
@@ -47,7 +49,7 @@ export class MxinfoComponent {
   maxgrade: string;
   techreqs: string[];
   protected mx: MorningExercise;
-  constructor(   public morningex: MorningExService, public dialogRef: MatDialogRef<MxinfoComponent>,
+  constructor(   public morningex: MorningExService, public dialogRef: MatDialogRef<MxinfoComponent>, public dialog: MatDialog,
                   @Inject(MAT_DIALOG_DATA) protected document: Observable<MorningExercise>,) {
     document.subscribe(mx => {
       this.mx = mx;
@@ -61,8 +63,21 @@ export class MxinfoComponent {
     window.location.reload()
   }
   revokeMx(title: string) {
-    // this.morningex.approveMx(title)
+    this.morningex.revokeMx(title)
     window.location.reload()
+  }
+  editMx(title: string) {
+    this.dialog.open(EditingmodalComponent, {
+      width: '90vw',
+      data: (this.document),
+    });
+    this.dialogRef.close()
+  }
+  deleteMx(title: string) {
+    this.dialog.open(DeletepageComponent, {
+      width: '90vw',
+      data: (this.document),
+    });
   }
 }
 

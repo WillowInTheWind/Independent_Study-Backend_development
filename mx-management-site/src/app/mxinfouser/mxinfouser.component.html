@@ -10,14 +10,15 @@
     <div>
       {{mingrade}} to {{maxgrade}}
     </div>
-    {{ mx.is_available_in_day? "This Morning Exercise CAN be done with 24 hours notice": "This Morning Exercise CAN NOT be done with 24 hours notice" }}
+    <div *ngIf = "!document.isdisplay">
+    {{ mx.is_available_in_day ? "This Morning Exercise CAN be done with 24 hours notice": "This Morning Exercise CAN NOT be done with 24 hours notice" }}</div>
   </div>
   <div class = "info">
     <div>{{ mx.description }}</div>
     <div style="margin-bottom: 15px"></div>
-    <div *ngIf="mx.young_student_prep_instructions">For younger students: {{mx.young_student_prep_instructions}}</div>
+    <div *ngIf="mx.young_student_prep_instructions && !document.isdisplay ">For younger students: {{mx.young_student_prep_instructions}}</div>
   </div>
-  <mat-expansion-panel class = "panel" >
+  <mat-expansion-panel  *ngIf = "!document.isdisplay " class = "panel" >
     <mat-expansion-panel-header>
       <mat-panel-title>
         Technical requirements
@@ -26,11 +27,13 @@
         These are very basic details and need further follow up
       </mat-panel-description>
     </mat-expansion-panel-header>
-    <div *ngFor="let i of techreqs">
+
+    <div  *ngFor="let i of techreqs">
       {{ i }}
     </div>
   </mat-expansion-panel>
   <div class = "approvebutton">
-    <button *ngIf="!mx.is_approved && document.iseditor" class = "approve" (click) = "editMx(mx.title)">Edit MX</button>
+    <button *ngIf="!mx.is_approved && document.iseditor && !document.isdisplay" class = "approve" (click) = "editMx(mx.title)">Edit MX</button>
+    <button *ngIf="!mx.is_approved && document.iseditor && !document.isdisplay" class = "approve" (click) = "deleteMx(mx.id)">Delete MX</button>
   </div>
 </div>

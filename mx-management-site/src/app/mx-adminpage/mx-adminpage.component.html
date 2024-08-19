@@ -34,15 +34,16 @@
             <mat-label> owner </mat-label>
             <mat-select formControlName = "owner"  #maxgrade>
               @for (user of (Users|async); track user) {
-                <mat-option *ngIf="!mingrade.value || $index > grades.indexOf(mingrade.value)"  [value]="user">{{ user.name }}</mat-option>
+                <mat-option [value]="user.id">{{ user.name }}</mat-option>
               }
             </mat-select>
           </mat-form-field>
         <button class = "filterbutton" (click) = "filter()">Filter</button>
-</div>
+          <button class = "filterbutton" (click) = "clear()">Clear Filters</button>
+
+        </div>
       </form>
 <p></p>
-<div *ngIf="(approvedMorningExs | async)?.length==0&&(pendingMorningExs | async)?.length==0"> No Mxs </div>
   <mat-expansion-panel class = "panel"  [hideToggle]= "(pendingMorningExs | async)?.length == 0">
     <mat-expansion-panel-header>
       <mat-panel-title>

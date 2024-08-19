@@ -9,11 +9,12 @@
   </div>
   <div>
     {{mingrade}} to {{maxgrade}}
+
   </div>
   {{ mx.is_available_in_day? "This Morning Exercise CAN be done with 24 hours notice": "This Morning Exercise CAN NOT be done with 24 hours notice" }}
 </div>
   <div class = "info">
-    <div>{{ mx.description }}</div>
+    <p style = "white-space: pre-wrap;">{{ mx.description }}</p>
     <div style="margin-bottom: 15px"></div>
     <div *ngIf="mx.young_student_prep_instructions">For younger students: {{mx.young_student_prep_instructions}}</div>
   </div>
@@ -31,7 +32,9 @@
     </div>
   </mat-expansion-panel>
   <div class = "approvebutton">
-  <button *ngIf="mx.is_approved" class = "approve" (click) = "approveMx(mx.title)">Approve MX</button>
-    <button *ngIf="!mx.is_approved" class = "approve" (click) = "revokeMx(mx.title)">Revoke MX</button>
+  <button *ngIf="!mx.is_approved" class = "approve" (click) = "approveMx(mx.title)">Approve MX</button>
+    <button *ngIf="!mx.is_approved" class = "approve" (click) = "editMx(mx.title)">Edit MX</button>
+    <button  class = "approve" (click) = "deleteMx(mx.title)">Delete MX</button>
+    <button *ngIf="mx.is_approved" class = "approve" (click) = "revokeMx(mx.title)">Revoke MX</button>
   </div>
 </div>

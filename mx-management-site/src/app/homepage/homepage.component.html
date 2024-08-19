@@ -1,6 +1,37 @@
 <router-outlet>
   <div id="homepage">
-  <a class = "button" href = "/form"> Submit an Mx</a>
+    <p style="margin: 0; font-size: 16px"> THIS WEBSITE IS IN BETA, IF YOU ENCOUNTER AN ISSUE EMAIL cwayland&#64;fwparker.org" or mx&#64;fwparker.org and we will address it </p>
+  <h1 style="margin: 4px 0 4px 0">MXs in the next 4 Weeks</h1>
+
+      <div class = "styless" *ngFor="let morningEx of MorningExs| async">
+        <div class ="mx">
+          <div class = "date">
+              <div class = "month" *ngIf = "morningEx.date.slice(5,7) == '01'">Jan</div>
+            <div class = "month" *ngIf = "morningEx.date.slice(5,7) == '02'">Feb</div>
+            <div  class = "month" *ngIf = "morningEx.date.slice(5,7) == '03'">Mar</div>
+            <div  class = "month" *ngIf = "morningEx.date.slice(5,7) == '04'">Apr</div>
+            <div  class = "month" *ngIf = "morningEx.date.slice(5,7) == '05'">May</div>
+            <div class = "month" *ngIf = "morningEx.date.slice(5,7) == '06'">June</div>
+            <div class = "month" *ngIf = "morningEx.date.slice(5,7) == '07'">Jul</div>
+            <div class = "month" *ngIf = "morningEx.date.slice(5,7) == '08'">Aug</div>
+            <div class = "month" *ngIf = "morningEx.date.slice(5,7) == '09'">Sept</div>
+            <div class = "month" *ngIf = "morningEx.date.slice(5,7) == '10'">Oct</div>
+            <div class = "month" *ngIf = "morningEx.date.slice(5,7) == '11'">Nov</div>
+            <div class = "month" *ngIf = "morningEx.date.slice(5,7) == '12'">Dec</div>
+
+              <div class = "Day"> {{morningEx.date.slice(-2)}}</div>
+          </div>
+          <div class = "information">
+            <div class = "title">{{morningEx.title}}</div>
+            <div class = "desc">{{morningEx.description}}</div>
+          </div>
+
+        </div>
+
+    </div>
+
+
+  <a class = "button" href = "/form"> Want to schedule an MX: submit a Morning Exercise </a>
   </div>
 <!--<mat-calendar></mat-calendar>-->
 </router-outlet>

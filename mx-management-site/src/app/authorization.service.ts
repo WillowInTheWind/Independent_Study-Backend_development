@@ -50,6 +50,7 @@ export class AuthorizationService {
   }
 }
   export interface  GoogleUser {
+  id: number,
     sub: string,
     picture: string,
     email: string,

@@ -79,8 +79,8 @@ export class MxAdminpageComponent {
     '11th',
     '12th'
   ]
-  protected approvedMorningExs: Observable<MorningExercise[]> = this.mx.getmxsbyfilter("is_approved%20=%20TRUE");
-  protected pendingMorningExs: Observable<MorningExercise[]> = this.mx.getmxsbyfilter("is_approved%20=%20FALSE");
+  protected approvedMorningExs: Observable<MorningExercise[]> = this.mx.getmxsbyfilter("is_approved=TRUE");
+  protected pendingMorningExs: Observable<MorningExercise[]> = this.mx.getmxsbyfilter("is_approved=FALSE");
   protected Users = this.auth.getusers()
   filterform = new FormGroup({
     date:  new FormControl('',{nonNullable: true}),
@@ -98,15 +98,21 @@ export class MxAdminpageComponent {
       data: morningExercise,
     });
   }
-
+  clear() {
+    this.filterform.reset()
+   this.approvedMorningExs = this.mx.getmxsbyfilter("is_approved=TRUE");
+  this.pendingMorningExs = this.mx.getmxsbyfilter("is_approved=FALSE");
+  }
   filter() {
-    var datefilter = " "
-    var gradefilter = " "
-    var datecreatedfilter = " "
-    var ownerfilter = " "
-    var titlefilter = " "
-    this.approvedMorningExs = this.mx.getmxsbyfilter("is_approved%20=%20TRUE" + datefilter + datecreatedfilter + ownerfilter + titlefilter + gradefilter) ;
-    this.pendingMorningExs = this.mx.getmxsbyfilter("is_approved%20=%20FALSE" + datefilter + datecreatedfilter + ownerfilter + titlefilter + gradefilter);
+    var datefilter = this.filterform.value.date? ""+ <string>this.filterform.value.date: ""
+    var mingradefilter = this.filterform.value.mingrade? " AND min_grade = "+ this.grades.indexOf(<string>this.filterform.value.mingrade): ""
+    var maxgradefilter = this.filterform.value.maxgrade? " AND max_grade = "+ this.grades.indexOf(<string>this.filterform.value.maxgrade): ""
+    var gradefilter = mingradefilter+maxgradefilter
+    var datecreatedfilter = ""
+    var ownerfilter = this.filterform.value.owner? " AND owner=" + <string>this.filterform.value.owner: ""
+    var titlefilter = this.filterform.value.title? " AND title LIKE '*"+ <string>this.filterform.value.title +"*'": ""
+    this.approvedMorningExs = this.mx.getmxsbyfilter("is_approved=TRUE"  + datefilter + datecreatedfilter + ownerfilter + titlefilter + gradefilter) ;
+    this.pendingMorningExs = this.mx.getmxsbyfilter("is_approved=FALSE"  + datefilter  + datecreatedfilter  + ownerfilter  + titlefilter  + gradefilter);
   }
   constructor(
     private mx: MorningExService,

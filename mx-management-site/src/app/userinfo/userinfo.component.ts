@@ -35,7 +35,8 @@ export class UserinfoComponent {
         width: '90vw',
         data: {
           mx: morningExercise,
-          iseditor: false
+          iseditor: false,
+          isdisplay: true
         }
       }
     );

@@ -19,6 +19,6 @@ export const routes: Routes = [
   { path: 'me/mxs', component: UserMxsComponent },
   { path: 'me/settings', component: UserpageComponent },
   { path: ':user', component: UserinfoComponent },
-  { path: 'success', component: SucessComponent}
+  { path: 'mx/success', component: SucessComponent},
 ];
 
